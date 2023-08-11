@@ -1,7 +1,7 @@
 from deepface.DeepFace import *
 
 import matplotlib.pyplot as plt
-
+import tensorflow as tf
 
 
 actions = ['age', 'gender', 'race', 'emotion']
