@@ -192,7 +192,7 @@ class Ui_MainWindow(object):
     def setup_gender_combo(self):
         self.gender_combo.addItems(["", "Male", "Female"])
     def setup_ethnicity_combo(self):
-        self.ethnicity_combo.addItems(["", "White", "Black", "Asian", "Maori", "Pacific Islander", "Other"])
+        self.ethnicity_combo.addItems(["", "Asian", "Maori", "Pacific Islander", "European"])
         
     def set_image_directory(self):
         self.image_directory = QtWidgets.QFileDialog.getExistingDirectory(None, 'Select a folder:')
