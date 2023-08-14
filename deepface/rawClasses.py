@@ -3,6 +3,31 @@ loss_object = tf.keras.losses.CategoricalCrossentropy()
 
 import matplotlib.pyplot as plt
 
+def splice_array(tens, rowStart, rowEnd, columnStart, columnEnd):
+    arr = tens.numpy()
+    for i in range(rowStart):
+        arr[0][i] = 0
+    for i in range(len(arr[0])-rowEnd):
+        arr[0][len(arr[0])-i-1] = 0
+    
+    for i in range(columnStart):
+        arr[0][:,i] = 0
+    for i in range(len(arr[0])-columnEnd):
+        arr[0][:, len(arr[0])-i-1] = 0
+    return tf.convert_to_tensor(arr)
+
+
+def splice_onto(source, sticker):
+    startArr = source.numpy()
+    stickerArr = sticker.numpy()
+    
+    for i in range(len(stickerArr[0])):
+        for j in range(len(stickerArr[0][i])):
+            val = stickerArr[0][i][j]
+            if(val[0] != 0):
+                startArr[0][i][j] = val
+                
+    return tf.convert_to_tensor(startArr)
 class attributeModel: 
     
     def __init__(self, action):
@@ -85,6 +110,11 @@ class attributeModel:
     def raw_predict(self,img_content):
         predictions = self.model.predict(img_content, verbose=0)[0, :]
         return predictions
+
+    def generateLabel(self, index):
+        oL = np.zeros_like(self.model.predict(self.lastProcessed))
+        oL[0][index] = 1
+        return oL
     
     def predict(self,img_content):      
         
@@ -100,28 +130,48 @@ class attributeModel:
         output = self.prediction_to_labels(prediction)
         return output
     
-    def create_adversarial_pattern(self, input_image, input_label):
+    def find_gradient(self, input_image, input_label):
         with tf.GradientTape() as tape:
             tape.watch(input_image)
             prediction =self.model(input_image)
             loss = loss_object(input_label, prediction)
         gradient = tape.gradient(loss, input_image)
+        return gradient
+    
+    def create_adversarial_pattern(self, input_image, input_label):
+        gradient = self.find_gradient(input_image, input_label)
         signed_grad = tf.sign(gradient)
         return signed_grad
+
+    
+    def adversarialHillClimb(self, input_image, label_index, steps = 30, magnitude = 0.1):
+        input_label = self.generateLabel(label_index)
+        current = input_image * 1
+        for i in range(steps):
+            gradient = self.find_gradient(current, input_label)
+            maxDelta = max(-gradient.numpy().min(),gradient.numpy().max())
+            print(maxDelta)
+            factor = magnitude / maxDelta
+            gradient = gradient * factor
+            current = current + gradient
+            current = tf.clip_by_value(current,0,1)
+        rawOutput = self.raw_predict(current)
+        labeledOutput = self.prediction_to_labels(rawOutput)
+        return (current, labeledOutput)
 
     def getAttackImage(self, input_image, input_label, eps = 0.05):
         gradient = self.create_adversarial_pattern(input_image, input_label)
         adv_x = input_image + eps * gradient
-        adv_x = tf.clip_by_value(adv_x, -1,1)
+        adv_x = tf.clip_by_value(adv_x, 0,1)
         rawOutput = self.raw_predict(adv_x)
         labeledOutput = self.prediction_to_labels(rawOutput)
-        return (adv_x, labeledOutput)
+        return (adv_x, labeledOutput, gradient)
 
     def lastProcessedIntoAttack(self, actualLabel, eps = 0.05):
         tens = tf.convert_to_tensor(self.lastProcessed)
-        oL = np.zeros_like(self.model.predict(self.lastProcessed))
-        oL[0][actualLabel] = 1
-        return self.getAttackImage(tens, oL, eps = eps)
+        return self.getAttackImage(tens, self.generateLabel(actualLabel), eps = eps)
+    
+    
     
 def display_images(image, description):
     plt.figure()
