@@ -1,0 +1,17 @@
+{
+    "test": {
+        "test": "test"
+    },
+    "img.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "47",
+        "gender": "Female",
+        "emotion": "Angry"
+    },
+    "jacinda.jpg": {
+        "ethnicity": "Maori",
+        "age": "39",
+        "gender": "Female",
+        "emotion": "Neutral"
+    }
+}
