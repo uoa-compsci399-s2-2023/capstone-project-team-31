@@ -15,8 +15,9 @@ Yellowish: (220, 210, 50)
 
 class AdversarialPatternGenerator:
 
-    def __init__(self, accessory_type, images_dir, num_images=1, step_size=20, lambda_tv=3, probability_coeff=5, momentum_coeff=0.4, gauss_filtering=0, max_iter=300, channels_to_fix=[], stop_prob=0.01, horizontal_move=4, vertical_move=4, rotational_move=4, verbose=True):
+    def __init__(self, accessory_type, classification, images_dir, num_images=1, step_size=20, lambda_tv=3, probability_coeff=5, momentum_coeff=0.4, gauss_filtering=0, max_iter=15, channels_to_fix=[], stop_prob=0.01, horizontal_move=4, vertical_move=4, rotational_move=4, verbose=True):
         self.accessory_type = accessory_type
+        self.classification = classification # what type of classification is being dodged - 'gender', 'age', 'ethnicity', 'emotion' (to do: emotion requires further preprocessing)
         self.images_dir = images_dir
         self.num_images = num_images
         self.step_size = step_size
