@@ -142,26 +142,39 @@ def apply_accessory(image: np.ndarray, aug_accessory_image: np.ndarray, org_acce
     return np.bitwise_or(temp, aug_accessory_image)
 
 def total_variation(image, beta = 1):
-    # take from source: https://github.com/mahmoods01/accessorize-to-a-crime/blob/master/aux/attack/total_variation.m
+    '''
+        Calculates total variation of perturbation: image(1,224,224,3)
+    '''
 
-    d1 = image[:,0:,:,:] - image[:,1:,:,:]
-    d2 = image[:,:,0:,:] - image[:,:,1:,:]
+    # TV calculation
+    d1, d2 = np.roll(image, -1, axis = 1), np.roll(image, -1, axis = 2)
+    d1[:,-1,:,:], d2[:,:,-1,:] = image[:,-1,:,:], image[:,:,-1,:]
+
+    d1 = d1 - image 
+    d2 = d2 - image
     v = np.power(np.sqrt(d1*d1 + d2*d2), beta)
     tv = np.sum(v)
 
-    # Calculate dr_tv
+    # dr_tv calculation
     dr_beta = 2*(beta/2 - 1)/beta
     d1_ = np.power(np.maximum(v, 1e-5), dr_beta) * d1
     d2_ = np.power(np.maximum(v, 1e-5), dr_beta) * d2
-    d11 = d1_[:,0:,:,:] - d1_[:,1:,:,:]
-    d22 = d2_[:,0:,:,:] - d2_[:,1:,:,:]
-    d11[:,1,:,:]  = -d1_[:,0:,:,:] 
-    d22[:,1,:,:]  = -d2_[:,0:,:,:] 
+    d11, d22 = np.roll(d1_, 1, axis = 1), np.roll(d2_, 1, axis = 2)
+    d11[:,0,:,:], d22[:,:,0,:] = d1_[:,0,:,:], d2_[:,:,0,:]
+
+    d11 = d11 - d1_ 
+    d22 = d22 - d2_
+    d11[:,0,:,:]  = -d1_[:,0,:,:] 
+    d22[:,:,0,:]  = -d2_[:,:,0,:] 
     dr_tv = beta*(d11+d22)
 
     return tv, dr_tv
 
 def softmax_loss(pred, label):
+    '''
+        Softmax loss to use for gradient descent
+    '''
+
     tot = 0
     for i in range(len(label[0])):
         tot += np.exp(pred[0][i])
@@ -171,11 +184,50 @@ def softmax_loss(pred, label):
 def non_printability_score(image, segmentation, printable_values):
     '''
     Evaluates the ability of a printer to match the colours in the pertubation
+    
+    Args:
+        image: single rgb matrix with shape (h,w,3)
+        segmentation: area of image that needs to be perturbed
+        printable_values: printable values retrieved from printed palette
     '''
-
     # copy directly from: https://github.com/mahmoods01/accessorize-to-a-crime/blob/master/aux/attack/non_printability_score.m
 
-    pass
+    def norm(x,y):
+        return np.sum((np.subtract(x,y))*(np.subtract(x,y)))
+    
+    printable_vals = np.reshape(printable_values, (printable_values.shape[0],1,3))
+    max_norm = norm(np.array([0,0,0]), np.array([80,80,80]))
+
+    # Compute non-printability scores per pixel
+    scores = np.ones((image.shape[0], image.shape[1]))
+    for i in range(image.shape[0]):
+        for j in range(image.shape[1]):
+            print(segmentation[i,j,0])
+            if segmentation[i,j,0] == 1:
+                for k in range(printable_vals.shape[0]):
+                    scores[i,j] = scores[i,j]*norm(image[i,j,:], printable_vals[k,0,:])/max_norm
+            else:
+                scores[i,j] = 0
+    
+    score = np.sum(scores)
+    print(scores)
+
+    # Compute gradient
+    gradient = np.zeros(image.shape)
+    for i in range(image.shape[0]):
+        for j in range(image.shape[1]):
+            if segmentation[i,j,0] == 1 and scores[i,j] != 0:
+                for k in range(printable_vals.shape[0]):
+                    f_k = norm(image[i,j,:], printable_vals[k,0,:])
+
+                    # Gradients for R,G,B respectively
+                    gradient[i,j,0] = gradient[i,j,0] + 2*(image[i,j,0] - printable_vals[k,0,0])*(scores[i,j]/f_k)
+                    gradient[i,j,1] = gradient[i,j,1] + 2*(image[i,j,1] - printable_vals[k,0,1])*(scores[i,j]/f_k)
+                    gradient[i,j,2] = gradient[i,j,2] + 2*(image[i,j,2] - printable_vals[k,0,2])*(scores[i,j]/f_k)
+
+    gradient = gradient/np.max(np.abs(gradient))
+
+    return score, gradient
 
 def get_printable_vals():
     '''
