@@ -141,10 +141,32 @@ def apply_accessory(image: np.ndarray, aug_accessory_image: np.ndarray, org_acce
     temp = np.bitwise_and(image, org_accessory_image)
     return np.bitwise_or(temp, aug_accessory_image)
 
-def total_variation(image, beta):
+def total_variation(image, beta = 1):
     # take from source: https://github.com/mahmoods01/accessorize-to-a-crime/blob/master/aux/attack/total_variation.m
 
-    pass
+    d1 = image[:,0:,:,:] - image[:,1:,:,:]
+    d2 = image[:,:,0:,:] - image[:,:,1:,:]
+    v = np.power(np.sqrt(d1*d1 + d2*d2), beta)
+    tv = np.sum(v)
+
+    # Calculate dr_tv
+    dr_beta = 2*(beta/2 - 1)/beta
+    d1_ = np.power(np.maximum(v, 1e-5), dr_beta) * d1
+    d2_ = np.power(np.maximum(v, 1e-5), dr_beta) * d2
+    d11 = d1_[:,0:,:,:] - d1_[:,1:,:,:]
+    d22 = d2_[:,0:,:,:] - d2_[:,1:,:,:]
+    d11[:,1,:,:]  = -d1_[:,0:,:,:] 
+    d22[:,1,:,:]  = -d2_[:,0:,:,:] 
+    dr_tv = beta*(d11+d22)
+
+    return tv, dr_tv
+
+def softmax_loss(pred, label):
+    tot = 0
+    for i in range(len(label[0])):
+        tot += np.exp(pred[0][i])
+    loss = -np.log(np.exp(np.inner(pred[0], label[0],1))/tot)
+    return loss
 
 def non_printability_score(image, segmentation, printable_values):
     '''
