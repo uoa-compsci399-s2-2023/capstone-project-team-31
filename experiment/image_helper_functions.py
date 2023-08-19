@@ -141,7 +141,7 @@ def apply_accessory(image: np.ndarray, aug_accessory_image: np.ndarray, org_acce
     temp = np.bitwise_and(image, org_accessory_image)
     return np.bitwise_or(temp, aug_accessory_image)
 
-def total_variation(image, beta = 1):
+def total_variation(image: np.array, beta = 1) -> tuple:
     '''
         Calculates total variation of perturbation: image(1,224,224,3)
     '''
@@ -170,7 +170,7 @@ def total_variation(image, beta = 1):
 
     return tv, dr_tv
 
-def softmax_loss(pred, label):
+def softmax_loss(pred: np.array, label: np.array) -> tuple:
     '''
         Softmax loss to use for gradient descent
     '''
@@ -181,7 +181,7 @@ def softmax_loss(pred, label):
     loss = -np.log(np.exp(np.inner(pred[0], label[0],1))/tot)
     return loss
 
-def non_printability_score(image, segmentation, printable_values):
+def non_printability_score(image: np.array, segmentation: np.array, printable_values: np.array) -> tuple:
     '''
     Evaluates the ability of a printer to match the colours in the pertubation
     
@@ -229,21 +229,33 @@ def non_printability_score(image, segmentation, printable_values):
 
     return score, gradient
 
-def get_printable_vals():
+def get_printable_vals(num_colors = 32) -> np.array:
     '''
-    Sources what values are printable by comparing (?) to ./assets/printed-palette.png
+    Creates an Nx3 matrix of all RGB values that exist in printed image
     '''
     # inspo1: https://github.com/mahmoods01/accessorize-to-a-crime/blob/master/aux/attack/get_printable_vals.m
     # inspo2: https://github.com/mahmoods01/accessorize-to-a-crime/blob/master/aux/attack/make_printable_vals_struct.m
     
-    
+    print_img = Image.open('experiment/assets/printed-palette.png')
+    img_arr = np.asarray(print_img)
+
+    # Cuts 3% of edges from each side (subject to change)
+    cut_h = round(0.015*img_arr.shape[1])
+    cut_v = round(0.015*img_arr.shape[0])
+    img_arr = img_arr[cut_v:-cut_v, cut_h:-cut_h,:]
+
+    # Uniform quantization, Minimum Variance Optimization not available in python (subject to change)
+    printable_vals = np.round(img_arr*(num_colors/255))*(255//num_colors)
+    printable_vals = printable_vals.reshape(-1, img_arr.shape[2])
+    printable_vals.sort(axis=0)
+
+    return np.unique(printable_vals, axis = 0)
+
 def convert_b64_to_np(img_b64: str):
     decoded_img = base64.b64decode(img_b64)
     img = np.frombuffer(decoded_img, dtype=np.uint8)
     img = cv2.imdecode(img, cv2.IMREAD_COLOR)
     return img
-
-
 
 """
 Below is a demo of the above functions
