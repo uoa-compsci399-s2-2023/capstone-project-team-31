@@ -40,6 +40,7 @@ def prepare_images(images_dir: str, num_images: int) -> list:
         return random.sample(os.listdir(images_dir), num_images)
     
 from deepface.commons import functions
+
 def getImageObjects(img_path,
     enforce_detection=True,
     detector_backend="opencv",
@@ -92,7 +93,17 @@ def image_to_face(image: tuple):
     except ValueError:
         #This means that deepface did not detect a face in this image
         return None
-    outputImage = (img, image[1], image[2], image[3],image[4])
+    print("img shape: {}\nimg: {}".format(np.shape(img), img))
+    
+    img = np.multiply(img, 255).astype(np.uint8)
+    
+    print("img2 shape: {}\nimg2: {}".format(np.shape(img), img))
+    
+    cv2.imshow('image window', img[0])
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
+    
+    outputImage = (img[0], image[1], image[2], image[3],image[4])
     return outputImage
 
 def prepare_processed_images(images_dir: str, num_images: int):
@@ -139,7 +150,7 @@ def prepare_accessory(colour: str, accessory_dir: str, accessory_type: str) -> t
         mask = cv2.threshold(glasses, 0, 1, cv2.THRESH_BINARY)[1]
         
         # make a colour mask of the chosen colour
-        colour_info = json.load(open("experiment/assets/starting_colours.json", 'r'))
+        colour_info = json.load(open("./assets/starting_colours.json", 'r'))
         colour = colour_info[colour]
             
         coloured_matrix = np.array([[colour for i in range(glasses.shape[1])] for j in range(glasses.shape[0])])

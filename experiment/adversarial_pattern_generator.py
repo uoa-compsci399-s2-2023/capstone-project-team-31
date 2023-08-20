@@ -50,46 +50,46 @@ class AdversarialPatternGenerator:
         
         self.model = attributeModel(self.classification)
 
-    def pre_process(self, images):
+    # def pre_process(self, images):
         
-        processed_imgs = []
+    #     processed_imgs = []
         
-        for i in range(len(images)):
+    #     for i in range(len(images)):
             
-            temp = convert_b64_to_np(images[i][0]) 
+    #         temp = convert_b64_to_np(images[i][0]) 
 
-            contents = getImageContents(temp)
+    #         contents = getImageContents(temp)
             
-            detected_aligned = contents[0][0]
-            detected_aligned = np.multiply(detected_aligned, 255).astype(np.uint8)
+    #         detected_aligned = contents[0][0]
+    #         detected_aligned = np.multiply(detected_aligned, 255).astype(np.uint8)
 
-            processed_imgs.append(detected_aligned)
+    #         processed_imgs.append(detected_aligned)
 
-        ## may need helper function to use GPU or not, such as in line 32 https://github.com/mahmoods01/accessorize-to-a-crime/blob/master/physical_dodging.m
+    #     ## may need helper function to use GPU or not, such as in line 32 https://github.com/mahmoods01/accessorize-to-a-crime/blob/master/physical_dodging.m
 
-        return processed_imgs
+    #     return processed_imgs
 
     def get_best_starting_colour(self):
         '''
         returns starting configuration where deepface is least confident in its prediction of the true class for each image
         '''
 
-        images = prepare_images(self.images_dir, self.num_images)
+        processed_imgs = prepare_processed_images(self.images_dir, self.num_images)
 
-        processed_imgs = self.pre_process(images)
+        #processed_imgs = self.pre_process(images)
         
         best_start = []
         min_avg_true_class_conf = 1
         
         for colour in self.colours:
             
-            accessory_img, accessory_mask = prepare_accessory(colour, "experiment/assets/{}_silhouette.png".format(self.accessory_type), self.accessory_type)
+            accessory_img, accessory_mask = prepare_accessory(colour, "./assets/{}_silhouette.png".format(self.accessory_type), self.accessory_type)
             
-            confidences = np.empty(len(images))
+            confidences = np.empty(len(processed_imgs))
             
-            for i in range(len(images)):
+            for i in range(len(processed_imgs)):
             
-                temp_attack = apply_accessory(processed_imgs[i], accessory_img, accessory_mask)
+                temp_attack = apply_accessory(processed_imgs[i][0], accessory_img, accessory_mask)
 
                 temp_attack = temp_attack.astype(np.uint8)
                 
@@ -98,7 +98,7 @@ class AdversarialPatternGenerator:
                 cv2.waitKey(0)
                 cv2.destroyAllWindows()
                 
-                confidences[i] = get_confidence_in_true_class(temp_attack, self.classification, images[i][self.class_num], self.model)
+                confidences[i] = get_confidence_in_true_class(temp_attack, self.classification, processed_imgs[i][self.class_num], self.model)
                 
             avg_true_class_conf = np.mean(confidences)
             

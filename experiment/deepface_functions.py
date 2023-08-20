@@ -37,7 +37,7 @@ def get_confidence_in_true_class(image: np.ndarray, classfication:str, true_clas
     image_after = np.divide(image_after, 255)
         
 
-    labeledOutput = e.predict(image_after)
+    labeledOutput = e.predict_verbose(image_after)
     print(labeledOutput)
     
     confidence = labeledOutput[classfication][true_class]
