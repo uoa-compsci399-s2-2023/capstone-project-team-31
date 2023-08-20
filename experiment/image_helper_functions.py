@@ -93,15 +93,8 @@ def image_to_face(image: tuple):
     except ValueError:
         #This means that deepface did not detect a face in this image
         return None
-    print("img shape: {}\nimg: {}".format(np.shape(img), img))
     
     img = np.multiply(img, 255).astype(np.uint8)
-    
-    print("img2 shape: {}\nimg2: {}".format(np.shape(img), img))
-    
-    cv2.imshow('image window', img[0])
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
     
     outputImage = (img[0], image[1], image[2], image[3],image[4])
     return outputImage
@@ -178,7 +171,7 @@ def move_accessory(accessory_image: np.ndarray, accessory_mask: np.ndarray, move
     # generate random values for horizontal, vertical and rotational shifts within the ranges given in 'movement' dict
     shift_x = random.randint(-1*movement['horizontal'], movement['horizontal'])
     shift_y = random.randint(-1*movement['horizontal'], movement['vertical'])
-    rotation = random.randint(-1*movement['rotation'], movement['rotation'])
+    rotation = random.randint(-1*movement['rotational'], movement['rotational'])
     # shift the pixel values in accessory_mask acording to those generated values
 
     # keep a record of what movements were made in movement_info
@@ -197,7 +190,7 @@ def move_accessory(accessory_image: np.ndarray, accessory_mask: np.ndarray, move
     accessory_mask = accessory_mask.rotate(rotation, fillcolor=(255, 255, 255), )
     accessory_mask = np.array(accessory_mask)
     
-    movement_info = {"horizontal": shift_x, "vertical": shift_y, "rotation": rotation}
+    movement_info = {"horizontal": shift_x, "vertical": shift_y, "rotational": rotation}
     return accessory_image, accessory_mask, movement_info
 
 def reverse_accessory_move(accessory_image: np.ndarray, accessory_mask: np.ndarray, movement_info: dict) -> tuple:
