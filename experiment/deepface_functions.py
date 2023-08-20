@@ -1,6 +1,7 @@
 import numpy as np
 from deepface.DeepFace import *
 loss_object = tf.keras.losses.CategoricalCrossentropy()
+import cv2
 
 import matplotlib.pyplot as plt
 
@@ -246,11 +247,22 @@ def get_confidence_in_true_class(image: np.ndarray, classfication:str, true_clas
         true_class = 'Woman'
     elif true_class.lower() == 'male':
         true_class = 'Man'
+        
+
     
-    labeledOutput = e.predict(image)
+    ## cleaning up dimension issues:
+    if len(np.shape(image)) == 3:
+        image = np.expand_dims(image, axis=0)
+    
+    
+    image_after = image.astype(np.float32)
+    image_after = np.divide(image_after, 255)
+        
+
+    labeledOutput = e.predict(image_after)
     print(labeledOutput)
     
     confidence = labeledOutput[classfication][true_class]
     
-    return confidence
+    return confidence/100
     

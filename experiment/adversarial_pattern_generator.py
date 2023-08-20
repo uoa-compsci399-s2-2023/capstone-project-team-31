@@ -56,17 +56,13 @@ class AdversarialPatternGenerator:
         for i in range(len(images)):
             
             temp = convert_b64_to_np(images[i][0]) 
-        
-            cv2.imshow('image window', temp)
-            cv2.waitKey(0)
-            cv2.destroyAllWindows()
+
             contents = getImageContents(temp)
             
-            cv2.imshow('image window', contents)
-            cv2.waitKey(0)
-            cv2.destroyAllWindows()
+            detected_aligned = contents[0][0]
+            detected_aligned = np.multiply(detected_aligned, 255).astype(np.uint8)
 
-            processed_imgs.append(contents[0])
+            processed_imgs.append(detected_aligned)
 
         ## may need helper function to use GPU or not, such as in line 32 https://github.com/mahmoods01/accessorize-to-a-crime/blob/master/physical_dodging.m
 
@@ -76,12 +72,10 @@ class AdversarialPatternGenerator:
         '''
         returns starting configuration where deepface is least confident in its prediction of the true class for each image
         '''
-        
+
         images = prepare_images(self.images_dir, self.num_images)
 
         processed_imgs = self.pre_process(images)
-        
-        print(processed_imgs[0])
         
         best_start = []
         min_avg_true_class_conf = 1
@@ -94,15 +88,14 @@ class AdversarialPatternGenerator:
             
             for i in range(len(images)):
             
-                temp_attack = apply_accessory(processed_imgs[i][0], accessory_img, accessory_mask)
+                temp_attack = apply_accessory(processed_imgs[i], accessory_img, accessory_mask)
+
+                temp_attack = temp_attack.astype(np.uint8)
                 
-                temp_attack = np.expand_dims(temp_attack, axis=0)
                 
-                
-                # cv2.imshow('image window', temp_attack)
-                # cv2.waitKey(0)
-                # cv2.destroyAllWindows()
-                
+                cv2.imshow('image window', temp_attack)
+                cv2.waitKey(0)
+                cv2.destroyAllWindows()
                 
                 confidences[i] = get_confidence_in_true_class(temp_attack, self.classification, images[i][self.class_num], self.model)
                 
@@ -112,11 +105,9 @@ class AdversarialPatternGenerator:
                 min_avg_true_class_conf = avg_true_class_conf
                 best_start = [accessory_img, accessory_mask, temp_attack]
                 
-                print('new best start found with colour {}'.format(colour))
+                print('new best start found with colour {} and confidence {}'.format(colour, min_avg_true_class_conf))
                 
-                cv2.imshow('image window', temp_attack)
-                cv2.waitKey(0)
-                cv2.destroyAllWindows()
+
             
         return best_start
 
@@ -191,7 +182,6 @@ class AdversarialPatternGenerator:
 
         starting_point = self.get_best_starting_colour()
         
-        print('sucess!')
 
         # result = self.dodge(starting_point)
 

@@ -89,6 +89,6 @@ def parse_args():
     return args
 
 args = parse_args()
-adv_pattern_generator = AdversarialPatternGenerator(args.accessory_type, args.classification, args.images_dir) # and can specify any other paramenters from args
+adv_pattern_generator = AdversarialPatternGenerator(args.accessory_type, args.classification, args.images_dir, args.num_images, args.step_size, args.lambda_tv, args.printability_coeff, args.momentum_coeff, args.gauss_filtering, args.max_iterations, args.channels_to_fix, args.stop_probability, args.horizontal_move, args.vertical_move, args.rotational_move, args.v) # and can specify any other paramenters from args
 
 adv_pattern_generator.run()
