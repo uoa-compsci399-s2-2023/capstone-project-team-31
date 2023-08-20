@@ -1,6 +1,7 @@
 from image_helper_functions import *
 import numpy as np
 from deepface_functions import *
+from deepface_models import *
 from PIL import Image
 
 ## define an experiment object with relevant parameters
