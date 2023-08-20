@@ -38,6 +38,83 @@ def prepare_images(images_dir: str, num_images: int) -> list:
         return images
     else: # if the images are stored in a directory
         return random.sample(os.listdir(images_dir), num_images)
+    
+from deepface.commons import functions
+def getImageObjects(img_path,
+    enforce_detection=True,
+    detector_backend="opencv",
+    align=True,
+):
+    img_objs = functions.extract_faces(
+        img=img_path,
+        target_size=(224, 224),
+        detector_backend=detector_backend,
+        grayscale=False,
+        enforce_detection=enforce_detection,
+        align=align,
+    )
+    
+    return img_objs
+    
+def getImageContents(img_path,
+    enforce_detection=True,
+    detector_backend="opencv",
+    align=True,
+):
+    img_objs = getImageObjects(img_path, 
+                               enforce_detection = enforce_detection,
+                               align = align, 
+                               detector_backend = detector_backend)
+    contents = []
+    for (content, region, _) in img_objs:
+        contents.append(content)
+        
+    return contents
+
+
+def image_to_face(image: tuple):
+    '''
+    Takes an image, and returns a normalized 224x224 image centered on face using Deepface image detection
+    
+    Args:
+    * images : image to detect from, in the form outputted from prepare_images
+    
+    Returns
+    * Tuple of (img , ethnicity, gender, age, emotion)
+    * Normalized image in the shape (1,224,224,3) <- this is what deepface outputs - might be worth changing to (224,224,3)
+    
+    '''
+    #b64 = "data:image/jpg;base64/," + image[0]
+    b64 = image[0]
+    img = convert_b64_to_np(b64)
+    try:
+        img = getImageContents(img)[0]
+    except ValueError:
+        #This means that deepface did not detect a face in this image
+        return None
+    outputImage = (img, image[1], image[2], image[3],image[4])
+    return outputImage
+
+def prepare_processed_images(images_dir: str, num_images: int):
+    '''
+    Detect faces and normalize a given amount of images
+    
+    Args:
+    * images_dir: the directory containing the images to be used for generating an adversarial pattern, only supports .db
+    * num_images: the number of images to get
+    
+    Returns:
+    * list of processed images in the form  (img , ethnicity, gender, age, emotion)
+    '''
+    image_list = prepare_images(images_dir, num_images)
+    output_list = []
+    for image in image_list:
+        prepared_image = image_to_face(image)     
+        if(prepared_image != None):
+            output_list.append(prepared_image)
+        
+    return output_list
+
 
 def prepare_accessory(colour: str, accessory_dir: str, accessory_type: str) -> tuple:
     """
@@ -281,7 +358,7 @@ Below is a demo of the above functions
 # img = convert_b64_to_np(images[0][0]) 
 # # Resize to 224x224 (should be done in preprocessing, together with standardization of position)
 # img = cv2.resize(img, (224, 224))
-
+# print(img.shape)
 # # Apply the accessory to the image
 # overlay = apply_accessory(img, red_glasses, glasses)
 
