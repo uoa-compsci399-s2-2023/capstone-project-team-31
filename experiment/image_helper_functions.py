@@ -2,7 +2,7 @@ import numpy as np
 import cv2, random, sqlite3, os, base64
 from PIL import Image
 import sys
-import os
+import os, json
 
 def pre_process_imgs():
     # if needed
@@ -38,6 +38,83 @@ def prepare_images(images_dir: str, num_images: int) -> list:
         return images
     else: # if the images are stored in a directory
         return random.sample(os.listdir(images_dir), num_images)
+    
+from deepface.commons import functions
+def getImageObjects(img_path,
+    enforce_detection=True,
+    detector_backend="opencv",
+    align=True,
+):
+    img_objs = functions.extract_faces(
+        img=img_path,
+        target_size=(224, 224),
+        detector_backend=detector_backend,
+        grayscale=False,
+        enforce_detection=enforce_detection,
+        align=align,
+    )
+    
+    return img_objs
+    
+def getImageContents(img_path,
+    enforce_detection=True,
+    detector_backend="opencv",
+    align=True,
+):
+    img_objs = getImageObjects(img_path, 
+                               enforce_detection = enforce_detection,
+                               align = align, 
+                               detector_backend = detector_backend)
+    contents = []
+    for (content, region, _) in img_objs:
+        contents.append(content)
+        
+    return contents
+
+
+def image_to_face(image: tuple):
+    '''
+    Takes an image, and returns a normalized 224x224 image centered on face using Deepface image detection
+    
+    Args:
+    * images : image to detect from, in the form outputted from prepare_images
+    
+    Returns
+    * Tuple of (img , ethnicity, gender, age, emotion)
+    * Normalized image in the shape (1,224,224,3) <- this is what deepface outputs - might be worth changing to (224,224,3)
+    
+    '''
+    #b64 = "data:image/jpg;base64/," + image[0]
+    b64 = image[0]
+    img = convert_b64_to_np(b64)
+    try:
+        img = getImageContents(img)[0]
+    except ValueError:
+        #This means that deepface did not detect a face in this image
+        return None
+    outputImage = (img, image[1], image[2], image[3],image[4])
+    return outputImage
+
+def prepare_processed_images(images_dir: str, num_images: int):
+    '''
+    Detect faces and normalize a given amount of images
+    
+    Args:
+    * images_dir: the directory containing the images to be used for generating an adversarial pattern, only supports .db
+    * num_images: the number of images to get
+    
+    Returns:
+    * list of processed images in the form  (img , ethnicity, gender, age, emotion)
+    '''
+    image_list = prepare_images(images_dir, num_images)
+    output_list = []
+    for image in image_list:
+        prepared_image = image_to_face(image)     
+        if(prepared_image != None):
+            output_list.append(prepared_image)
+        
+    return output_list
+
 
 def prepare_accessory(colour: str, accessory_dir: str, accessory_type: str) -> tuple:
     """
@@ -51,8 +128,7 @@ def prepare_accessory(colour: str, accessory_dir: str, accessory_type: str) -> t
     Returns:
         tuple: (accessory_image, silhouette_mask)
     """
-    
-    if accessory_type == "glasses":
+    if accessory_type.lower() == "glasses":
         # load glasses_silhouette, find what pixels are white (i.e. colour value not rgb (0,0,0)) and make a colour mask of the chosen colour
         glasses = cv2.imread(accessory_dir)
         
@@ -62,14 +138,9 @@ def prepare_accessory(colour: str, accessory_dir: str, accessory_type: str) -> t
         # glasses = cv2.cvtColor(glasses, cv2.COLOR_BGR2GRAY)
         mask = cv2.threshold(glasses, 0, 1, cv2.THRESH_BINARY)[1]
         
-        if colour == "red":
-            colour = [255, 0, 0]
-        elif colour == "green":
-            colour = [0, 255, 0]
-        elif colour == "blue":
-            colour = [0, 0, 255]
-        elif colour == "yellow":
-            colour = [255, 255, 0]
+        # make a colour mask of the chosen colour
+        colour_info = json.load(open("experiment/assets/starting_colours.json", 'r'))
+        colour = colour_info[colour]
             
         coloured_matrix = np.array([[colour for i in range(glasses.shape[1])] for j in range(glasses.shape[0])])
         coloured_glasses = np.multiply(coloured_matrix, mask).astype(np.uint8)
@@ -146,10 +217,7 @@ def reverse_accessory_move(accessory_image: np.ndarray, accessory_mask: np.ndarr
 
 
 def apply_accessory(image: np.ndarray, aug_accessory_image: np.ndarray, org_accessory_image) -> np.ndarray:
-    
-    
-    image = image.astype(int) ## bug fix where image array was in float, could be better/more effeicient conversion elsewhere
-
+    image = ((image - image.min())/image.max() * 255).astype(np.uint8)
     temp = np.bitwise_and(image, org_accessory_image)
     return np.bitwise_or(temp, aug_accessory_image)
 
@@ -277,9 +345,9 @@ Below is a demo of the above functions
 # red_glasses, glasses, movement_info = move_accessory(red_glasses, glasses, {"horizontal": 10, "vertical": 10, "rotation": 10})
 
 # images = prepare_images("Faces.db", 1)
-# # convert to np array
+# # # convert to np array
 # img = convert_b64_to_np(images[0][0]) 
-# # Resize to 224x224 (should be done in preprocessing, together with standardization of position)
+# # # Resize to 224x224 (should be done in preprocessing, together with standardization of position)
 # img = cv2.resize(img, (224, 224))
 
 # # Apply the accessory to the image

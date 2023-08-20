@@ -1,6 +1,7 @@
 from image_helper_functions import *
 import numpy as np
 from deepface_functions import *
+from deepface_models import *
 from PIL import Image
 
 ## define an experiment object with relevant parameters
@@ -82,7 +83,7 @@ class AdversarialPatternGenerator:
         
         for colour in self.colours:
             
-            accessory_img, accessory_mask = prepare_accessory(colour, "./assets/{}_silhouette.png".format(self.accessory_type), self.accessory_type)
+            accessory_img, accessory_mask = prepare_accessory(colour, "experiment/assets/{}_silhouette.png".format(self.accessory_type), self.accessory_type)
             
             confidences = np.empty(len(images))
             
@@ -107,7 +108,6 @@ class AdversarialPatternGenerator:
                 
                 print('new best start found with colour {} and confidence {}'.format(colour, min_avg_true_class_conf))
                 
-
             
         return best_start
 
