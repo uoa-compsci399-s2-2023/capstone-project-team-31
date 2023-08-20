@@ -93,15 +93,8 @@ def image_to_face(image: tuple):
     except ValueError:
         #This means that deepface did not detect a face in this image
         return None
-    print("img shape: {}\nimg: {}".format(np.shape(img), img))
     
     img = np.multiply(img, 255).astype(np.uint8)
-    
-    print("img2 shape: {}\nimg2: {}".format(np.shape(img), img))
-    
-    cv2.imshow('image window', img[0])
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
     
     outputImage = (img[0], image[1], image[2], image[3],image[4])
     return outputImage
