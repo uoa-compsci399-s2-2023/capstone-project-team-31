@@ -1,6 +1,8 @@
 import numpy as np
 import cv2, random, sqlite3, os, base64
 from PIL import Image
+import sys
+import os
 
 def pre_process_imgs():
     # if needed
@@ -24,9 +26,12 @@ def prepare_images(images_dir: str, num_images: int) -> list:
     # inspiration: https://github.com/mahmoods01/accessorize-to-a-crime/blob/master/aux/attack/prepare_experiment.m
     # take a random permutation of image filenames from images_dir of size num_images
     # for each iamge filename, load the image and store it in some type of structure (e.g. list/json whatever)
+
+    
+    abs_path = os.path.abspath(os.path.join(os.path.dirname( __file__ ), os.pardir, images_dir)) #bug fixing
     
     if images_dir.endswith(".db"): # if the images are stored in a database
-        conn = sqlite3.connect(images_dir)
+        conn = sqlite3.connect(abs_path)
         cursor = conn.cursor()
         images = cursor.execute("SELECT * FROM images ORDER BY RANDOM() LIMIT ?", (num_images,)).fetchall()
         conn.close()
@@ -50,6 +55,9 @@ def prepare_accessory(colour: str, accessory_dir: str, accessory_type: str) -> t
     if accessory_type == "glasses":
         # load glasses_silhouette, find what pixels are white (i.e. colour value not rgb (0,0,0)) and make a colour mask of the chosen colour
         glasses = cv2.imread(accessory_dir)
+        
+        if glasses is None:
+            print("Error loading accessory from {}".format(accessory_dir))
         glasses = np.bitwise_not(glasses)
         # glasses = cv2.cvtColor(glasses, cv2.COLOR_BGR2GRAY)
         mask = cv2.threshold(glasses, 0, 1, cv2.THRESH_BINARY)[1]
@@ -138,6 +146,10 @@ def reverse_accessory_move(accessory_image: np.ndarray, accessory_mask: np.ndarr
 
 
 def apply_accessory(image: np.ndarray, aug_accessory_image: np.ndarray, org_accessory_image) -> np.ndarray:
+    
+    
+    image = image.astype(int) ## bug fix where image array was in float, could be better/more effeicient conversion elsewhere
+
     temp = np.bitwise_and(image, org_accessory_image)
     return np.bitwise_or(temp, aug_accessory_image)
 
