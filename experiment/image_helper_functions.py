@@ -2,7 +2,7 @@ import numpy as np
 import cv2, random, sqlite3, os, base64
 from PIL import Image
 import sys
-import os
+import os, json
 
 def pre_process_imgs():
     # if needed
@@ -51,8 +51,7 @@ def prepare_accessory(colour: str, accessory_dir: str, accessory_type: str) -> t
     Returns:
         tuple: (accessory_image, silhouette_mask)
     """
-    
-    if accessory_type == "glasses":
+    if accessory_type.lower() == "glasses":
         # load glasses_silhouette, find what pixels are white (i.e. colour value not rgb (0,0,0)) and make a colour mask of the chosen colour
         glasses = cv2.imread(accessory_dir)
         
@@ -62,14 +61,9 @@ def prepare_accessory(colour: str, accessory_dir: str, accessory_type: str) -> t
         # glasses = cv2.cvtColor(glasses, cv2.COLOR_BGR2GRAY)
         mask = cv2.threshold(glasses, 0, 1, cv2.THRESH_BINARY)[1]
         
-        if colour == "red":
-            colour = [255, 0, 0]
-        elif colour == "green":
-            colour = [0, 255, 0]
-        elif colour == "blue":
-            colour = [0, 0, 255]
-        elif colour == "yellow":
-            colour = [255, 255, 0]
+        # make a colour mask of the chosen colour
+        colour_info = json.load(open("experiment/assets/starting_colours.json", 'r'))
+        colour = colour_info[colour]
             
         coloured_matrix = np.array([[colour for i in range(glasses.shape[1])] for j in range(glasses.shape[0])])
         coloured_glasses = np.multiply(coloured_matrix, mask).astype(np.uint8)
@@ -146,10 +140,7 @@ def reverse_accessory_move(accessory_image: np.ndarray, accessory_mask: np.ndarr
 
 
 def apply_accessory(image: np.ndarray, aug_accessory_image: np.ndarray, org_accessory_image) -> np.ndarray:
-    
-    
-    image = image.astype(int) ## bug fix where image array was in float, could be better/more effeicient conversion elsewhere
-
+    image = ((image - image.min())/image.max() * 255).astype(np.uint8)
     temp = np.bitwise_and(image, org_accessory_image)
     return np.bitwise_or(temp, aug_accessory_image)
 
@@ -277,11 +268,12 @@ Below is a demo of the above functions
 # red_glasses, glasses, movement_info = move_accessory(red_glasses, glasses, {"horizontal": 10, "vertical": 10, "rotation": 10})
 
 # images = prepare_images("Faces.db", 1)
-# # convert to np array
+# # # convert to np array
 # img = convert_b64_to_np(images[0][0]) 
-# # Resize to 224x224 (should be done in preprocessing, together with standardization of position)
+# # # Resize to 224x224 (should be done in preprocessing, together with standardization of position)
 # img = cv2.resize(img, (224, 224))
-
+# print(img.dtype)
+# print(red_glasses.dtype)
 # # Apply the accessory to the image
 # overlay = apply_accessory(img, red_glasses, glasses)
 

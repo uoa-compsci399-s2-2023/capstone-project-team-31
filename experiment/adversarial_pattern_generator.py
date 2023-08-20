@@ -62,11 +62,11 @@ class AdversarialPatternGenerator:
             cv2.destroyAllWindows()
             contents = getImageContents(temp)
             
-            cv2.imshow('image window', contents)
+            cv2.imshow('image window', contents[0][0])
             cv2.waitKey(0)
             cv2.destroyAllWindows()
 
-            processed_imgs.append(contents[0])
+            processed_imgs.append(contents[0][0])
 
         ## may need helper function to use GPU or not, such as in line 32 https://github.com/mahmoods01/accessorize-to-a-crime/blob/master/physical_dodging.m
 
@@ -81,27 +81,26 @@ class AdversarialPatternGenerator:
 
         processed_imgs = self.pre_process(images)
         
-        print(processed_imgs[0])
+        # print(processed_imgs[0])
         
         best_start = []
         min_avg_true_class_conf = 1
         
         for colour in self.colours:
             
-            accessory_img, accessory_mask = prepare_accessory(colour, "./assets/{}_silhouette.png".format(self.accessory_type), self.accessory_type)
+            accessory_img, accessory_mask = prepare_accessory(colour, "experiment/assets/{}_silhouette.png".format(self.accessory_type), self.accessory_type)
             
             confidences = np.empty(len(images))
             
             for i in range(len(images)):
-            
-                temp_attack = apply_accessory(processed_imgs[i][0], accessory_img, accessory_mask)
+                temp_attack = apply_accessory(processed_imgs[i], accessory_img, accessory_mask)
                 
+                cv2.imshow('image window', temp_attack)
+                cv2.waitKey(0)
+                cv2.destroyAllWindows()
                 temp_attack = np.expand_dims(temp_attack, axis=0)
                 
                 
-                # cv2.imshow('image window', temp_attack)
-                # cv2.waitKey(0)
-                # cv2.destroyAllWindows()
                 
                 
                 confidences[i] = get_confidence_in_true_class(temp_attack, self.classification, images[i][self.class_num], self.model)
@@ -114,9 +113,9 @@ class AdversarialPatternGenerator:
                 
                 print('new best start found with colour {}'.format(colour))
                 
-                cv2.imshow('image window', temp_attack)
-                cv2.waitKey(0)
-                cv2.destroyAllWindows()
+                # cv2.imshow('image window', temp_attack[0])
+                # cv2.waitKey(0)
+                # cv2.destroyAllWindows()
             
         return best_start
 
