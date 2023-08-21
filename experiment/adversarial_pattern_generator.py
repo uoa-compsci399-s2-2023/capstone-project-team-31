@@ -120,6 +120,7 @@ class AdversarialPatternGenerator:
         ## divide self.step_size and self.lambda.tv by num_images
 
         pertubations = np.zeros(experiment['num_images']) ## placeholder, where information for each pertubation is stored
+        printable_vals = get_printable_vals()
 
         i = 0
         scores = np.array()
@@ -144,24 +145,47 @@ class AdversarialPatternGenerator:
                 # store image -- update data storing arrays images, movements, areas_to_perturb
 
             # [scores, gradients] = find_gradient(images, true_classes) get the gradient and confidence in true class by running deepface model on images with current pertubation
+            gradients = np.zeros(area_to_pert.shape)
 
             for x in range(experiment['num_images']):
 
-                #get the xith image's data from data storage arrays (inl gradients)
+                # get the xith image's data from data storage arrays (inl gradients)
+                im = processed_image[x,:,:,:]
+                gradient = gradients[x,:,:,:]
+                area_to_pert = areas_to_pert[x,:,:,:]
+                movement_info = movements[x]
 
                 # normalise gradient
+                gradient[area_to_pert != 1] = 0
+                gradient = gradient/np.max(np.abs(gradient)) 
 
                 # update the pertubation using total_variation from image_helper_functions
+                _, dr_tv = total_variation(im)
+                dr_tv[area_to_pert != 1] = 0
+                dr_tv = dr_tv/np.max(np.abs(dr_tv))
 
                 # compute pertubation and reverse the movement using reverse_accesory_movement(movement_info)
+                r = self.step_size*gradient - dr_tv*self.lambda_tv
+                r = np.reshape(r, im.shape)
+                r = reverse_accessory_move(r, movement_info) #whut
+                r[experiment['accessory_area'] != 1] = 0
 
                 # apply gaussian filtering per specification given to self.gauss_filtering
-
+                
                 # store the pertubation
                 pass
 
-            
+
             # get printability score using non_printability_score in image_helper_functions.py
+            nps, dr_nps = non_printability_score(experiment['accessory_image'], experiment['accessory_area'][:,:,0], printable_vals)
+            if self.printability_coeff != 0:
+                dr_nps = -dr_nps
+                dr_nps[(dr_nps+experiment['accessory_image']) > 255] = 0
+                dr_nps[(dr_nps+experiment['accessory_image']) < 255] = 0
+                area_to_pert = experiment['accessory_area']
+                dr_nps[:,:,self.channels_to_fix] = 0
+                gradient[area_to_pert != 1] = 0
+                experiment['accessory_image'] = experiment['accessory_image'] + self.printability_coeff*dr_nps
 
             # apply pertubations
 
