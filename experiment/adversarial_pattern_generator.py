@@ -76,6 +76,8 @@ class AdversarialPatternGenerator:
     #     ## may need helper function to use GPU or not, such as in line 32 https://github.com/mahmoods01/accessorize-to-a-crime/blob/master/physical_dodging.m
 
     #     return processed_imgs
+    
+
 
     def get_best_starting_colour(self):
         '''
@@ -101,6 +103,8 @@ class AdversarialPatternGenerator:
                 cv2.imshow('image window', temp_attack)
                 cv2.waitKey(0)
                 cv2.destroyAllWindows()
+                
+                self.processed_imgs[i][self.class_num] = cleanup_labels(self.processed_imgs[i][self.class_num])
                 
                 confidences[i] = get_confidence_in_true_class(temp_attack, self.classification, self.processed_imgs[i][self.class_num], self.model)
                 
@@ -128,7 +132,6 @@ class AdversarialPatternGenerator:
 
         print(pertubations)
         i = 0
-        #scores = np.empty()
         score_mean = 1
 
         while i < self.max_iter and score_mean > self.stop_prob:
@@ -137,6 +140,8 @@ class AdversarialPatternGenerator:
             attacks = [] * self.num_images
             movements = [] * self.num_images
             areas_to_perturb = [] * self.num_images
+            gradients = [] * self.num_images
+            scores = [] * self.num_images
 
             for j in range(self.num_images):
 
@@ -153,6 +158,9 @@ class AdversarialPatternGenerator:
                 attacks[j] = attack
                 movements[j] = movement_info
                 areas_to_perturb[j] = area_to_perturb
+                
+                gradients[j] = self.model.find_gradient(attack, self.processed_imgs[j][self.class_num])
+                scores[j] = get_confidence_in_true_class(attack, self.classification, self.processed_imgs[i][self.class_num])
 
 
             # [scores, gradients] = find_gradient(images, true_classes) get the gradient and confidence in true class by running deepface model on images with current pertubation
@@ -196,4 +204,15 @@ class AdversarialPatternGenerator:
         
 
         result = self.dodge(starting_point)
+        
+        
+def cleanup_labels(true_class:str):
+## cleaning up different classification terms
+
+    if true_class.lower() == 'female':
+        true_class = 'Woman'
+    elif true_class.lower() == 'male':
+        true_class = 'Man'
+    
+    return true_class
 
