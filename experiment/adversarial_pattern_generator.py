@@ -152,7 +152,7 @@ class AdversarialPatternGenerator:
                 # get the xith image's data from data storage arrays (inl gradients)
                 im = processed_image[x,:,:,:]
                 gradient = gradients[x,:,:,:]
-                area_to_pert = areas_to_pert[x,:,:,:]
+                area_to_pert = areas_to_perturb[x,:,:,:]
                 movement_info = movements[x]
 
                 # normalise gradient
@@ -166,13 +166,19 @@ class AdversarialPatternGenerator:
 
                 # compute pertubation and reverse the movement using reverse_accesory_movement(movement_info)
                 r = self.step_size*gradient - dr_tv*self.lambda_tv
-                r = np.reshape(r, im.shape)
-                r = reverse_accessory_move(r, movement_info) #whut
+                r = np.reshape(r, im.shape) #TODO: Need to check if this is exactly the shape we wanted and implemented
+                r = reverse_accessory_move(r, movement_info) #TODO: This function asks for three inputs, im not sure what else to put here :((
                 r[experiment['accessory_area'] != 1] = 0
 
                 # apply gaussian filtering per specification given to self.gauss_filtering
                 
                 # store the pertubation
+                if i>1:
+                    #TODO: What exactly is .r here, is perturbations its own class?
+                    #Otherwise we can just store the r of each perturbation in another array :))
+                    pertubations[x].r = self.momentum_coeff*pertubations[x].r + r 
+                else:
+                    pertubations[x].r = r
                 pass
 
 
@@ -180,14 +186,24 @@ class AdversarialPatternGenerator:
             nps, dr_nps = non_printability_score(experiment['accessory_image'], experiment['accessory_area'][:,:,0], printable_vals)
             if self.printability_coeff != 0:
                 dr_nps = -dr_nps
-                dr_nps[(dr_nps+experiment['accessory_image']) > 255] = 0
-                dr_nps[(dr_nps+experiment['accessory_image']) < 255] = 0
+                dr_nps[(dr_nps + experiment['accessory_image']) > 255] = 0
+                dr_nps[(dr_nps + experiment['accessory_image']) < 0] = 0
                 area_to_pert = experiment['accessory_area']
                 dr_nps[:,:,self.channels_to_fix] = 0
                 gradient[area_to_pert != 1] = 0
                 experiment['accessory_image'] = experiment['accessory_image'] + self.printability_coeff*dr_nps
 
             # apply pertubations
+            # TODO: Again check how to actually store and retrieve r value of each perturbation <3
+            for r_i in range(pertubations.shape[0]):
+                r = pertubations[r_i].r
+
+                # perturb model
+                r[(experiment['accessory_image'] + r) > 255] = 0
+                r[(experiment['accessory_image'] + r) < 0] = 0
+                experiment['accessory_image'] = experiment['accessory_image'] + r
+
+            # TODO: quantization step looks sketchy, theyre just subtracting it by 0??? mod(x,1) is always 0 or am i tripping?
 
             # display
             if self.verbose:
