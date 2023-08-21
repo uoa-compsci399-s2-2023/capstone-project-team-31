@@ -227,12 +227,20 @@ def apply_accessory(image: np.ndarray, aug_accessory_image: np.ndarray, org_acce
 
 def total_variation(image: np.array, beta = 1) -> tuple:
     '''
-        Calculates total variation of perturbation: image(1,224,224,3)
+    Calculates total variation of perturbation
+    
+    Args:
+        image: Single rgb matrix with shape (h,w,3) 
+        beta: Magnitude to increase exponential value
+    
+    Returns:
+        tv: Total variation of image
+        dr_tv: Total variation gradient of each pixel (h,w,3)
     '''
 
     # TV calculation
-    d1, d2 = np.roll(image, -1, axis = 1), np.roll(image, -1, axis = 2)
-    d1[:,-1,:,:], d2[:,:,-1,:] = image[:,-1,:,:], image[:,:,-1,:]
+    d1, d2 = np.roll(image, -1, axis = 0), np.roll(image, -1, axis = 1)
+    d1[-1,:,:], d2[:,-1,:] = image[-1,:,:], image[:,-1,:]
 
     d1 = d1 - image 
     d2 = d2 - image
@@ -241,22 +249,29 @@ def total_variation(image: np.array, beta = 1) -> tuple:
 
     # dr_tv calculation
     dr_beta = 2*(beta/2 - 1)/beta
-    d1_ = np.power(np.maximum(v, 1e-5), dr_beta) * d1
-    d2_ = np.power(np.maximum(v, 1e-5), dr_beta) * d2
-    d11, d22 = np.roll(d1_, 1, axis = 1), np.roll(d2_, 1, axis = 2)
-    d11[:,0,:,:], d22[:,:,0,:] = d1_[:,0,:,:], d2_[:,:,0,:]
+    d1_ = np.multiply(np.power(np.maximum(v, 1e-5), dr_beta), d1)
+    d2_ = np.multiply(np.power(np.maximum(v, 1e-5), dr_beta), d2)
+    d11, d22 = np.roll(d1_, 1, axis = 0), np.roll(d2_, 1, axis = 1)
+    d11[0,:,:], d22[:,0,:] = d1_[0,:,:], d2_[:,0,:]
 
     d11 = d11 - d1_ 
     d22 = d22 - d2_
-    d11[:,0,:,:]  = -d1_[:,0,:,:] 
-    d22[:,:,0,:]  = -d2_[:,:,0,:] 
+    d11[0,:,:]  = -d1_[0,:,:] 
+    d22[:,0,:]  = -d2_[:,0,:] 
     dr_tv = beta*(d11+d22)
 
     return tv, dr_tv
 
-def softmax_loss(pred: np.array, label: np.array) -> tuple:
+def softmax_loss(pred: np.array, label: np.array) -> float:
     '''
-        Softmax loss to use for gradient descent
+    Softmax loss to use for gradient descent
+
+    Args:
+        pred: Prediction array. Currently has shape (1,2)
+        label: Label array. Currently has shape (1,2)
+        
+    Returns
+        loss: Softmax loss
     '''
 
     tot = 0
@@ -270,15 +285,20 @@ def non_printability_score(image: np.array, segmentation: np.array, printable_va
     Evaluates the ability of a printer to match the colours in the pertubation
     
     Args:
-        image: single rgb matrix with shape (h,w,3)
-        segmentation: area of image that needs to be perturbed
-        printable_values: printable values retrieved from printed palette
+        image: Single rgb matrix with shape (h,w,3)
+        segmentation: Area of image that needs to be perturbed
+        printable_values: Printable values retrieved from printed palette (N, 3)
+ 
+    Returns:
+        score: Non printability score
+        gradient: Non printability score gradient with shape (h,w,3)
     '''
     # copy directly from: https://github.com/mahmoods01/accessorize-to-a-crime/blob/master/aux/attack/non_printability_score.m
 
     def norm(x,y):
         return np.sum((np.subtract(x,y))*(np.subtract(x,y)))
     
+    # TODO: idk if this is really important or not since its literally just adding another dimension to everys single RGB value????
     printable_vals = np.reshape(printable_values, (printable_values.shape[0],1,3))
     max_norm = norm(np.array([0,0,0]), np.array([80,80,80]))
 
@@ -286,23 +306,22 @@ def non_printability_score(image: np.array, segmentation: np.array, printable_va
     scores = np.ones((image.shape[0], image.shape[1]))
     for i in range(image.shape[0]):
         for j in range(image.shape[1]):
-            print(segmentation[i,j,0])
             if segmentation[i,j,0] == 1:
                 for k in range(printable_vals.shape[0]):
-                    scores[i,j] = scores[i,j]*norm(image[i,j,:], printable_vals[k,0,:])/max_norm
+                    scores[i,j] = scores[i,j]*norm(image[i,j], printable_vals[k,0,:])/max_norm
             else:
                 scores[i,j] = 0
     
     score = np.sum(scores)
-    print(scores)
 
     # Compute gradient
     gradient = np.zeros(image.shape)
+
     for i in range(image.shape[0]):
         for j in range(image.shape[1]):
             if segmentation[i,j,0] == 1 and scores[i,j] != 0:
                 for k in range(printable_vals.shape[0]):
-                    f_k = norm(image[i,j,:], printable_vals[k,0,:])
+                    f_k = norm(image[i,j], printable_vals[k,0])
 
                     # Gradients for R,G,B respectively
                     gradient[i,j,0] = gradient[i,j,0] + 2*(image[i,j,0] - printable_vals[k,0,0])*(scores[i,j]/f_k)
@@ -316,6 +335,12 @@ def non_printability_score(image: np.array, segmentation: np.array, printable_va
 def get_printable_vals(num_colors = 32) -> np.array:
     '''
     Creates an Nx3 matrix of all RGB values that exist in printed image
+
+    Args:
+        num_colors: Number (roughly num_colors*3) of unique colors to reduce image to
+    
+    Returns:
+        printable_vals: Matrix of unique colors (N,3)
     '''
     # inspo1: https://github.com/mahmoods01/accessorize-to-a-crime/blob/master/aux/attack/get_printable_vals.m
     # inspo2: https://github.com/mahmoods01/accessorize-to-a-crime/blob/master/aux/attack/make_printable_vals_struct.m
