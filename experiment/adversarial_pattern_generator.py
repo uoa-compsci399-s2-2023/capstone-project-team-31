@@ -33,6 +33,14 @@ class AdversarialPatternGenerator:
             print("ERROR: {} is an invalid classification. Check spelling is one of: 'ethnicity', 'gender', 'age', 'emotion".format(classification))
         self.images_dir = images_dir
         self.num_images = num_images
+        
+        processed_imgs = prepare_processed_images(self.images_dir, self.num_images)
+        self.processed_imgs = processed_imgs
+        
+        if len(processed_imgs) > self.num_images:
+            ## a face hasn't been detected
+            self.num_images = len(processed_imgs)
+        
         self.step_size = step_size
         self.lambda_tv = lambda_tv
         self.printability_coeff = printability_coeff
@@ -68,16 +76,14 @@ class AdversarialPatternGenerator:
     #     ## may need helper function to use GPU or not, such as in line 32 https://github.com/mahmoods01/accessorize-to-a-crime/blob/master/physical_dodging.m
 
     #     return processed_imgs
+    
+
 
     def get_best_starting_colour(self):
         '''
         returns starting configuration where deepface is least confident in its prediction of the true class for each image
         '''
 
-        processed_imgs = prepare_processed_images(self.images_dir, self.num_images)
-
-        #processed_imgs = self.pre_process(images)
-        
         best_start = []
         min_avg_true_class_conf = 1
         
@@ -85,11 +91,11 @@ class AdversarialPatternGenerator:
             
             accessory_img, accessory_mask = prepare_accessory(colour, "./assets/{}_silhouette.png".format(self.accessory_type), self.accessory_type)
             
-            confidences = np.empty(len(processed_imgs))
+            confidences = np.empty(self.num_images)
             
-            for i in range(len(processed_imgs)):
+            for i in range(self.num_images):
             
-                temp_attack = apply_accessory(processed_imgs[i][0], accessory_img, accessory_mask)
+                temp_attack = apply_accessory(self.processed_imgs[i][0], accessory_img, accessory_mask)
 
                 temp_attack = temp_attack.astype(np.uint8)
                 
@@ -98,7 +104,9 @@ class AdversarialPatternGenerator:
                 cv2.waitKey(0)
                 cv2.destroyAllWindows()
                 
-                confidences[i] = get_confidence_in_true_class(temp_attack, self.classification, processed_imgs[i][self.class_num], self.model)
+                self.processed_imgs[i][self.class_num] = cleanup_labels(self.processed_imgs[i][self.class_num])
+                
+                confidences[i] = get_confidence_in_true_class(temp_attack, self.classification, self.processed_imgs[i][self.class_num], self.model)
                 
             avg_true_class_conf = np.mean(confidences)
             
@@ -117,32 +125,44 @@ class AdversarialPatternGenerator:
         '''
         # inspo: https://github.com/mahmoods01/accessorize-to-a-crime/blob/master/aux/attack/dodge.m
 
-        ## divide self.step_size and self.lambda.tv by num_images
+        step_size = self.step_size/self.num_images
+        lambda_tv = self.lambda_tv/self.num_images
 
-        pertubations = np.zeros(experiment['num_images']) ## placeholder, where information for each pertubation is stored
         printable_vals = get_printable_vals()
+        pertubations = [[dict(), 0] for i in range(self.num_images + 1)] ## where information for each image pertubation is stored: [movement_info, r]
 
+        print(pertubations)
         i = 0
-        scores = np.array()
+        score_mean = 1
 
-        while i < self.max_iter and np.mean(scores) > self.stop_prob:
+        while i < self.max_iter and score_mean > self.stop_prob:
 
             #data storing:
-            images = []
-            movements = []
-            areas_to_perturb = []
+            attacks = [] * self.num_images
+            movements = [] * self.num_images
+            areas_to_perturb = [] * self.num_images
+            gradients = [] * self.num_images
+            scores = [] * self.num_images
 
-            for j in range(experiment['num_images']):
+            for j in range(self.num_images):
 
-                # for every image, move the accessory mask slightly by calling 
-                [round_accessory_area, round_accessory_im, movement_info] = move_accessory(experiment['accessory_image'], experiment['accessory_area'], self.movement)
-                pertubations[j]['movement_info'] = movement_info
+                # for every image, move the accessory mask slightly 
+                [round_accessory_im, round_accessory_area, movement_info] = move_accessory(experiment[0], experiment[1], self.movement)
+                pertubations[j][0] = movement_info
+                
+                area_to_perturb = round_accessory_area
+                
+                ##TODO: don't touch any rgb channel which have been fixed (fixed_rgb_channels) (if we want this?)
+                
+                attack = apply_accessory(self.processed_imgs[j][0], round_accessory_im, area_to_perturb)
+                
+                attacks[j] = attack
+                movements[j] = movement_info
+                areas_to_perturb[j] = area_to_perturb
+                
+                gradients[j] = self.model.find_gradient(attack, self.processed_imgs[j][self.class_num])
+                scores[j] = get_confidence_in_true_class(attack, self.classification, self.processed_imgs[i][self.class_num])
 
-                # define area to perturb using round_accessory_area and don't touch any rgb channel which have been fixed (fixed_rgb_channels)
-
-                # add accessory to image -- their approach was to replace the pixels marked out in round_accessory_area in the image with the coloured pertubation
-
-                # store image -- update data storing arrays images, movements, areas_to_perturb
 
             # [scores, gradients] = find_gradient(images, true_classes) get the gradient and confidence in true class by running deepface model on images with current pertubation
 
@@ -223,5 +243,16 @@ class AdversarialPatternGenerator:
         starting_point = self.get_best_starting_colour()
         
 
-        # result = self.dodge(starting_point)
+        result = self.dodge(starting_point)
+        
+        
+def cleanup_labels(true_class:str):
+## cleaning up different classification terms
+
+    if true_class.lower() == 'female':
+        true_class = 'Woman'
+    elif true_class.lower() == 'male':
+        true_class = 'Man'
+    
+    return true_class
 

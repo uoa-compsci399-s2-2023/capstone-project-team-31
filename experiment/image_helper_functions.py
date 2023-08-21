@@ -171,7 +171,7 @@ def move_accessory(accessory_image: np.ndarray, accessory_mask: np.ndarray, move
     # generate random values for horizontal, vertical and rotational shifts within the ranges given in 'movement' dict
     shift_x = random.randint(-1*movement['horizontal'], movement['horizontal'])
     shift_y = random.randint(-1*movement['horizontal'], movement['vertical'])
-    rotation = random.randint(-1*movement['rotation'], movement['rotation'])
+    rotation = random.randint(-1*movement['rotational'], movement['rotational'])
     # shift the pixel values in accessory_mask acording to those generated values
 
     # keep a record of what movements were made in movement_info
@@ -190,7 +190,7 @@ def move_accessory(accessory_image: np.ndarray, accessory_mask: np.ndarray, move
     accessory_mask = accessory_mask.rotate(rotation, fillcolor=(255, 255, 255), )
     accessory_mask = np.array(accessory_mask)
     
-    movement_info = {"horizontal": shift_x, "vertical": shift_y, "rotation": rotation}
+    movement_info = {"horizontal": shift_x, "vertical": shift_y, "rotational": rotation}
     return accessory_image, accessory_mask, movement_info
 
 def reverse_accessory_move(accessory_image: np.ndarray, accessory_mask: np.ndarray, movement_info: dict) -> tuple:
