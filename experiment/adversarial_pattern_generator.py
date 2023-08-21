@@ -145,10 +145,10 @@ class AdversarialPatternGenerator:
                 # store image -- update data storing arrays images, movements, areas_to_perturb
 
             # [scores, gradients] = find_gradient(images, true_classes) get the gradient and confidence in true class by running deepface model on images with current pertubation
-            gradients = np.zeros(area_to_pert.shape)
 
             for x in range(experiment['num_images']):
-
+                # TODO: need to define processed_image and gradients variables :/
+                
                 # get the xith image's data from data storage arrays (inl gradients)
                 im = processed_image[x,:,:,:]
                 gradient = gradients[x,:,:,:]
