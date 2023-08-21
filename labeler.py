@@ -146,17 +146,6 @@ class Ui_MainWindow(object):
         self.setup_ethnicity_combo()
         self.ethnicity_combo.setFont(font)
         
-        self.save_labels = QtWidgets.QPushButton(self.centralwidget)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.save_labels.sizePolicy().hasHeightForWidth())
-        self.save_labels.setSizePolicy(sizePolicy)
-        self.save_labels.setMinimumSize(QtCore.QSize(0, 100))
-        self.save_labels.clicked.connect(self.save_labels_to_db)
-        self.save_labels.setFont(font)
-        self.save_labels.setObjectName("pushButton")
-        self.verticalLayout.addWidget(self.save_labels)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 1086, 21))
@@ -172,6 +161,32 @@ class Ui_MainWindow(object):
         self.image_dir_select.triggered.connect(self.set_image_directory)
         self.menuFile.addAction(self.image_dir_select)
         self.menubar.addAction(self.menuFile.menuAction())
+        
+        self.horizontalLayout = QtWidgets.QHBoxLayout()
+        self.horizontalLayout.setObjectName("horizontalLayout")
+        self.save_general_btn = QtWidgets.QPushButton(self.centralwidget)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.save_general_btn.sizePolicy().hasHeightForWidth())
+        self.save_general_btn.setSizePolicy(sizePolicy)
+
+        self.save_general_btn.setFont(font)
+        self.save_general_btn.setObjectName("save_general_btn")
+        self.save_general_btn.clicked.connect(lambda: self.save_labels_to_db("images"))
+        self.horizontalLayout.addWidget(self.save_general_btn)
+        self.save_team_btn = QtWidgets.QPushButton(self.centralwidget)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.save_team_btn.sizePolicy().hasHeightForWidth())
+        self.save_team_btn.setSizePolicy(sizePolicy)
+
+        self.save_team_btn.setFont(font)
+        self.save_team_btn.setObjectName("save_team_btn")
+        self.save_team_btn.clicked.connect(lambda: self.save_labels_to_db("our_own_faces"))
+        self.horizontalLayout.addWidget(self.save_team_btn)
+        self.verticalLayout.addLayout(self.horizontalLayout)
 
         self.image_directory = None
         self.images = None
@@ -270,20 +285,21 @@ class Ui_MainWindow(object):
             print(e)
             print("Error saving labels")
             
-    def save_labels_to_db(self):
+    def save_labels_to_db(self, table_name):
         try:
             img_b64 = self.convert_base64()
             if img_b64 is not None:
-                self.db_cursor.execute("SELECT * FROM images WHERE img_base64=?", (img_b64,))
+                self.db_cursor.execute("SELECT * FROM {} WHERE img_base64=?".format(table_name), (img_b64,))
                 if self.db_cursor.fetchone() is None: # If the image is not in the databse, add it to the database
-                    self.db_cursor.execute("INSERT INTO images VALUES (?,?,?,?,?)", (img_b64, 
+                    self.db_cursor.execute("INSERT INTO {} VALUES (?,?,?,?,?)".format(table_name), (img_b64, 
                                                                                     self.ethnicity_combo.currentText(),
                                                                                     self.age_combo.currentText(),
                                                                                     self.gender_combo.currentText(),
                                                                                     self.emotion_combo.currentText()))
                     self.db_conn.commit()
                     self.save_labels_to_file()
-        except:
+        except Exception as e:
+            print(e)
             print("Error saving labels to database")
         
     def convert_base64(self):
@@ -311,10 +327,10 @@ class Ui_MainWindow(object):
         self.gender_label.setText(_translate("MainWindow", "Gender"))
         self.ethnicity_label.setText(_translate("MainWindow", "Ethnicity"))
         self.emotion_label.setText(_translate("MainWindow", "Emotion"))
-        self.save_labels.setText(_translate("MainWindow", "Save Labels"))
         self.menuFile.setTitle(_translate("MainWindow", "File"))
         self.image_dir_select.setText(_translate("MainWindow", "Select Image Directory"))
-        
+        self.save_general_btn.setText(_translate("MainWindow", "Save to General Table"))
+        self.save_team_btn.setText(_translate("MainWindow", "Save to Team Member Table"))
         
 if __name__ == "__main__":
     import sys
