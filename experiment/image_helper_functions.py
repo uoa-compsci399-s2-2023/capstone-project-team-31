@@ -3,6 +3,9 @@ import cv2, random, sqlite3, os, base64
 from PIL import Image
 import sys
 import os, json
+from imgaug import augmenters as iaa
+from imgaug import parameters as iap
+
 
 def pre_process_imgs():
     # if needed
@@ -140,11 +143,10 @@ def prepare_accessory(colour: str, accessory_dir: str, accessory_type: str) -> t
         if glasses is None:
             print("Error loading accessory from {}".format(accessory_dir))
         glasses = np.bitwise_not(glasses)
-        # glasses = cv2.cvtColor(glasses, cv2.COLOR_BGR2GRAY)
         mask = cv2.threshold(glasses, 0, 1, cv2.THRESH_BINARY)[1]
         
         # make a colour mask of the chosen colour
-        colour_info = json.load(open("./assets/starting_colours.json", 'r'))
+        colour_info = json.load(open("D:/Github/capstone-project-team-31/experiment/assets/starting_colours.json", 'r'))
         colour = colour_info[colour]
             
         coloured_matrix = np.array([[colour for i in range(glasses.shape[1])] for j in range(glasses.shape[0])])
@@ -172,26 +174,23 @@ def move_accessory(accessory_image: np.ndarray, accessory_mask: np.ndarray, move
     # generate random values for horizontal, vertical and rotational shifts within the ranges given in 'movement' dict
     shift_x = random.randint(-1*movement['horizontal'], movement['horizontal'])
     shift_y = random.randint(-1*movement['horizontal'], movement['vertical'])
-    rotation = random.randint(-1*movement['rotational'], movement['rotational'])
-    # shift the pixel values in accessory_mask acording to those generated values
 
-    # keep a record of what movements were made in movement_info
-    shift_x = random.randint(0, 3)
-    shift_y = random.randint(0, 3)
+    rotation = random.randint(-1*movement['rotation'], movement['rotation'])
+    
+    # Save the movement info
+    movement_info = {"horizontal": shift_x, "vertical": shift_y, "rotation": rotation}
+
     
     # Transform the image
     accessory_image = np.roll(accessory_image, (shift_x, shift_y), axis=(0, 1))
-    accessory_image = Image.fromarray(accessory_image)
-    accessory_image = accessory_image.rotate(rotation)
-    accessory_image = np.array(accessory_image)
+    rot_aug = iaa.Affine(rotate=iap.Deterministic(rotation))
+    accessory_image = rot_aug.augment_image(accessory_image)
     
     # Transform the mask
     accessory_mask = np.roll(accessory_mask, (shift_x, shift_y), axis=(0, 1))
-    accessory_mask = Image.fromarray(accessory_mask)
-    accessory_mask = accessory_mask.rotate(rotation, fillcolor=(255, 255, 255), )
-    accessory_mask = np.array(accessory_mask)
+    rot_aug = iaa.Affine(rotate=iap.Deterministic(rotation), cval=255)
+    accessory_mask = rot_aug.augment_image(accessory_mask)
     
-    movement_info = {"horizontal": shift_x, "vertical": shift_y, "rotational": rotation}
     return accessory_image, accessory_mask, movement_info
 
 def reverse_accessory_move(accessory_image: np.ndarray, accessory_mask: np.ndarray, movement_info: dict) -> tuple:
@@ -208,23 +207,20 @@ def reverse_accessory_move(accessory_image: np.ndarray, accessory_mask: np.ndarr
     '''
     print("accessory_image shape:{}\naccessory_image: {}".format(np.shape(accessory_image), accessory_image))
     # Transform the image
-    accessory_image = Image.fromarray(accessory_image)
-    accessory_image = accessory_image.rotate(movement_info['rotation'] * -1)
-    accessory_image = np.array(accessory_image)
+    rot_aug = iaa.Affine(rotate=iap.Deterministic(movement_info["rotation"] * -1))
+    accessory_image = rot_aug.augment_image(accessory_image)
     accessory_image = np.roll(accessory_image, (movement_info['horizontal'] * -1, movement_info['vertical'] * -1), axis=(0, 1))
     
     # Transform the mask
-    accessory_mask = Image.fromarray(accessory_mask)
-    accessory_mask = accessory_mask.rotate(movement_info['rotation'] * -1, fillcolor=(255, 255, 255))
-    accessory_mask = np.array(accessory_mask)
+    rot_aug = iaa.Affine(rotate=iap.Deterministic(movement_info["rotation"] * -1), cval=255)
+    accessory_mask = rot_aug.augment_image(accessory_mask)
     accessory_mask = np.roll(accessory_mask, (movement_info['horizontal'] * -1, movement_info['vertical'] * -1), axis=(0, 1))
     return accessory_image, accessory_mask
 
-
 def apply_accessory(image: np.ndarray, aug_accessory_image: np.ndarray, org_accessory_image) -> np.ndarray:
-    image = ((image - image.min())/image.max() * 255).astype(np.uint8)
-    temp = np.bitwise_and(image, org_accessory_image)
-    return np.bitwise_or(temp, aug_accessory_image)
+    mask = np.where(org_accessory_image == 0)
+    image[mask] = aug_accessory_image[mask]
+    return image
 
 def total_variation(image: np.array, beta = 1) -> tuple:
     '''
@@ -366,26 +362,3 @@ def convert_b64_to_np(img_b64: str):
     img = np.frombuffer(decoded_img, dtype=np.uint8)
     img = cv2.imdecode(img, cv2.IMREAD_COLOR)
     return img
-
-"""
-Below is a demo of the above functions
-"""
-# red_glasses, glasses = prepare_accessory("red", "experiment/assets/glasses_silhouette.png", "glasses")
-
-# red_glasses, glasses, movement_info = move_accessory(red_glasses, glasses, {"horizontal": 10, "vertical": 10, "rotation": 10})
-
-# images = prepare_images("Faces.db", 1)
-# # # convert to np array
-# img = convert_b64_to_np(images[0][0]) 
-# # # Resize to 224x224 (should be done in preprocessing, together with standardization of position)
-# img = cv2.resize(img, (224, 224))
-
-# # Apply the accessory to the image
-# overlay = apply_accessory(img, red_glasses, glasses)
-
-# # Reverse the movement
-# red_glasses, glasses = reverse_accessory_move(red_glasses, glasses, movement_info)
-
-# cv2.imshow("img", img)
-# cv2.imshow("overlay", overlay)
-# cv2.waitKey(0)
