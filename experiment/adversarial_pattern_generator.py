@@ -130,10 +130,6 @@ class AdversarialPatternGenerator:
 
                 # for every image, move the accessory mask slightly 
                 
-                if j == 1:
-                    cv2.imshow('image window', self.processed_imgs[j][0])
-                    cv2.waitKey(0)
-                    cv2.destroyAllWindows()
                 
                 [round_accessory_im, round_accessory_area, movement_info] = move_accessory(experiment['accessory_image'], experiment['accessory_mask'], self.movement)
                 pertubations[j].movement_info = movement_info
