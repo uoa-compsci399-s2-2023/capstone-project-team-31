@@ -20,7 +20,7 @@ Yellowish: (220, 210, 50)
 
 class AdversarialPatternGenerator:
 
-    def __init__(self, accessory_type, classification, images_dir, num_images=1, step_size=20, lambda_tv=3, printability_coeff=5, momentum_coeff=0.4, gauss_filtering=0, max_iter=15, channels_to_fix=[], stop_prob=0.01, horizontal_move=4, vertical_move=4, rotational_move=4, verbose=True):
+    def __init__(self, accessory_type, classification, images_dir, num_images=1, step_size=2, lambda_tv=3, printability_coeff=5, momentum_coeff=0.4, gauss_filtering=0, max_iter=15, channels_to_fix=[], stop_prob=0.01, horizontal_move=4, vertical_move=4, rotational_move=4, verbose=True):
         self.accessory_type = accessory_type
         self.classification = classification # what type of classification is being dodged - 'gender', 'age', 'ethnicity', 'emotion' (to do: emotion requires further preprocessing)
         if classification == 'ethnicity':
@@ -190,6 +190,7 @@ class AdversarialPatternGenerator:
 
                 # update the pertubation using total_variation from image_helper_functions
                 _, dr_tv = total_variation(im)
+                dr_tv = np.nan_to_num(dr_tv)
                 print("total variation: {}\ndr_tv: {}".format(_, dr_tv))
                 dr_tv[mask,:] = [0, 0, 0]
                 dr_tv = dr_tv/np.max(np.abs(dr_tv))
@@ -199,8 +200,11 @@ class AdversarialPatternGenerator:
                 r = np.reshape(r, im.shape) #TODO: Need to check if this is exactly the shape we wanted and implemented
                 
                 print("r shape: {}\nr:{}".format(np.shape(r), r))
-                r = reverse_accessory_move(r, experiment['accessory_mask'], movement_info) 
-                r[experiment['accessory_area'] != 1] = 0
+                print("max r: {}\nmin r: {}".format(np.max(r), np.min(r)))
+                
+                
+                #r = reverse_accessory_move(r, experiment['accessory_mask'], movement_info) ## TODO: what is this accessory area - this one or round_accessory area
+                #r[experiment['accessory_mask'] != 1] = 0
 
                 # apply gaussian filtering per specification given to self.gauss_filtering
                 
@@ -215,25 +219,29 @@ class AdversarialPatternGenerator:
 
 
             # get printability score using non_printability_score in image_helper_functions.py
-            nps, dr_nps = non_printability_score(experiment['accessory_image'], experiment['accessory_area'][:,:,0], printable_vals)
+            nps, dr_nps = non_printability_score(experiment['accessory_image'], experiment['accessory_mask'][:,:,0], printable_vals)
             if self.printability_coeff != 0:
                 dr_nps = -dr_nps
                 dr_nps[(dr_nps + experiment['accessory_image']) > 255] = 0
                 dr_nps[(dr_nps + experiment['accessory_image']) < 0] = 0
-                area_to_pert = experiment['accessory_area']
+                area_to_pert = experiment['accessory_mask']
                 dr_nps[:,:,self.channels_to_fix] = 0
                 gradient[area_to_pert != 1] = 0
                 experiment['accessory_image'] = experiment['accessory_image'] + self.printability_coeff*dr_nps
 
             # apply pertubations
             # TODO: Again check how to actually store and retrieve r value of each perturbation <3
-            for r_i in range(pertubations.shape[0]):
+            for r_i in range(len(pertubations)):
                 r = pertubations[r_i].r
+                
+                r = (np.rint(r)).astype(int)
 
                 # perturb model
                 r[(experiment['accessory_image'] + r) > 255] = 0
                 r[(experiment['accessory_image'] + r) < 0] = 0
                 experiment['accessory_image'] = experiment['accessory_image'] + r
+                
+                experiment['accessory_image'] = reverse_accessory_move(experiment['accessory_image'], areas_to_perturb[r_i], movements[r_i])
 
             # TODO: quantization step looks sketchy, theyre just subtracting it by 0??? mod(x,1) is always 0 or am i tripping?
             score_mean = np.mean(scores)

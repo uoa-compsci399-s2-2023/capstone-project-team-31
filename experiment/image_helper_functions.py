@@ -206,7 +206,7 @@ def reverse_accessory_move(accessory_image: np.ndarray, accessory_mask: np.ndarr
     * accessory_image: the new image of the accessory in np.ndarray format
     * accessory_mask: the new mask of the accessory in np.ndarray format
     '''
-    
+    print("accessory_image shape:{}\naccessory_image: {}".format(np.shape(accessory_image), accessory_image))
     # Transform the image
     accessory_image = Image.fromarray(accessory_image)
     accessory_image = accessory_image.rotate(movement_info['rotation'] * -1)
