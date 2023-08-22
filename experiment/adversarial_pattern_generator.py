@@ -3,6 +3,8 @@ import numpy as np
 from deepface_functions import *
 from deepface_models import *
 from PIL import Image
+from pertubation import Pertubation
+import tensorflow as tf
 
 ## define an experiment object with relevant parameters
 
@@ -37,8 +39,9 @@ class AdversarialPatternGenerator:
         processed_imgs = prepare_processed_images(self.images_dir, self.num_images)
         self.processed_imgs = processed_imgs
         
-        if len(processed_imgs) > self.num_images:
+        if len(processed_imgs) < self.num_images:
             ## a face hasn't been detected
+            print("unidentified face, num_images now {}".format(len(processed_imgs)))
             self.num_images = len(processed_imgs)
         
         self.step_size = step_size
@@ -57,26 +60,6 @@ class AdversarialPatternGenerator:
         self.verbose = verbose
         
         self.model = attributeModel(self.classification)
-
-    # def pre_process(self, images):
-        
-    #     processed_imgs = []
-        
-    #     for i in range(len(images)):
-            
-    #         temp = convert_b64_to_np(images[i][0]) 
-
-    #         contents = getImageContents(temp)
-            
-    #         detected_aligned = contents[0][0]
-    #         detected_aligned = np.multiply(detected_aligned, 255).astype(np.uint8)
-
-    #         processed_imgs.append(detected_aligned)
-
-    #     ## may need helper function to use GPU or not, such as in line 32 https://github.com/mahmoods01/accessorize-to-a-crime/blob/master/physical_dodging.m
-
-    #     return processed_imgs
-    
 
 
     def get_best_starting_colour(self):
@@ -100,19 +83,17 @@ class AdversarialPatternGenerator:
                 temp_attack = temp_attack.astype(np.uint8)
                 
                 
-                cv2.imshow('image window', temp_attack)
-                cv2.waitKey(0)
-                cv2.destroyAllWindows()
+                # cv2.imshow('image window', temp_attack)
+                # cv2.waitKey(0)
+                # cv2.destroyAllWindows()
                 
-                self.processed_imgs[i][self.class_num] = cleanup_labels(self.processed_imgs[i][self.class_num])
-                
-                confidences[i] = get_confidence_in_true_class(temp_attack, self.classification, self.processed_imgs[i][self.class_num], self.model)
+                confidences[i] = get_confidence_in_true_class(cleanup_dims(temp_attack), self.classification, cleanup_labels(self.processed_imgs[i][self.class_num]), self.model)
                 
             avg_true_class_conf = np.mean(confidences)
             
             if avg_true_class_conf < min_avg_true_class_conf:
                 min_avg_true_class_conf = avg_true_class_conf
-                best_start = [accessory_img, accessory_mask, temp_attack]
+                best_start ={'accessory_image': accessory_img, 'accessory_mask': accessory_mask}
                 
                 print('new best start found with colour {} and confidence {}'.format(colour, min_avg_true_class_conf))
                 
@@ -128,27 +109,31 @@ class AdversarialPatternGenerator:
         step_size = self.step_size/self.num_images
         lambda_tv = self.lambda_tv/self.num_images
 
+        print("entered dodge")
+        
         printable_vals = get_printable_vals()
-        pertubations = [[dict(), 0] for i in range(self.num_images + 1)] ## where information for each image pertubation is stored: [movement_info, r]
+        pertubations = [Pertubation() for i in range(self.num_images + 1)] ## where information for each image pertubation is stored: [movement_info, r]
 
-        print(pertubations)
         i = 0
         score_mean = 1
 
         while i < self.max_iter and score_mean > self.stop_prob:
-
+            
+            ("while loop iteration {}".format(i))
             #data storing:
-            attacks = [] * self.num_images
-            movements = [] * self.num_images
-            areas_to_perturb = [] * self.num_images
-            gradients = [] * self.num_images
-            scores = [] * self.num_images
+            attacks = [None] * self.num_images
+            movements = [None] * self.num_images
+            areas_to_perturb = [None] * self.num_images
+            gradients = [None] * self.num_images
+            scores = [None] * self.num_images
 
             for j in range(self.num_images):
+                
+                print("first j loop: {}".format(j))
 
                 # for every image, move the accessory mask slightly 
-                [round_accessory_im, round_accessory_area, movement_info] = move_accessory(experiment[0], experiment[1], self.movement)
-                pertubations[j][0] = movement_info
+                [round_accessory_im, round_accessory_area, movement_info] = move_accessory(experiment['accessory_image'], experiment['accessory_mask'], self.movement)
+                pertubations[j].movement_info = movement_info
                 
                 area_to_perturb = round_accessory_area
                 
@@ -160,34 +145,61 @@ class AdversarialPatternGenerator:
                 movements[j] = movement_info
                 areas_to_perturb[j] = area_to_perturb
                 
-                gradients[j] = self.model.find_gradient(attack, self.processed_imgs[j][self.class_num])
-                scores[j] = get_confidence_in_true_class(attack, self.classification, self.processed_imgs[i][self.class_num])
+                print("image data: {}".format(self.processed_imgs[j][1:]))
+                
+                label = cleanup_labels(self.processed_imgs[j][self.class_num])
+                
+                print("label: {}".format(label))
+                
+                print("True class: {}".format(label))
+                
+                #expand attack dim to work with deepface
+                attack = cleanup_dims(attack)
+                
+                attack = int_to_float(attack)
+                
+                tens = tf.convert_to_tensor(attack)
+                
+                gradients[j] = self.model.find_resized_gradient(tens, self.model.generateLabelFromText(label))[0]
+                scores[j] = get_confidence_in_true_class(attack, self.classification, label, self.model)
 
 
             # [scores, gradients] = find_gradient(images, true_classes) get the gradient and confidence in true class by running deepface model on images with current pertubation
-
-            for x in range(experiment['num_images']):
+            print("gradients: {}\nscores: {}".format(gradients, scores))
+            
+            for x in range(self.num_images):
+                
+                print("second x loop: {}".format(x))
                 # TODO: need to define processed_image and gradients variables :/
                 
                 # get the xith image's data from data storage arrays (inl gradients)
-                im = processed_image[x,:,:,:]
-                gradient = gradients[x,:,:,:]
-                area_to_pert = areas_to_perturb[x,:,:,:]
+                im = attacks[x]
+                gradient = gradients[x]
+                area_to_pert = areas_to_perturb[x]
                 movement_info = movements[x]
+                
+                print("gradient shape: {}\ngradient: {}".format(np.shape(gradient), gradient))
+                print("pertubation area shape: {}\n pertubation area: {}".format(np.shape(area_to_pert), area_to_pert))
 
                 # normalise gradient
-                gradient[area_to_pert != 1] = 0
+                mask = np.all(area_to_pert == [255, 255, 255], axis=2)
+                gradient = gradient.numpy()
+                gradient[mask, :] = [0, 0, 0] 
                 gradient = gradient/np.max(np.abs(gradient)) 
+                
 
                 # update the pertubation using total_variation from image_helper_functions
                 _, dr_tv = total_variation(im)
-                dr_tv[area_to_pert != 1] = 0
+                print("total variation: {}\ndr_tv: {}".format(_, dr_tv))
+                dr_tv[mask,:] = [0, 0, 0]
                 dr_tv = dr_tv/np.max(np.abs(dr_tv))
 
                 # compute pertubation and reverse the movement using reverse_accesory_movement(movement_info)
-                r = self.step_size*gradient - dr_tv*self.lambda_tv
+                r = step_size*gradient - dr_tv*lambda_tv
                 r = np.reshape(r, im.shape) #TODO: Need to check if this is exactly the shape we wanted and implemented
-                r = reverse_accessory_move(r, movement_info) #TODO: This function asks for three inputs, im not sure what else to put here :((
+                
+                print("r shape: {}\nr:{}".format(np.shape(r), r))
+                r = reverse_accessory_move(r, experiment['accessory_mask'], movement_info) 
                 r[experiment['accessory_area'] != 1] = 0
 
                 # apply gaussian filtering per specification given to self.gauss_filtering
@@ -224,17 +236,26 @@ class AdversarialPatternGenerator:
                 experiment['accessory_image'] = experiment['accessory_image'] + r
 
             # TODO: quantization step looks sketchy, theyre just subtracting it by 0??? mod(x,1) is always 0 or am i tripping?
-
+            score_mean = np.mean(scores)
             # display
             if self.verbose:
+                
+                print("iteration: {}".format(i))
+                print("average confidence in true class: {}".format(score_mean))
+                print("non-printability score: {}".format(nps))
+                print("attack:")
+                
+                print("attack shape: {}\n attack format: {}".format(np.shape(attack[0]), attack[0]))
+                
+                cv2.imshow('image window', attacks[0])
+                cv2.waitKey(0)
+                cv2.destroyAllWindows()
                 # print out the iteration number, deepface's current confidence in image true classes, non-printability score
                 # display the image with current pertubation
-                pass
 
             i += 1 
-            pass
 
-        pass
+        return attacks
 
     # return final pertubation result, with deepface's average confidence in predicting true classes
 
@@ -250,9 +271,28 @@ def cleanup_labels(true_class:str):
 ## cleaning up different classification terms
 
     if true_class.lower() == 'female':
-        true_class = 'Woman'
+        result = 'Woman'
     elif true_class.lower() == 'male':
-        true_class = 'Man'
+        result = 'Man'
     
-    return true_class
+    return result
 
+
+def cleanup_dims(image):
+    
+    ## cleaning up dimension issues:
+    if len(np.shape(image)) == 3:
+        image = np.expand_dims(image, axis=0)
+        
+    return image
+
+def int_to_float(image):
+    image = image.astype(np.float32)
+    image = np.divide(image, 255)
+    
+    return image
+
+def float_to_int(image):
+    
+    image = np.multiply(image, 255)
+    image = image.astype(np.uint8)

@@ -97,6 +97,7 @@ def image_to_face(image: tuple):
     img = np.multiply(img, 255).astype(np.uint8)
     
     outputImage = (img[0], image[1], image[2], image[3],image[4])
+    
     return outputImage
 
 def prepare_processed_images(images_dir: str, num_images: int):
@@ -345,7 +346,7 @@ def get_printable_vals(num_colors = 32) -> np.array:
     # inspo1: https://github.com/mahmoods01/accessorize-to-a-crime/blob/master/aux/attack/get_printable_vals.m
     # inspo2: https://github.com/mahmoods01/accessorize-to-a-crime/blob/master/aux/attack/make_printable_vals_struct.m
     
-    print_img = Image.open('experiment/assets/printed-palette.png')
+    print_img = Image.open('./assets/printed-palette.png')
     img_arr = np.asarray(print_img)
 
     # Cuts 3% of edges from each side (subject to change)
