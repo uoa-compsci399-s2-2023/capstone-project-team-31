@@ -100,6 +100,7 @@ def image_to_face(image: tuple):
     img = np.multiply(img, 255).astype(np.uint8)
     
     outputImage = (img[0], image[1], image[2], image[3],image[4])
+    
     return outputImage
 
 def prepare_processed_images(images_dir: str, num_images: int):
@@ -173,10 +174,12 @@ def move_accessory(accessory_image: np.ndarray, accessory_mask: np.ndarray, move
     # generate random values for horizontal, vertical and rotational shifts within the ranges given in 'movement' dict
     shift_x = random.randint(-1*movement['horizontal'], movement['horizontal'])
     shift_y = random.randint(-1*movement['horizontal'], movement['vertical'])
+
     rotation = random.randint(-1*movement['rotation'], movement['rotation'])
     
     # Save the movement info
     movement_info = {"horizontal": shift_x, "vertical": shift_y, "rotation": rotation}
+
     
     # Transform the image
     accessory_image = np.roll(accessory_image, (shift_x, shift_y), axis=(0, 1))
@@ -202,7 +205,7 @@ def reverse_accessory_move(accessory_image: np.ndarray, accessory_mask: np.ndarr
     * accessory_image: the new image of the accessory in np.ndarray format
     * accessory_mask: the new mask of the accessory in np.ndarray format
     '''
-    
+    print("accessory_image shape:{}\naccessory_image: {}".format(np.shape(accessory_image), accessory_image))
     # Transform the image
     rot_aug = iaa.Affine(rotate=iap.Deterministic(movement_info["rotation"] * -1))
     accessory_image = rot_aug.augment_image(accessory_image)
@@ -339,7 +342,7 @@ def get_printable_vals(num_colors = 32) -> np.array:
     # inspo1: https://github.com/mahmoods01/accessorize-to-a-crime/blob/master/aux/attack/get_printable_vals.m
     # inspo2: https://github.com/mahmoods01/accessorize-to-a-crime/blob/master/aux/attack/make_printable_vals_struct.m
     
-    print_img = Image.open('experiment/assets/printed-palette.png')
+    print_img = Image.open('./assets/printed-palette.png')
     img_arr = np.asarray(print_img)
 
     # Cuts 3% of edges from each side (subject to change)

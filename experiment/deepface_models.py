@@ -123,13 +123,16 @@ class attributeModel:
         Outputs: Gradient respective to input_label
         
         '''
+
         input_label = np.expand_dims(input_label_raw, axis = 0)
         input_image = tf.convert_to_tensor(input_image_np)
+        
         with tf.GradientTape() as tape:
             tape.watch(input_image)
             prediction = self.model(input_image)
             loss = loss_object(input_label, prediction)
         gradient = tape.gradient(loss, input_image)
+        
         return gradient
     
     def find_resized_gradient(self, input_image, input_label):
@@ -144,7 +147,6 @@ class attributeModel:
         gradient = self.find_gradient(gray, input_label)
         np_gradient = gradient.numpy()
         resized = cv2.resize(np_gradient[0], (224, 224))
-        print(resized.shape)
         gray = cv2.cvtColor(resized, cv2.COLOR_GRAY2BGR)
         return gray
         
