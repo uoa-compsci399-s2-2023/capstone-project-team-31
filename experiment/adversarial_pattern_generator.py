@@ -185,12 +185,19 @@ class AdversarialPatternGenerator:
                 dr_tv[mask,:] = [0, 0, 0]
                 dr_tv = dr_tv/np.max(np.abs(dr_tv))
 
+                if np.max(dr_tv*lambda_tv) > 100000:
+                    r = step_size*gradient 
                 # compute pertubation and reverse the movement using reverse_accesory_movement(movement_info)
-                r = step_size*gradient - dr_tv*lambda_tv
-                r = np.reshape(r, im.shape) #TODO: Need to check if this is exactly the shape we wanted and implemented              
+                else:
+                    r = step_size*gradient - dr_tv*lambda_tv
+                
+
+                r = np.reshape(r, im.shape) #TODO: Need to check if this is exactly the shape we wanted and implemented 
+                            
                 
                 r, r_mask = reverse_accessory_move(r, experiment['accessory_mask'], movement_info)
-                r[experiment['accessory_mask'] != 1] = 0
+                
+                r[experiment['accessory_mask'] != 255] = 0 
 
                 # apply gaussian filtering per specification given to self.gauss_filtering
                 
@@ -198,7 +205,8 @@ class AdversarialPatternGenerator:
                 if i>1:
                     #TODO: What exactly is .r here, is perturbations its own class?
                     #Otherwise we can just store the r of each perturbation in another array :))
-                    pertubations[x].r = self.momentum_coeff*pertubations[x].r + r 
+                    pertubations[x].r = self.momentum_coeff*pertubations[x].r + r
+                    
                 else:
                     pertubations[x].r = r
                 pass
@@ -213,17 +221,21 @@ class AdversarialPatternGenerator:
                 area_to_pert = experiment['accessory_mask']
                 dr_nps[:,:,self.channels_to_fix] = 0
                 gradient[area_to_pert != 1] = 0
+                print("max in printability pertubation: {}\nmin in printability pertubation: {}".format(np.max(self.printability_coeff*dr_nps), np.min(self.printability_coeff*dr_nps)))
                 experiment['accessory_image'] = experiment['accessory_image'] + self.printability_coeff*dr_nps
 
             # apply pertubations
             for r_i in range(len(pertubations)):
                 r = pertubations[r_i].r
-
+                
+                
                 r = (np.rint(r)).astype(int)
+                
 
                 # perturb model
                 r[(experiment['accessory_image'] + r) > 255] = 0
                 r[(experiment['accessory_image'] + r) < 0] = 0
+                print("max in r: {}\nmin in r: {}".format(np.max(r), np.min(r))) 
                 experiment['accessory_image'] = experiment['accessory_image'] + r
                 
                 
