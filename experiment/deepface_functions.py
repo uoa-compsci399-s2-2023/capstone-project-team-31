@@ -16,7 +16,6 @@ def get_confidence_in_true_class(image: np.ndarray, classification:str, true_cla
         
 
     labeledOutput = e.predict_verbose(image_after)
-    print(labeledOutput)
     
     confidence = labeledOutput[classification][true_class]
     

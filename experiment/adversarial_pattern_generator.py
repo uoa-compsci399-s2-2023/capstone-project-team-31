@@ -20,7 +20,7 @@ Yellowish: (220, 210, 50)
 
 class AdversarialPatternGenerator:
 
-    def __init__(self, accessory_type, classification, images_dir, num_images=1, step_size=5, lambda_tv=3, printability_coeff=5, momentum_coeff=0.4, gauss_filtering=0, max_iter=15, channels_to_fix=[], stop_prob=0.01, horizontal_move=4, vertical_move=4, rotational_move=4, verbose=True):
+    def __init__(self, accessory_type, classification, images_dir, num_images=1, step_size=5, lambda_tv=3, printability_coeff=5, momentum_coeff=0.4, gauss_filtering=0, max_iter=5, channels_to_fix=[], stop_prob=0.01, horizontal_move=4, vertical_move=4, rotational_move=4, verbose=True):
         self.accessory_type = accessory_type
         self.classification = classification # what type of classification is being dodged - 'gender', 'age', 'ethnicity', 'emotion' (to do: emotion requires further preprocessing)
         if classification == 'ethnicity':
@@ -77,8 +77,10 @@ class AdversarialPatternGenerator:
             confidences = np.empty(self.num_images)
             
             for i in range(self.num_images):
+                
+                img_copy = np.copy(self.processed_imgs[i][0]) #otherwise self.processed_imgs edited
             
-                temp_attack = apply_accessory(self.processed_imgs[i][0], accessory_img, accessory_mask)
+                temp_attack = apply_accessory(img_copy, accessory_img, accessory_mask)
 
                 temp_attack = temp_attack.astype(np.uint8)
                 
@@ -127,6 +129,12 @@ class AdversarialPatternGenerator:
             for j in range(self.num_images):
 
                 # for every image, move the accessory mask slightly 
+                
+                if j == 1:
+                    cv2.imshow('image window', self.processed_imgs[j][0])
+                    cv2.waitKey(0)
+                    cv2.destroyAllWindows()
+                
                 [round_accessory_im, round_accessory_area, movement_info] = move_accessory(experiment['accessory_image'], experiment['accessory_mask'], self.movement)
                 pertubations[j].movement_info = movement_info
                 
@@ -134,7 +142,9 @@ class AdversarialPatternGenerator:
                 
                 ##TODO: don't touch any rgb channel which have been fixed (fixed_rgb_channels) (if we want this?)
                 
-                attack = apply_accessory(self.processed_imgs[j][0], round_accessory_im, area_to_perturb)
+                img_copy = np.copy(self.processed_imgs[j][0]) #otherwise self.processed_imgs edited
+                
+                attack = apply_accessory(img_copy, round_accessory_im, area_to_perturb)
                 
                 attacks[j] = attack
                 movements[j] = movement_info
