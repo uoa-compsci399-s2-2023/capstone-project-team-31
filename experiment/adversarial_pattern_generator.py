@@ -4,6 +4,7 @@ from deepface_functions import *
 from deepface_models import *
 from PIL import Image
 from pertubation import Pertubation
+from experiment_model import Experiment
 import tensorflow as tf
 
 ## define an experiment object with relevant parameters
@@ -56,7 +57,7 @@ class AdversarialPatternGenerator:
         self.movement['horizontal'] = horizontal_move
         self.movement['vertical'] = vertical_move
         self.movement['rotation'] = rotational_move
-        self.colours = ['red', 'green', 'blue', 'yellow']
+        self.colours = ['grey', 'organish', 'brownish', 'goldish']
         self.verbose = verbose
         
         self.model = attributeModel(self.classification)
@@ -95,14 +96,14 @@ class AdversarialPatternGenerator:
             
             if avg_true_class_conf < min_avg_true_class_conf:
                 min_avg_true_class_conf = avg_true_class_conf
-                best_start ={'accessory_image': accessory_img, 'accessory_mask': accessory_mask}
+                best_start = Experiment(accessory_img, accessory_mask)
                 
                 print('new best start found with colour {} and confidence {}'.format(colour, min_avg_true_class_conf))
                 
             
         return best_start
 
-    def dodge(self, experiment):
+    def dodge(self, experiment: Experiment):
         '''
         pertubates the colours within the accessory mask using gradient descent to minimise deepface's confidence in predicting true labels
         '''
@@ -130,8 +131,7 @@ class AdversarialPatternGenerator:
 
                 # for every image, move the accessory mask slightly 
                 
-                
-                [round_accessory_im, round_accessory_area, movement_info] = move_accessory(experiment['accessory_image'], experiment['accessory_mask'], self.movement)
+                [round_accessory_im, round_accessory_area, movement_info] = move_accessory(experiment.get_image(), experiment.get_mask(), self.movement)
                 pertubations[j].movement_info = movement_info
                 
                 area_to_perturb = round_accessory_area
@@ -156,7 +156,7 @@ class AdversarialPatternGenerator:
                 tens = tf.convert_to_tensor(attack)
                 
                 gradients[j] = self.model.find_resized_gradient(tens, self.model.generateLabelFromText(label))[0]
-                scores[j] = get_confidence_in_true_class(attack, self.classification, label, self.model)
+                scores[j] = get_confidence_in_true_class(attack, self.classification, label, self.model, True)
 
 
             # [scores, gradients] = find_gradient(images, true_classes) get the gradient and confidence in true class by running deepface model on images with current pertubation
@@ -170,34 +170,50 @@ class AdversarialPatternGenerator:
                 gradient = gradients[x]
                 area_to_pert = areas_to_perturb[x]
                 movement_info = movements[x]
+                
+                cv2.imshow('image window', area_to_pert)
+                cv2.waitKey(0)
+                cv2.destroyAllWindows()
 
                 # normalise gradient
-                mask = np.all(area_to_pert == [255, 255, 255], axis=2)
+                mask = np.all(area_to_pert != [0,0,0], axis=2)
                 gradient = gradient.numpy()
-                gradient[mask, :] = [0, 0, 0] 
+                gradient[mask, :] = 0
                 gradient = gradient/np.max(np.abs(gradient)) 
+                
+                print("max gradient: {}\nmin gradient: {}".format(np.max(gradient), np.min(gradient)))
                 
 
                 # update the pertubation using total_variation from image_helper_functions
                 _, dr_tv = total_variation(im)
                 dr_tv = np.nan_to_num(dr_tv)
 
-                dr_tv[mask,:] = [0, 0, 0]
+                dr_tv[mask,:] = 0
                 dr_tv = dr_tv/np.max(np.abs(dr_tv))
+                
+                dr_tv = np.nan_to_num(dr_tv)
+                
+                print("max dr_dv: {}\nmin dr_tv: {}".format(np.max(dr_tv), np.min(dr_tv)))
 
-                if np.max(dr_tv*lambda_tv) > 100000:
-                    r = step_size*gradient 
+
                 # compute pertubation and reverse the movement using reverse_accesory_movement(movement_info)
-                else:
-                    r = step_size*gradient - dr_tv*lambda_tv
+
+                r = step_size*gradient - dr_tv*lambda_tv
+                
+                r = np.nan_to_num(r)
+                
+                print("BEFORE: max in r: {}\nBEFORE: min in r: {}".format(np.max(r), np.min(r)))
                 
 
                 r = np.reshape(r, im.shape) #TODO: Need to check if this is exactly the shape we wanted and implemented 
-                            
+                           
                 
-                r, r_mask = reverse_accessory_move(r, experiment['accessory_mask'], movement_info)
+                r, r_mask = reverse_accessory_move(r, experiment.get_mask(), movement_info)
                 
-                r[experiment['accessory_mask'] != 255] = 0 
+                print("AFTER: max in r: {}\nAFTER: min in r: {}".format(np.max(r), np.min(r))) 
+                
+                r[experiment.get_mask() != 0] = 0 
+                print("AFTER: max in r: {}\nAFTER: min in r: {}".format(np.max(r), np.min(r))) 
 
                 # apply gaussian filtering per specification given to self.gauss_filtering
                 
@@ -205,7 +221,16 @@ class AdversarialPatternGenerator:
                 if i>1:
                     #TODO: What exactly is .r here, is perturbations its own class?
                     #Otherwise we can just store the r of each perturbation in another array :))
-                    pertubations[x].r = self.momentum_coeff*pertubations[x].r + r
+                    print("BEFORE: pertubations[x].r max: {}\nBEFORE: pertubations[x].r min: {}".format(np.max(pertubations[x].r), np.min(pertubations[x].r)))
+                    
+                    pertubations[x].r = np.multiply(pertubations[x].r, (self.momentum_coeff)) 
+                    
+                    print("AFTER: pertubations[x].r max: {}\nAFTER: pertubations[x].r min: {}".format(np.max(pertubations[x].r), np.min(pertubations[x].r)))
+                    
+                    pertubations[x].r = np.add(r, pertubations[x].r)
+
+
+                    print("AFTER: max in r: {}\nAFTER: min in r: {}".format(np.max(pertubations[x].r), np.min(pertubations[x].r))) 
                     
                 else:
                     pertubations[x].r = r
@@ -213,35 +238,61 @@ class AdversarialPatternGenerator:
 
 
             # get printability score using non_printability_score in image_helper_functions.py
-            nps, dr_nps = non_printability_score(experiment['accessory_image'], experiment['accessory_mask'], printable_vals)
+            nps, dr_nps = non_printability_score(experiment.get_image(), experiment.get_mask(), printable_vals)
             if self.printability_coeff != 0:
                 dr_nps = -dr_nps
-                dr_nps[(dr_nps + experiment['accessory_image']) > 255] = 0
-                dr_nps[(dr_nps + experiment['accessory_image']) < 0] = 0
-                area_to_pert = experiment['accessory_mask']
+                dr_nps[(dr_nps + experiment.get_image()) > 255] = 0
+                dr_nps[(dr_nps + experiment.get_image()) < 0] = 0
+                area_to_pert = experiment.get_mask()
                 dr_nps[:,:,self.channels_to_fix] = 0
                 gradient[area_to_pert != 1] = 0
                 print("max in printability pertubation: {}\nmin in printability pertubation: {}".format(np.max(self.printability_coeff*dr_nps), np.min(self.printability_coeff*dr_nps)))
-                experiment['accessory_image'] = experiment['accessory_image'] + self.printability_coeff*dr_nps
+                experiment.set_image(experiment.get_image() + self.printability_coeff*dr_nps)
 
             # apply pertubations
             for r_i in range(len(pertubations)):
                 r = pertubations[r_i].r
                 
+                print("PRE ROUND: max r: {}\nPRE ROUND: min r: {}".format(np.max(r), np.min(r)))
+                
                 
                 r = (np.rint(r)).astype(int)
                 
-
-                # perturb model
-                r[(experiment['accessory_image'] + r) > 255] = 0
-                r[(experiment['accessory_image'] + r) < 0] = 0
                 print("max in r: {}\nmin in r: {}".format(np.max(r), np.min(r))) 
-                experiment['accessory_image'] = experiment['accessory_image'] + r
+                # perturb model
+                r[(experiment.get_image() + r) > 255] = 0
+                r[(experiment.get_image() + r) < 0] = 0
+                print("max in r: {}\nmin in r: {}".format(np.max(r), np.min(r))) 
+                print('r shape: {}'.format(np.shape(r)))
                 
+                # result = np.zeros((224, 224, 3), dtype=np.uint8)
+                    
+                # for s in range(224):
+                #     for t in range(224):
+                #         for c in range(3):
+                #             result[s][t][c] = experiment.get_image()[s][t][c] + r[s][t][c]
+                            
+                result = np.add(r, experiment.get_image())
+                print("result max: {}result min: {}".format(np.max(result), np.min(result)))
+                
+                the_same = np.where(result != experiment.get_image())
+                print("# values different: {}".format(len(the_same[0])))
+                
+                experiment.set_image(result)
+
+                
+                print('should be 0: {}'.format(len(np.where(result != experiment.get_image())[0])))
+                            
+                
+                #experiment['accessory_image'] = experiment['accessory_image'] + r
+                
+                print("max in accessory_iamge: {}\nmin in accessory_iamge: {}".format(np.max(experiment.get_image()), np.min(experiment.get_image()))) 
+                print('accessory_image shape: {}'.format(np.shape(experiment.get_image())))
                 
 
             # TODO: quantization step looks sketchy, theyre just subtracting it by 0??? mod(x,1) is always 0 or am i tripping?
             score_mean = np.mean(scores)
+            print("scores: {}".format(scores))
             # display
             if self.verbose:
                 
@@ -255,7 +306,7 @@ class AdversarialPatternGenerator:
 
             i += 1 
 
-        return attacks
+        return attacks, experiment
 
     # return final pertubation result, with deepface's average confidence in predicting true classes
 
@@ -263,8 +314,17 @@ class AdversarialPatternGenerator:
 
         starting_point = self.get_best_starting_colour()
         
+        before = starting_point.get_image()
+        
 
-        result = self.dodge(starting_point)
+        result, experiment_result = self.dodge(starting_point)
+        
+        cv2.imshow('image window', before)
+        cv2.waitKey(0)
+        cv2.destroyAllWindows()
+        
+        print("should be different: {}".format(len(np.where(before != experiment_result.get_image())[0])))
+        
         
         for attack in result:
             cv2.imshow('image window', attack)
