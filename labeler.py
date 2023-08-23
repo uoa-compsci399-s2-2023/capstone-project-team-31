@@ -201,7 +201,7 @@ class Ui_MainWindow(object):
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
         
     def setup_emotion_combo(self):
-        self.emotion_combo.addItems(["", "happy", "sad", "angry", "neutral", "surprised"])
+        self.emotion_combo.addItems(["", "happy", "sad", "angry", "neutral", "surprised", "disgusted", "fear"])
     def setup_age_combo(self):
         self.age_combo.addItems([""] + [str(i) for i in range(100)])
     def setup_gender_combo(self):
@@ -304,7 +304,7 @@ class Ui_MainWindow(object):
         
     def convert_base64(self):
         try:
-            if self.images[self.image_count].endswith('.jpg') or self.images[self.image_count].endswith('.jpeg'):
+            if self.images[self.image_count].endswith('.jpg') or self.images[self.image_count].endswith('.jpeg') or self.images[self.image_count].endswith('.JPG'):
                 _, img_b64 = cv2.imencode('.jpg', self.curr_image)
             elif self.images[self.image_count].endswith('.png'):
                 _, img_b64 = cv2.imencode('.png', self.curr_image)
