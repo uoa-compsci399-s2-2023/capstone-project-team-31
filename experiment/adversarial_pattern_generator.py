@@ -170,10 +170,6 @@ class AdversarialPatternGenerator:
                 gradient = gradients[x]
                 area_to_pert = areas_to_perturb[x]
                 movement_info = movements[x]
-                
-                cv2.imshow('image window', area_to_pert)
-                cv2.waitKey(0)
-                cv2.destroyAllWindows()
 
                 # normalise gradient
                 mask = np.all(area_to_pert != [0,0,0], axis=2)
