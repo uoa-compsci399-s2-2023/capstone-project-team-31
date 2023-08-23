@@ -220,7 +220,7 @@ class Ui_MainWindow(object):
             if self.image_count < len(self.images) - 1:
                 with open(self.json_file, "r") as f:
                     data = json.load(f)
-                    while self.images[self.image_count] in data.keys():
+                    while self.images[self.image_count] in data.keys() or self.images[self.image_count].startswith('.'):
                         self.image_count += 1
                         if self.image_count >= len(self.images):
                             msg = QtWidgets.QMessageBox()
@@ -239,7 +239,7 @@ class Ui_MainWindow(object):
             if self.image_count > 0:
                 with open(self.json_file, "r") as f:
                     data = json.load(f)
-                    while self.images[self.image_count] in data.keys():
+                    while self.images[self.image_count] in data.keys() or self.images[self.image_count].startswith('.'):
                         self.image_count -= 1
                         if self.image_count < 0:
                             msg = QtWidgets.QMessageBox()
