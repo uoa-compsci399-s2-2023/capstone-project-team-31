@@ -69,6 +69,7 @@ class AdversarialPatternGenerator:
         '''
 
         best_start = []
+        best_attack = None
         min_avg_true_class_conf = 1
         
         for colour in self.colours:
@@ -85,25 +86,21 @@ class AdversarialPatternGenerator:
 
                 temp_attack = temp_attack.astype(np.uint8)
                 
-                
-                # cv2.imshow('image window', temp_attack)
-                # cv2.waitKey(0)
-                # cv2.destroyAllWindows()
-                
-                confidences[i] = get_confidence_in_true_class(cleanup_dims(temp_attack), self.classification, cleanup_labels(self.processed_imgs[i][self.class_num]), self.model)
+                confidences[i] = get_confidence_in_true_class(cleanup_dims(temp_attack), self.classification, cleanup_labels(self.processed_imgs[i][self.class_num]), self.model, True)
                 
             avg_true_class_conf = np.mean(confidences)
             
             if avg_true_class_conf < min_avg_true_class_conf:
                 min_avg_true_class_conf = avg_true_class_conf
                 best_start = Experiment(accessory_img, accessory_mask)
+                best_attack, temp_attack
                 
                 print('new best start found with colour {} and confidence {}'.format(colour, min_avg_true_class_conf))
                 
             
-        return best_start
+        return best_start, best_attack
 
-    def dodge(self, experiment: Experiment):
+    def dodge(self, experiment: Experiment, best_attack):
         '''
         pertubates the colours within the accessory mask using gradient descent to minimise deepface's confidence in predicting true labels
         '''
@@ -142,6 +139,9 @@ class AdversarialPatternGenerator:
                 
                 attack = apply_accessory(img_copy, round_accessory_im, area_to_perturb)
                 
+                if i==0:
+                    print('should be 0: {}'.format(len(np.where(attack != best_attack))))
+                
                 attacks[j] = attack
                 movements[j] = movement_info
                 areas_to_perturb[j] = area_to_perturb
@@ -176,9 +176,7 @@ class AdversarialPatternGenerator:
                 gradient = gradient.numpy()
                 gradient[mask, :] = 0
                 gradient = gradient/np.max(np.abs(gradient)) 
-                
-                print("max gradient: {}\nmin gradient: {}".format(np.max(gradient), np.min(gradient)))
-                
+                                
 
                 # update the pertubation using total_variation from image_helper_functions
                 _, dr_tv = total_variation(im)
@@ -189,7 +187,6 @@ class AdversarialPatternGenerator:
                 
                 dr_tv = np.nan_to_num(dr_tv)
                 
-                print("max dr_dv: {}\nmin dr_tv: {}".format(np.max(dr_tv), np.min(dr_tv)))
 
 
                 # compute pertubation and reverse the movement using reverse_accesory_movement(movement_info)
@@ -197,36 +194,24 @@ class AdversarialPatternGenerator:
                 r = step_size*gradient - dr_tv*lambda_tv
                 
                 r = np.nan_to_num(r)
-                
-                print("BEFORE: max in r: {}\nBEFORE: min in r: {}".format(np.max(r), np.min(r)))
-                
+                                
 
                 r = np.reshape(r, im.shape) #TODO: Need to check if this is exactly the shape we wanted and implemented 
                            
                 
                 r, r_mask = reverse_accessory_move(r, experiment.get_mask(), movement_info)
                 
-                print("AFTER: max in r: {}\nAFTER: min in r: {}".format(np.max(r), np.min(r))) 
-                
                 r[experiment.get_mask() != 0] = 0 
-                print("AFTER: max in r: {}\nAFTER: min in r: {}".format(np.max(r), np.min(r))) 
 
                 # apply gaussian filtering per specification given to self.gauss_filtering
                 
                 # store the pertubation
                 if i>1:
-                    #TODO: What exactly is .r here, is perturbations its own class?
-                    #Otherwise we can just store the r of each perturbation in another array :))
-                    print("BEFORE: pertubations[x].r max: {}\nBEFORE: pertubations[x].r min: {}".format(np.max(pertubations[x].r), np.min(pertubations[x].r)))
                     
+                    #Otherwise we can just store the r of each perturbation in another array :))                    
                     pertubations[x].r = np.multiply(pertubations[x].r, (self.momentum_coeff)) 
-                    
-                    print("AFTER: pertubations[x].r max: {}\nAFTER: pertubations[x].r min: {}".format(np.max(pertubations[x].r), np.min(pertubations[x].r)))
-                    
+                                        
                     pertubations[x].r = np.add(r, pertubations[x].r)
-
-
-                    print("AFTER: max in r: {}\nAFTER: min in r: {}".format(np.max(pertubations[x].r), np.min(pertubations[x].r))) 
                     
                 else:
                     pertubations[x].r = r
@@ -242,56 +227,33 @@ class AdversarialPatternGenerator:
                 area_to_pert = experiment.get_mask()
                 dr_nps[:,:,self.channels_to_fix] = 0
                 gradient[area_to_pert != 1] = 0
-                print("max in printability pertubation: {}\nmin in printability pertubation: {}".format(np.max(self.printability_coeff*dr_nps), np.min(self.printability_coeff*dr_nps)))
                 experiment.set_image(experiment.get_image() + self.printability_coeff*dr_nps)
 
             # apply pertubations
             for r_i in range(len(pertubations)):
                 r = pertubations[r_i].r
-                
-                print("PRE ROUND: max r: {}\nPRE ROUND: min r: {}".format(np.max(r), np.min(r)))
-                
+                                
                 
                 r = (np.rint(r)).astype(int)
                 
-                print("max in r: {}\nmin in r: {}".format(np.max(r), np.min(r))) 
                 # perturb model
                 r[(experiment.get_image() + r) > 255] = 0
                 r[(experiment.get_image() + r) < 0] = 0
-                print("max in r: {}\nmin in r: {}".format(np.max(r), np.min(r))) 
-                print('r shape: {}'.format(np.shape(r)))
-                
-                # result = np.zeros((224, 224, 3), dtype=np.uint8)
-                    
-                # for s in range(224):
-                #     for t in range(224):
-                #         for c in range(3):
-                #             result[s][t][c] = experiment.get_image()[s][t][c] + r[s][t][c]
+
                             
-                result = np.add(r, experiment.get_image())
-                print("result max: {}result min: {}".format(np.max(result), np.min(result)))
-                
+                result = np.add(r, experiment.get_image())                
                 the_same = np.where(result != experiment.get_image())
-                print("# values different: {}".format(len(the_same[0])))
                 
                 experiment.set_image(result)
 
-                
-                print('should be 0: {}'.format(len(np.where(result != experiment.get_image())[0])))
-                            
-                
-                #experiment['accessory_image'] = experiment['accessory_image'] + r
-                
-                print("max in accessory_iamge: {}\nmin in accessory_iamge: {}".format(np.max(experiment.get_image()), np.min(experiment.get_image()))) 
-                print('accessory_image shape: {}'.format(np.shape(experiment.get_image())))
-                
 
             # TODO: quantization step looks sketchy, theyre just subtracting it by 0??? mod(x,1) is always 0 or am i tripping?
             score_mean = np.mean(scores)
-            print("scores: {}".format(scores))
+
             # display
             if self.verbose:
-                
+                                        
+                print("scores: {}".format(scores))
                 print("iteration: {}".format(i))
                 print("average confidence in true class: {}".format(score_mean))
                 print("non-printability score: {}".format(nps))
@@ -308,19 +270,10 @@ class AdversarialPatternGenerator:
 
     def run(self):
 
-        starting_point = self.get_best_starting_colour()
-        
-        before = starting_point.get_image()
+        starting_point, best_attack = self.get_best_starting_colour()
         
 
-        result, experiment_result = self.dodge(starting_point)
-        
-        cv2.imshow('image window', before)
-        cv2.waitKey(0)
-        cv2.destroyAllWindows()
-        
-        print("should be different: {}".format(len(np.where(before != experiment_result.get_image())[0])))
-        
+        result, experiment_result = self.dodge(starting_point, best_attack)        
         
         for attack in result:
             cv2.imshow('image window', attack)
