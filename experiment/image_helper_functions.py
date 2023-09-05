@@ -40,7 +40,14 @@ def prepare_images(images_dir: str, num_images: int) -> list:
         conn.close()
         return images
     else: # if the images are stored in a directory
-        return random.sample(os.listdir(images_dir), num_images)
+        images = os.listdir(abs_path)
+        rand_images = random.sample(images, num_images)
+        output = []
+        with open("./Faces.json", 'r') as f:
+            data = json.load(f)
+            for img in rand_images:
+                output.append([img, data[img]['ethnicity'], data[img]['gender'], data[img]['age'], data[img]['emotion']])
+        return output
     
 from deepface.commons import functions
 
