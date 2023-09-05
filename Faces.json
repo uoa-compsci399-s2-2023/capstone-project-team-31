@@ -79,5 +79,95 @@
         "age": "23",
         "gender": "Female",
         "emotion": "disgusted"
+    },
+    "IMG_4926.JPG": {
+        "ethnicity": "Asian",
+        "age": "23",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "IMG_4932.JPG": {
+        "ethnicity": "Asian",
+        "age": "23",
+        "gender": "Male",
+        "emotion": "fear"
+    },
+    "IMG_5033.JPG": {
+        "ethnicity": "European",
+        "age": "20",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "IMG_5027.JPG": {
+        "ethnicity": "European",
+        "age": "21",
+        "gender": "Male",
+        "emotion": "disgusted"
+    },
+    "IMG_5026.JPG": {
+        "ethnicity": "European",
+        "age": "21",
+        "gender": "Male",
+        "emotion": "disgusted"
+    },
+    "IMG_5032.JPG": {
+        "ethnicity": "European",
+        "age": "21",
+        "gender": "Male",
+        "emotion": "disgusted"
+    },
+    "IMG_4933.JPG": {
+        "ethnicity": "Asian",
+        "age": "23",
+        "gender": "Male",
+        "emotion": "surprised"
+    },
+    "IMG_4927.JPG": {
+        "ethnicity": "Asian",
+        "age": "23",
+        "gender": "Male",
+        "emotion": "happy"
+    },
+    "IMG_4923.JPG": {
+        "ethnicity": "Asian",
+        "age": "23",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "IMG_4937.JPG": {
+        "ethnicity": "Asian",
+        "age": "23",
+        "gender": "Male",
+        "emotion": "surprised"
+    },
+    "IMG_5036.JPG": {
+        "ethnicity": "European",
+        "age": "20",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "IMG_5022.JPG": {
+        "ethnicity": "European",
+        "age": "21",
+        "gender": "Male",
+        "emotion": "surprised"
+    },
+    "IMG_5023.JPG": {
+        "ethnicity": "European",
+        "age": "21",
+        "gender": "Male",
+        "emotion": "surprised"
+    },
+    "IMG_5037.JPG": {
+        "ethnicity": "European",
+        "age": "20",
+        "gender": "Male",
+        "emotion": "happy"
+    },
+    "IMG_4895.JPG": {
+        "ethnicity": "European",
+        "age": "23",
+        "gender": "Female",
+        "emotion": "neutral"
     }
 }
