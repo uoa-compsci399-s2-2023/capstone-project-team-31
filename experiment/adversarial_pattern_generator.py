@@ -69,7 +69,7 @@ class AdversarialPatternGenerator:
         '''
 
         best_start = []
-        best_attack = None
+
         min_avg_true_class_conf = 1
         
         for colour in self.colours:
@@ -93,14 +93,13 @@ class AdversarialPatternGenerator:
             if avg_true_class_conf < min_avg_true_class_conf:
                 min_avg_true_class_conf = avg_true_class_conf
                 best_start = Experiment(accessory_img, accessory_mask)
-                best_attack, temp_attack
                 
                 print('new best start found with colour {} and confidence {}'.format(colour, min_avg_true_class_conf))
                 
             
-        return best_start, best_attack
+        return best_start
 
-    def dodge(self, experiment: Experiment, best_attack):
+    def dodge(self, experiment: Experiment):
         '''
         pertubates the colours within the accessory mask using gradient descent to minimise deepface's confidence in predicting true labels
         '''
@@ -139,8 +138,6 @@ class AdversarialPatternGenerator:
                 
                 attack = apply_accessory(img_copy, round_accessory_im, area_to_perturb)
                 
-                if i==0:
-                    print('should be 0: {}'.format(len(np.where(attack != best_attack))))
                 
                 attacks[j] = attack
                 movements[j] = movement_info
@@ -270,10 +267,11 @@ class AdversarialPatternGenerator:
 
     def run(self):
 
-        starting_point, best_attack = self.get_best_starting_colour()
-        
+        starting_point = self.get_best_starting_colour()
 
-        result, experiment_result = self.dodge(starting_point, best_attack)        
+        result, experiment_result = self.dodge(starting_point)
+        
+        cv2.imwrite("./results/accessory_image.png", experiment_result.get_image())        
         
         for attack in result:
             cv2.imshow('image window', attack)
