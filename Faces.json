@@ -13,5 +13,53 @@
         "age": "39",
         "gender": "Female",
         "emotion": "Neutral"
+    },
+    "IMG_4919.JPG": {
+        "ethnicity": "European",
+        "age": "23",
+        "gender": "Female",
+        "emotion": "sad"
+    },
+    "IMG_4925.JPG": {
+        "ethnicity": "Asian",
+        "age": "23",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "IMG_5018.JPG": {
+        "ethnicity": "European",
+        "age": "21",
+        "gender": "Male",
+        "emotion": "fear"
+    },
+    "IMG_5024.JPG": {
+        "ethnicity": "European",
+        "age": "21",
+        "gender": "Male",
+        "emotion": "surprised"
+    },
+    "IMG_5030.JPG": {
+        "ethnicity": "European",
+        "age": "21",
+        "gender": "Male",
+        "emotion": "angry"
+    },
+    "IMG_5031.JPG": {
+        "ethnicity": "European",
+        "age": "21",
+        "gender": "Male",
+        "emotion": "angry"
+    },
+    "IMG_5025.JPG": {
+        "ethnicity": "European",
+        "age": "21",
+        "gender": "Male",
+        "emotion": "disgusted"
+    },
+    "IMG_5019.JPG": {
+        "ethnicity": "European",
+        "age": "21",
+        "gender": "Male",
+        "emotion": "fear"
     }
 }
