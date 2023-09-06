@@ -26,7 +26,7 @@ def parse_args():
                         help = "How many images are being processed"
     )
     parser.add_argument("-s", "--step_size",
-                        default = 20,
+                        default = 10,
                         type = int,
                         help = "The step size used in the optimisation algorithm"
     )
@@ -51,7 +51,7 @@ def parse_args():
                         help = "" # TODO: Where is this used and for what
     )
     parser.add_argument("-i", "--max_iterations",
-                        default = 15,
+                        default = 5,
                         type = int,
                         help = "Maximum number of iterations during perturbtion" 
     )
