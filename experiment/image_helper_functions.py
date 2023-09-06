@@ -46,7 +46,8 @@ def prepare_images(images_dir: str, num_images: int) -> list:
         with open("./Faces.json", 'r') as f:
             data = json.load(f)
             for img in rand_images:
-                output.append([img, data[img]['ethnicity'], data[img]['gender'], data[img]['age'], data[img]['emotion']])
+                temp =  cv2.imread(os.path.join(abs_path, img))
+                output.append([temp, data[img]['ethnicity'], data[img]['gender'], data[img]['age'], data[img]['emotion']])
         return output
     
 from deepface.commons import functions
@@ -150,7 +151,7 @@ def prepare_accessory(colour: str, accessory_dir: str, accessory_type: str) -> t
     
     fname = accessory_type.lower()
 
-    if fname == "glasses" or fname == "facemask" or fname == "bandana" or fname == "earrings":
+    if fname == "glasses" or fname == "facemask" or fname == "bandana" or fname == "earrings" or fname == "facetest":
         # load glasses_silhouette, find what pixels are white (i.e. colour value not rgb (0,0,0)) and make a colour mask of the chosen colour
         accessory = cv2.imread(accessory_dir)
     else:
@@ -162,7 +163,7 @@ def prepare_accessory(colour: str, accessory_dir: str, accessory_type: str) -> t
     mask = cv2.threshold(accessory, 0, 1, cv2.THRESH_BINARY)[1]
     
     # make a colour mask of the chosen colour
-    colour_info = json.load(open("./assets/starting_colours.json", 'r'))
+    colour_info = json.load(open("experiment/assets/starting_colours.json", 'r'))
     colour = colour_info[colour]
         
     coloured_matrix = np.array([[colour for i in range(accessory.shape[1])] for j in range(accessory.shape[0])])
