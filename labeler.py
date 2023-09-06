@@ -201,7 +201,7 @@ class Ui_MainWindow(object):
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
         
     def setup_emotion_combo(self):
-        self.emotion_combo.addItems(["", "happy", "sad", "angry", "neutral", "surprised"])
+        self.emotion_combo.addItems(["", "happy", "sad", "angry", "neutral", "surprised", "disgusted", "fear"])
     def setup_age_combo(self):
         self.age_combo.addItems([""] + [str(i) for i in range(100)])
     def setup_gender_combo(self):
@@ -220,7 +220,7 @@ class Ui_MainWindow(object):
             if self.image_count < len(self.images) - 1:
                 with open(self.json_file, "r") as f:
                     data = json.load(f)
-                    while self.images[self.image_count] in data.keys():
+                    while self.images[self.image_count] in data.keys() or self.images[self.image_count].startswith('.'):
                         self.image_count += 1
                         if self.image_count >= len(self.images):
                             msg = QtWidgets.QMessageBox()
@@ -239,7 +239,7 @@ class Ui_MainWindow(object):
             if self.image_count > 0:
                 with open(self.json_file, "r") as f:
                     data = json.load(f)
-                    while self.images[self.image_count] in data.keys():
+                    while self.images[self.image_count] in data.keys() or self.images[self.image_count].startswith('.'):
                         self.image_count -= 1
                         if self.image_count < 0:
                             msg = QtWidgets.QMessageBox()
@@ -304,7 +304,7 @@ class Ui_MainWindow(object):
         
     def convert_base64(self):
         try:
-            if self.images[self.image_count].endswith('.jpg') or self.images[self.image_count].endswith('.jpeg'):
+            if self.images[self.image_count].endswith('.jpg') or self.images[self.image_count].endswith('.jpeg') or self.images[self.image_count].endswith('.JPG'):
                 _, img_b64 = cv2.imencode('.jpg', self.curr_image)
             elif self.images[self.image_count].endswith('.png'):
                 _, img_b64 = cv2.imencode('.png', self.curr_image)

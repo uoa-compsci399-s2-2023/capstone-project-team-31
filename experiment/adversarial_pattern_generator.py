@@ -4,6 +4,7 @@ from deepface_functions import *
 from deepface_models import *
 from PIL import Image
 from pertubation import Pertubation
+from experiment_model import Experiment
 from scipy.ndimage.filters import gaussian_filter
 import tensorflow as tf
 import matplotlib.pyplot as plt
@@ -59,7 +60,7 @@ class AdversarialPatternGenerator:
         self.movement['horizontal'] = horizontal_move
         self.movement['vertical'] = vertical_move
         self.movement['rotation'] = rotational_move
-        self.colours = ['red', 'green', 'blue', 'yellow']
+        self.colours = ['grey', 'organish', 'brownish', 'goldish']
         self.verbose = verbose
         
         self.model = attributeModel(self.classification)
@@ -71,39 +72,37 @@ class AdversarialPatternGenerator:
         '''
 
         best_start = []
+
         min_avg_true_class_conf = 1
         
         for colour in self.colours:
-            accessory_img, accessory_mask = prepare_accessory(colour, "experiment/assets/{}_silhouette.png".format(self.accessory_type), self.accessory_type)
+            
+            accessory_img, accessory_mask = prepare_accessory(colour, "./assets/{}.png".format(self.accessory_type.lower()), self.accessory_type)
             
             confidences = np.empty(self.num_images)
             
             for i in range(self.num_images):
-                img_copy = np.copy(self.processed_imgs[i][0])
-
+                
+                img_copy = np.copy(self.processed_imgs[i][0]) #otherwise self.processed_imgs edited
+            
                 temp_attack = apply_accessory(img_copy, accessory_img, accessory_mask)
 
                 temp_attack = temp_attack.astype(np.uint8)
-
-                #compare = np.concatenate((temp_attack, accessory_img, accessory_mask), axis=0)
-                #cv2.imshow('temp', compare)
-                #cv2.waitKey(0)
-                #cv2.destroyAllWindows()
                 
-                _, confidences[i] = get_confidence_in_true_class(cleanup_dims(temp_attack), self.classification, cleanup_labels(self.processed_imgs[i][self.class_num]), self.model)
+                confidences[i] = get_confidence_in_true_class(cleanup_dims(temp_attack), self.classification, cleanup_labels(self.processed_imgs[i][self.class_num]), self.model, True)
                 
             avg_true_class_conf = np.mean(confidences)
             
             if avg_true_class_conf < min_avg_true_class_conf:
                 min_avg_true_class_conf = avg_true_class_conf
-                best_start ={'accessory_image': np.copy(accessory_img), 'accessory_mask': np.copy(accessory_mask)}
+                best_start = Experiment(accessory_img, accessory_mask)
                 
                 print('new best start found with colour {} and confidence {}'.format(colour, min_avg_true_class_conf))
                 
             
         return best_start
 
-    def dodge(self, experiment):
+    def dodge(self, experiment: Experiment):
         '''
         pertubates the colours within the accessory mask using gradient descent to minimise deepface's confidence in predicting true labels
         '''
@@ -125,13 +124,13 @@ class AdversarialPatternGenerator:
 
         while i < self.max_iter and score_mean > self.stop_prob:
             
-            ("while loop iteration {}".format(i))
             #data storing:
             attacks = [None] * self.num_images
             movements = [None] * self.num_images
             areas_to_perturb = [None] * self.num_images
             gradients = [None] * self.num_images
             scores = [None] * self.num_images
+            labels = [None] * self.num_images
 
             # Learning rate decay
             step_size = step_size/(1+self.decay_rate*self.max_iter)
@@ -139,14 +138,18 @@ class AdversarialPatternGenerator:
             print_coeff = print_coeff/(1+self.decay_rate*self.max_iter)
 
             for j in range(self.num_images):
-                
-                print("first j loop: {}".format(j))
 
-                # for every image, move the accessory mask slightly
-                [round_accessory_im, round_accessory_area, movement_info] = move_accessory(experiment['accessory_image'], experiment['accessory_mask'], self.movement)
+                # for every image, move the accessory mask slightly 
+                
+                [round_accessory_im, round_accessory_area, movement_info] = move_accessory(experiment.get_image(), experiment.get_mask(), self.movement)
                 pertubations[j].movement_info = movement_info
                 
                 ##TODO: don't touch any rgb channel which have been fixed (fixed_rgb_channels) (if we want this?)
+                
+                img_copy = np.copy(self.processed_imgs[j][0]) #otherwise self.processed_imgs edited
+                
+                attack = apply_accessory(img_copy, round_accessory_im, area_to_perturb)
+                
                 
                 img_copy = np.copy(self.processed_imgs[j][0])
                 attack = apply_accessory(img_copy, round_accessory_im, round_accessory_area)
@@ -161,15 +164,17 @@ class AdversarialPatternGenerator:
                 areas_to_perturb[j] = round_accessory_area
                 print("image data: {}".format(self.processed_imgs[j][1:]))
                 
-                label = cleanup_labels(self.processed_imgs[j][self.class_num])
-                print("label: {}".format(label))
-                print("True class: {}".format(label))
+                if labels[j] is None:
+                    labels[j] = cleanup_labels(self.processed_imgs[j][self.class_num])
+
+                print("label: {}".format(labels[j]))
+                print("True class: {}".format(labels[j]))
                 
                 #expand attack dim to work with deepface
                 attack = cleanup_dims(attack)
                 tens = int_to_float(attack)
                 tens = tf.convert_to_tensor(tens)
-                gradients[j] = self.model.find_resized_gradient(tens, self.model.generateLabelFromText(label))[0]
+                gradients[j] = self.model.find_resized_gradient(tens, self.model.generateLabelFromText(labels[j]))[0]
 
             # [scores, gradients] = find_gradient(images, true_classes) get the gradient and confidence in true class by running deepface model on images with current pertubation
             
@@ -188,10 +193,11 @@ class AdversarialPatternGenerator:
                 print("pertubation area shape: {}\n".format(np.shape(area_to_pert)))
 
                 # normalise gradient
-                mask = np.all(area_to_pert != [0, 0, 0], axis=2)
+                mask = np.all(area_to_pert != [0,0,0], axis=2)
                 gradient = gradient.numpy()
                 gradient[mask, :] = 0
                 gradient = gradient/np.max(np.abs(gradient)) 
+                                
 
                 # update the pertubation using total_variation from image_helper_functions
                 _, dr_tv = total_variation(im)
@@ -203,6 +209,7 @@ class AdversarialPatternGenerator:
                 dr_tv = np.nan_to_num(dr_tv)
 
                 # compute pertubation and reverse the movement using reverse_accesory_movement(movement_info)
+
                 r = step_size*gradient - dr_tv*lambda_tv
                 r = np.nan_to_num(r)
                 r = np.reshape(r, im.shape) #TODO: Need to check if this is exactly the shape we wanted and implemented
@@ -226,7 +233,7 @@ class AdversarialPatternGenerator:
                 pass
 
             # get printability score using non_printability_score in image_helper_functions.py
-            nps, dr_nps = non_printability_score(experiment['accessory_image'], experiment['accessory_mask'][:,:,0], printable_vals)
+            nps, dr_nps = non_printability_score(experiment.get_image(), experiment.get_mask(), printable_vals)
             if self.printability_coeff != 0:
                 #dr_nps[(dr_nps + experiment['accessory_image']) > 255] = 0
                 #dr_nps[(dr_nps + experiment['accessory_image']) < 0] = 0
@@ -234,12 +241,13 @@ class AdversarialPatternGenerator:
                 #dr_nps[:,:,self.channels_to_fix] = 0
                 gradient[area_to_pert != 1] = 0
                 print("PRE ROUND: max dr_nps: {}\nPRE ROUND: min dr_nps: {}".format(np.max(dr_nps), np.min(dr_nps)))
-                experiment['accessory_image'] = experiment['accessory_image'] - print_coeff*dr_nps
+                experiment.set_image(experiment.get_image() - print_coeff*dr_nps)
 
             # apply pertubations
-            # TODO: Again check how to actually store and retrieve r value of each perturbation <3
             for r_i in range(len(pertubations)):
                 r = pertubations[r_i].r
+                                
+                
                 r = (np.rint(r)).astype(int)
                 print("PRE ROUND: max r: {}\nPRE ROUND: min r: {}".format(np.max(r), np.min(r)))
                 
@@ -247,12 +255,20 @@ class AdversarialPatternGenerator:
                 #r[(experiment['accessory_image'] + r) > 255] = 0
                 #r[(experiment['accessory_image'] + r) < 0] = 0
                 experiment['accessory_image'] = experiment['accessory_image'] + r
+                r[(experiment.get_image() + r) > 255] = 0
+                r[(experiment.get_image() + r) < 0] = 0
+
+                            
+                result = np.add(r, experiment.get_image())                
                 
+                experiment.set_image(result)
+
+
             # TODO: quantization step looks sketchy, theyre just subtracting it by 0??? mod(x,1) is always 0 or am i tripping?
             # TODO: might need to change processed_imgs here once we add more images
 
             final_attack = apply_accessory(np.copy(self.processed_imgs[0][0]), experiment['accessory_image'], experiment['accessory_mask'])
-            output, scores[j] = get_confidence_in_true_class(cleanup_dims(final_attack), self.classification, label, self.model)
+            output, scores[j] = get_confidence_in_true_class(cleanup_dims(final_attack), self.classification, labels[j], self.model)
 
             score_mean = np.mean(scores)
             scores_over_time.append(score_mean)
@@ -270,11 +286,11 @@ class AdversarialPatternGenerator:
                 
             # display
             if self.verbose:
-                
+                                        
+                print("scores: {}".format(scores))
                 print("iteration: {}".format(i))
                 print("average confidence in true class: {}".format(score_mean))
                 print("non-printability score: {}".format(nps))
-                print("attack:")
                 
                 print("attack shape: {}\n".format(np.shape(attack[0])))
                 
@@ -290,16 +306,22 @@ class AdversarialPatternGenerator:
         plt.show()
 
         cv2.imwrite('Test_pert.png', lowest_pert[j][2])
-        return attacks
+        return attacks, experiment
 
     # return final pertubation result, with deepface's average confidence in predicting true classes
 
     def run(self):
 
         starting_point = self.get_best_starting_colour()
-        
 
-        result = self.dodge(starting_point)
+        result, experiment_result = self.dodge(starting_point)
+        
+        cv2.imwrite("./results/accessory_image.png", experiment_result.get_image())        
+        
+        for attack in result:
+            cv2.imshow('image window', attack)
+            cv2.waitKey(0)
+            cv2.destroyAllWindows()
         
         
 def cleanup_labels(true_class:str):

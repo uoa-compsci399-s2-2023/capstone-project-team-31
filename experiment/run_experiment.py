@@ -31,7 +31,7 @@ def parse_args():
                         help = "Learning decay rate"
     )
     parser.add_argument("-s", "--step_size",
-                        default = -10,
+                        default = 10,
                         type = float,
                         help = "The step size used in the optimisation algorithm"
     )
@@ -56,7 +56,7 @@ def parse_args():
                         help = "" # TODO: Where is this used and for what
     )
     parser.add_argument("-i", "--max_iterations",
-                        default = 15,
+                        default = 5,
                         type = int,
                         help = "Maximum number of iterations during perturbtion" 
     )

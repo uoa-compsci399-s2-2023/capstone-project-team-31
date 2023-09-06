@@ -40,10 +40,14 @@ def prepare_images(images_dir: str, num_images: int) -> list:
         conn.close()
         return images
     else: # if the images are stored in a directory
-        #nan = random.sample(os.listdir(images_dir), num_images)
-        temp =  cv2.imread(images_dir)
-        temp = [temp, 'Asian', 'male', '23', 'neutral']
-        return [temp]
+        images = os.listdir(abs_path)
+        rand_images = random.sample(images, num_images)
+        output = []
+        with open("./Faces.json", 'r') as f:
+            data = json.load(f)
+            for img in rand_images:
+                output.append([img, data[img]['ethnicity'], data[img]['gender'], data[img]['age'], data[img]['emotion']])
+        return output
     
 from deepface.commons import functions
 
@@ -143,23 +147,28 @@ def prepare_accessory(colour: str, accessory_dir: str, accessory_type: str) -> t
     Returns:
         tuple: (accessory_image, silhouette_mask)
     """
-    if accessory_type.lower() == "glasses" or accessory_type.lower() == "facetest" or accessory_type.lower() == "facemask":
+    
+    fname = accessory_type.lower()
+
+    if fname == "glasses" or fname == "facemask" or fname == "bandana" or fname == "earrings":
         # load glasses_silhouette, find what pixels are white (i.e. colour value not rgb (0,0,0)) and make a colour mask of the chosen colour
-        glasses = cv2.imread(accessory_dir)
+        accessory = cv2.imread(accessory_dir)
+    else:
+        print("Please check your accessory spelling")
         
-        if glasses is None:
-            print("Error loading accessory from {}".format(accessory_dir))
-        glasses = np.bitwise_not(glasses)
-        mask = cv2.threshold(glasses, 0, 1, cv2.THRESH_BINARY)[1]
+    if accessory is None:
+        print("Error loading accessory from {}".format(accessory_dir))
+    accessory = np.bitwise_not(accessory)
+    mask = cv2.threshold(accessory, 0, 1, cv2.THRESH_BINARY)[1]
+    
+    # make a colour mask of the chosen colour
+    colour_info = json.load(open("./assets/starting_colours.json", 'r'))
+    colour = colour_info[colour]
         
-        # make a colour mask of the chosen colour
-        colour_info = json.load(open("experiment/assets/starting_colours.json", 'r'))
-        colour = colour_info[colour]
-            
-        coloured_matrix = np.array([[colour for i in range(glasses.shape[1])] for j in range(glasses.shape[0])])
-        coloured_glasses = np.multiply(coloured_matrix, mask).astype(np.uint8)
-        coloured_glasses = cv2.cvtColor(coloured_glasses, cv2.COLOR_RGB2BGR)
-        return coloured_glasses, np.bitwise_not(glasses)
+    coloured_matrix = np.array([[colour for i in range(accessory.shape[1])] for j in range(accessory.shape[0])])
+    coloured_accessory = np.multiply(coloured_matrix, mask).astype(np.uint8)
+    coloured_accessory = cv2.cvtColor(coloured_accessory, cv2.COLOR_RGB2BGR)
+    return coloured_accessory, np.bitwise_not(accessory)
     
 
 def move_accessory(accessory_image: np.ndarray, accessory_mask: np.ndarray, movement: dict) -> tuple:
@@ -211,7 +220,7 @@ def reverse_accessory_move(accessory_image: np.ndarray, accessory_mask: np.ndarr
     * accessory_image: the new image of the accessory in np.ndarray format
     * accessory_mask: the new mask of the accessory in np.ndarray format
     '''
-    #print("accessory_image shape:{}\naccessory_image: {}".format(np.shape(accessory_image), accessory_image))
+
     # Transform the image
     accessory_image = np.copy(accessory_image)
     rot_aug = iaa.Affine(rotate=iap.Deterministic(movement_info["rotation"] * -1))

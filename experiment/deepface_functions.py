@@ -6,7 +6,7 @@ from deepface_models import *
     
     
 
-def get_confidence_in_true_class(image: np.ndarray, classification:str, true_class:str, e:attributeModel):
+def get_confidence_in_true_class(image: np.ndarray, classification:str, true_class:str, e:attributeModel, verbose=False):
     '''
     takes a single image and returns deepface's confidence in predicting its true class
     '''
@@ -22,7 +22,8 @@ def get_confidence_in_true_class(image: np.ndarray, classification:str, true_cla
     #print(np.max(image), np.min(image))
 
     labeledOutput = e.predict_verbose(image_after)
-    print(labeledOutput)
+    if verbose:
+        print(labeledOutput)
     
     confidence = labeledOutput[classification][true_class]
     
