@@ -74,7 +74,7 @@ class AdversarialPatternGenerator:
         
         for colour in self.colours:
             
-            accessory_img, accessory_mask = prepare_accessory(colour, "./assets/{}.png".format(self.accessory_type), self.accessory_type)
+            accessory_img, accessory_mask = prepare_accessory(colour, "./assets/{}.png".format(self.accessory_type.lower()), self.accessory_type)
             
             confidences = np.empty(self.num_images)
             
@@ -122,6 +122,7 @@ class AdversarialPatternGenerator:
             areas_to_perturb = [None] * self.num_images
             gradients = [None] * self.num_images
             scores = [None] * self.num_images
+            labels = [None] * self.num_images
 
             for j in range(self.num_images):
 
@@ -143,7 +144,8 @@ class AdversarialPatternGenerator:
                 movements[j] = movement_info
                 areas_to_perturb[j] = area_to_perturb
                 
-                label = cleanup_labels(self.processed_imgs[j][self.class_num])
+                if labels[j] is None:
+                    labels[j] = cleanup_labels(self.processed_imgs[j][self.class_num])
                 
                 #expand attack dim to work with deepface
                 attack = cleanup_dims(attack)
@@ -152,11 +154,8 @@ class AdversarialPatternGenerator:
                 
                 tens = tf.convert_to_tensor(attack)
                 
-                gradients[j] = self.model.find_resized_gradient(tens, self.model.generateLabelFromText(label))[0]
-                scores[j] = get_confidence_in_true_class(attack, self.classification, label, self.model, True)
-
-
-            # [scores, gradients] = find_gradient(images, true_classes) get the gradient and confidence in true class by running deepface model on images with current pertubation
+                gradients[j] = self.model.find_resized_gradient(tens, self.model.generateLabelFromText(labels[j]))[0]
+                
             
             for x in range(self.num_images):
                 
@@ -212,7 +211,8 @@ class AdversarialPatternGenerator:
                     
                 else:
                     pertubations[x].r = r
-                pass
+                
+                scores[j] = get_confidence_in_true_class(int_to_float(cleanup_dims(im)), self.classification, labels[x], self.model, True)
 
 
             # get printability score using non_printability_score in image_helper_functions.py
@@ -239,7 +239,6 @@ class AdversarialPatternGenerator:
 
                             
                 result = np.add(r, experiment.get_image())                
-                the_same = np.where(result != experiment.get_image())
                 
                 experiment.set_image(result)
 
