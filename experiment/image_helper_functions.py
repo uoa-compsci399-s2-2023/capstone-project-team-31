@@ -3,6 +3,9 @@ import cv2, random, sqlite3, os, base64
 from PIL import Image
 import sys
 import os, json
+from imgaug import augmenters as iaa
+from imgaug import parameters as iap
+
 
 def pre_process_imgs():
     # if needed
@@ -37,7 +40,14 @@ def prepare_images(images_dir: str, num_images: int) -> list:
         conn.close()
         return images
     else: # if the images are stored in a directory
-        return random.sample(os.listdir(images_dir), num_images)
+        images = os.listdir(abs_path)
+        rand_images = random.sample(images, num_images)
+        output = []
+        with open("./Faces.json", 'r') as f:
+            data = json.load(f)
+            for img in rand_images:
+                output.append([img, data[img]['ethnicity'], data[img]['gender'], data[img]['age'], data[img]['emotion']])
+        return output
     
 from deepface.commons import functions
 
@@ -97,6 +107,7 @@ def image_to_face(image: tuple):
     img = np.multiply(img, 255).astype(np.uint8)
     
     outputImage = (img[0], image[1], image[2], image[3],image[4])
+    
     return outputImage
 
 def prepare_processed_images(images_dir: str, num_images: int):
@@ -132,24 +143,28 @@ def prepare_accessory(colour: str, accessory_dir: str, accessory_type: str) -> t
     Returns:
         tuple: (accessory_image, silhouette_mask)
     """
-    if accessory_type.lower() == "glasses":
+    
+    fname = accessory_type.lower()
+
+    if fname == "glasses" or fname == "facemask" or fname == "bandana" or fname == "earrings":
         # load glasses_silhouette, find what pixels are white (i.e. colour value not rgb (0,0,0)) and make a colour mask of the chosen colour
-        glasses = cv2.imread(accessory_dir)
+        accessory = cv2.imread(accessory_dir)
+    else:
+        print("Please check your accessory spelling")
         
-        if glasses is None:
-            print("Error loading accessory from {}".format(accessory_dir))
-        glasses = np.bitwise_not(glasses)
-        # glasses = cv2.cvtColor(glasses, cv2.COLOR_BGR2GRAY)
-        mask = cv2.threshold(glasses, 0, 1, cv2.THRESH_BINARY)[1]
+    if accessory is None:
+        print("Error loading accessory from {}".format(accessory_dir))
+    accessory = np.bitwise_not(accessory)
+    mask = cv2.threshold(accessory, 0, 1, cv2.THRESH_BINARY)[1]
+    
+    # make a colour mask of the chosen colour
+    colour_info = json.load(open("./assets/starting_colours.json", 'r'))
+    colour = colour_info[colour]
         
-        # make a colour mask of the chosen colour
-        colour_info = json.load(open("./assets/starting_colours.json", 'r'))
-        colour = colour_info[colour]
-            
-        coloured_matrix = np.array([[colour for i in range(glasses.shape[1])] for j in range(glasses.shape[0])])
-        coloured_glasses = np.multiply(coloured_matrix, mask).astype(np.uint8)
-        coloured_glasses = cv2.cvtColor(coloured_glasses, cv2.COLOR_RGB2BGR)
-        return coloured_glasses, np.bitwise_not(glasses)
+    coloured_matrix = np.array([[colour for i in range(accessory.shape[1])] for j in range(accessory.shape[0])])
+    coloured_accessory = np.multiply(coloured_matrix, mask).astype(np.uint8)
+    coloured_accessory = cv2.cvtColor(coloured_accessory, cv2.COLOR_RGB2BGR)
+    return coloured_accessory, np.bitwise_not(accessory)
     
 
 def move_accessory(accessory_image: np.ndarray, accessory_mask: np.ndarray, movement: dict) -> tuple:
@@ -171,26 +186,23 @@ def move_accessory(accessory_image: np.ndarray, accessory_mask: np.ndarray, move
     # generate random values for horizontal, vertical and rotational shifts within the ranges given in 'movement' dict
     shift_x = random.randint(-1*movement['horizontal'], movement['horizontal'])
     shift_y = random.randint(-1*movement['horizontal'], movement['vertical'])
-    rotation = random.randint(-1*movement['rotation'], movement['rotation'])
-    # shift the pixel values in accessory_mask acording to those generated values
 
-    # keep a record of what movements were made in movement_info
-    shift_x = random.randint(0, 3)
-    shift_y = random.randint(0, 3)
+    rotation = random.randint(-1*movement['rotation'], movement['rotation'])
+    
+    # Save the movement info
+    movement_info = {"horizontal": shift_x, "vertical": shift_y, "rotation": rotation}
+
     
     # Transform the image
     accessory_image = np.roll(accessory_image, (shift_x, shift_y), axis=(0, 1))
-    accessory_image = Image.fromarray(accessory_image)
-    accessory_image = accessory_image.rotate(rotation)
-    accessory_image = np.array(accessory_image)
+    rot_aug = iaa.Affine(rotate=iap.Deterministic(rotation))
+    accessory_image = rot_aug.augment_image(accessory_image)
     
     # Transform the mask
     accessory_mask = np.roll(accessory_mask, (shift_x, shift_y), axis=(0, 1))
-    accessory_mask = Image.fromarray(accessory_mask)
-    accessory_mask = accessory_mask.rotate(rotation, fillcolor=(255, 255, 255), )
-    accessory_mask = np.array(accessory_mask)
+    rot_aug = iaa.Affine(rotate=iap.Deterministic(rotation), cval=255)
+    accessory_mask = rot_aug.augment_image(accessory_mask)
     
-    movement_info = {"horizontal": shift_x, "vertical": shift_y, "rotation": rotation}
     return accessory_image, accessory_mask, movement_info
 
 def reverse_accessory_move(accessory_image: np.ndarray, accessory_mask: np.ndarray, movement_info: dict) -> tuple:
@@ -205,34 +217,39 @@ def reverse_accessory_move(accessory_image: np.ndarray, accessory_mask: np.ndarr
     * accessory_image: the new image of the accessory in np.ndarray format
     * accessory_mask: the new mask of the accessory in np.ndarray format
     '''
-    
+
     # Transform the image
-    accessory_image = Image.fromarray(accessory_image)
-    accessory_image = accessory_image.rotate(movement_info['rotation'] * -1)
-    accessory_image = np.array(accessory_image)
+    rot_aug = iaa.Affine(rotate=iap.Deterministic(movement_info["rotation"] * -1))
+    accessory_image = rot_aug.augment_image(accessory_image)
     accessory_image = np.roll(accessory_image, (movement_info['horizontal'] * -1, movement_info['vertical'] * -1), axis=(0, 1))
     
     # Transform the mask
-    accessory_mask = Image.fromarray(accessory_mask)
-    accessory_mask = accessory_mask.rotate(movement_info['rotation'] * -1, fillcolor=(255, 255, 255))
-    accessory_mask = np.array(accessory_mask)
+    rot_aug = iaa.Affine(rotate=iap.Deterministic(movement_info["rotation"] * -1), cval=255)
+    accessory_mask = rot_aug.augment_image(accessory_mask)
     accessory_mask = np.roll(accessory_mask, (movement_info['horizontal'] * -1, movement_info['vertical'] * -1), axis=(0, 1))
     return accessory_image, accessory_mask
 
-
 def apply_accessory(image: np.ndarray, aug_accessory_image: np.ndarray, org_accessory_image) -> np.ndarray:
-    image = ((image - image.min())/image.max() * 255).astype(np.uint8)
-    temp = np.bitwise_and(image, org_accessory_image)
-    return np.bitwise_or(temp, aug_accessory_image)
+    mask = np.where(org_accessory_image == 0)
+    image[mask] = aug_accessory_image[mask]
+    return image
 
 def total_variation(image: np.array, beta = 1) -> tuple:
     '''
-        Calculates total variation of perturbation: image(1,224,224,3)
+    Calculates total variation of perturbation
+    
+    Args:
+        image: Single rgb matrix with shape (h,w,3) 
+        beta: Magnitude to increase exponential value
+    
+    Returns:
+        tv: Total variation of image
+        dr_tv: Total variation gradient of each pixel (h,w,3)
     '''
 
     # TV calculation
-    d1, d2 = np.roll(image, -1, axis = 1), np.roll(image, -1, axis = 2)
-    d1[:,-1,:,:], d2[:,:,-1,:] = image[:,-1,:,:], image[:,:,-1,:]
+    d1, d2 = np.roll(image, -1, axis = 0), np.roll(image, -1, axis = 1)
+    d1[-1,:,:], d2[:,-1,:] = image[-1,:,:], image[:,-1,:]
 
     d1 = d1 - image 
     d2 = d2 - image
@@ -241,22 +258,29 @@ def total_variation(image: np.array, beta = 1) -> tuple:
 
     # dr_tv calculation
     dr_beta = 2*(beta/2 - 1)/beta
-    d1_ = np.power(np.maximum(v, 1e-5), dr_beta) * d1
-    d2_ = np.power(np.maximum(v, 1e-5), dr_beta) * d2
-    d11, d22 = np.roll(d1_, 1, axis = 1), np.roll(d2_, 1, axis = 2)
-    d11[:,0,:,:], d22[:,:,0,:] = d1_[:,0,:,:], d2_[:,:,0,:]
+    d1_ = np.multiply(np.power(np.maximum(v, 1e-5), dr_beta), d1)
+    d2_ = np.multiply(np.power(np.maximum(v, 1e-5), dr_beta), d2)
+    d11, d22 = np.roll(d1_, 1, axis = 0), np.roll(d2_, 1, axis = 1)
+    d11[0,:,:], d22[:,0,:] = d1_[0,:,:], d2_[:,0,:]
 
     d11 = d11 - d1_ 
     d22 = d22 - d2_
-    d11[:,0,:,:]  = -d1_[:,0,:,:] 
-    d22[:,:,0,:]  = -d2_[:,:,0,:] 
+    d11[0,:,:]  = -d1_[0,:,:] 
+    d22[:,0,:]  = -d2_[:,0,:] 
     dr_tv = beta*(d11+d22)
 
     return tv, dr_tv
 
-def softmax_loss(pred: np.array, label: np.array) -> tuple:
+def softmax_loss(pred: np.array, label: np.array) -> float:
     '''
-        Softmax loss to use for gradient descent
+    Softmax loss to use for gradient descent
+
+    Args:
+        pred: Prediction array. Currently has shape (1,2)
+        label: Label array. Currently has shape (1,2)
+        
+    Returns
+        loss: Softmax loss
     '''
 
     tot = 0
@@ -270,15 +294,20 @@ def non_printability_score(image: np.array, segmentation: np.array, printable_va
     Evaluates the ability of a printer to match the colours in the pertubation
     
     Args:
-        image: single rgb matrix with shape (h,w,3)
-        segmentation: area of image that needs to be perturbed
-        printable_values: printable values retrieved from printed palette
+        image: Single rgb matrix with shape (h,w,3)
+        segmentation: Area of image that needs to be perturbed
+        printable_values: Printable values retrieved from printed palette (N, 3)
+ 
+    Returns:
+        score: Non printability score
+        gradient: Non printability score gradient with shape (h,w,3)
     '''
     # copy directly from: https://github.com/mahmoods01/accessorize-to-a-crime/blob/master/aux/attack/non_printability_score.m
 
     def norm(x,y):
         return np.sum((np.subtract(x,y))*(np.subtract(x,y)))
     
+    # TODO: idk if this is really important or not since its literally just adding another dimension to everys single RGB value????
     printable_vals = np.reshape(printable_values, (printable_values.shape[0],1,3))
     max_norm = norm(np.array([0,0,0]), np.array([80,80,80]))
 
@@ -286,23 +315,22 @@ def non_printability_score(image: np.array, segmentation: np.array, printable_va
     scores = np.ones((image.shape[0], image.shape[1]))
     for i in range(image.shape[0]):
         for j in range(image.shape[1]):
-            print(segmentation[i,j,0])
             if segmentation[i,j,0] == 1:
                 for k in range(printable_vals.shape[0]):
-                    scores[i,j] = scores[i,j]*norm(image[i,j,:], printable_vals[k,0,:])/max_norm
+                    scores[i,j] = scores[i,j]*norm(image[i,j], printable_vals[k,0,:])/max_norm
             else:
                 scores[i,j] = 0
     
     score = np.sum(scores)
-    print(scores)
 
     # Compute gradient
     gradient = np.zeros(image.shape)
+
     for i in range(image.shape[0]):
         for j in range(image.shape[1]):
             if segmentation[i,j,0] == 1 and scores[i,j] != 0:
                 for k in range(printable_vals.shape[0]):
-                    f_k = norm(image[i,j,:], printable_vals[k,0,:])
+                    f_k = norm(image[i,j], printable_vals[k,0])
 
                     # Gradients for R,G,B respectively
                     gradient[i,j,0] = gradient[i,j,0] + 2*(image[i,j,0] - printable_vals[k,0,0])*(scores[i,j]/f_k)
@@ -316,11 +344,17 @@ def non_printability_score(image: np.array, segmentation: np.array, printable_va
 def get_printable_vals(num_colors = 32) -> np.array:
     '''
     Creates an Nx3 matrix of all RGB values that exist in printed image
+
+    Args:
+        num_colors: Number (roughly num_colors*3) of unique colors to reduce image to
+    
+    Returns:
+        printable_vals: Matrix of unique colors (N,3)
     '''
     # inspo1: https://github.com/mahmoods01/accessorize-to-a-crime/blob/master/aux/attack/get_printable_vals.m
     # inspo2: https://github.com/mahmoods01/accessorize-to-a-crime/blob/master/aux/attack/make_printable_vals_struct.m
     
-    print_img = Image.open('experiment/assets/printed-palette.png')
+    print_img = Image.open('./assets/printed-palette.png')
     img_arr = np.asarray(print_img)
 
     # Cuts 3% of edges from each side (subject to change)
@@ -340,26 +374,3 @@ def convert_b64_to_np(img_b64: str):
     img = np.frombuffer(decoded_img, dtype=np.uint8)
     img = cv2.imdecode(img, cv2.IMREAD_COLOR)
     return img
-
-"""
-Below is a demo of the above functions
-"""
-# red_glasses, glasses = prepare_accessory("red", "experiment/assets/glasses_silhouette.png", "glasses")
-
-# red_glasses, glasses, movement_info = move_accessory(red_glasses, glasses, {"horizontal": 10, "vertical": 10, "rotation": 10})
-
-# images = prepare_images("Faces.db", 1)
-# # # convert to np array
-# img = convert_b64_to_np(images[0][0]) 
-# # # Resize to 224x224 (should be done in preprocessing, together with standardization of position)
-# img = cv2.resize(img, (224, 224))
-
-# # Apply the accessory to the image
-# overlay = apply_accessory(img, red_glasses, glasses)
-
-# # Reverse the movement
-# red_glasses, glasses = reverse_accessory_move(red_glasses, glasses, movement_info)
-
-# cv2.imshow("img", img)
-# cv2.imshow("overlay", overlay)
-# cv2.waitKey(0)
