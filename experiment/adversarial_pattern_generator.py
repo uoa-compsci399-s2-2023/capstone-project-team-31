@@ -212,7 +212,7 @@ class AdversarialPatternGenerator:
                 else:
                     pertubations[x].r = r
                 
-                scores[j] = get_confidence_in_true_class(int_to_float(cleanup_dims(im)), self.classification, labels[x], self.model, True)
+                scores[x] = get_confidence_in_true_class(int_to_float(cleanup_dims(im)), self.classification, labels[x], self.model, True)
 
 
             # get printability score using non_printability_score in image_helper_functions.py
