@@ -77,7 +77,7 @@ class AdversarialPatternGenerator:
         
         for colour in self.colours:
             
-            accessory_img, accessory_mask = prepare_accessory(colour, "experiment/assets/{}.png".format(self.accessory_type.lower()), self.accessory_type)
+            accessory_img, accessory_mask = prepare_accessory(colour, "./assets/{}.png".format(self.accessory_type.lower()), self.accessory_type)
             
             confidences = np.empty(self.num_images)
             
@@ -112,7 +112,7 @@ class AdversarialPatternGenerator:
         print_coeff = self.printability_coeff/self.num_images
 
         print("Num GPUs Available:", tf.config.list_physical_devices('GPU'))
-        print("entered dodge")
+        print("Entered dodge")
         
         scores_over_time = []
         printable_vals = get_printable_vals()
@@ -138,10 +138,11 @@ class AdversarialPatternGenerator:
             lambda_tv = lambda_tv/(1+self.decay_rate*self.max_iter)
             print_coeff = print_coeff/(1+self.decay_rate*self.max_iter)
 
+            # Calculate gradient of each accessory movement
+            print('Entered gradient calculation')
             for j in range(self.num_images):
 
                 # for every image, move the accessory mask slightly 
-                
                 [round_accessory_im, round_accessory_area, movement_info] = move_accessory(experiment.get_image(), experiment.get_mask(), self.movement)
                 pertubations[j].movement_info = movement_info
                 
@@ -150,15 +151,9 @@ class AdversarialPatternGenerator:
                 img_copy = np.copy(self.processed_imgs[j][0])
                 attack = apply_accessory(img_copy, round_accessory_im, round_accessory_area)
 
-                #imgs = np.concatenate((attack, temppp), axis=0)
-                #cv2.imshow('VERTICAL', imgs)
-                #cv2.waitKey(0)
-                #cv2.destroyAllWindows()
-
                 attacks[j] = attack
                 movements[j] = movement_info
                 areas_to_perturb[j] = round_accessory_area
-                #print("image data: {}".format(self.processed_imgs[j][1:]))
                 
                 if labels[j] is None:
                     labels[j] = cleanup_labels(self.processed_imgs[j][self.class_num])
@@ -168,22 +163,15 @@ class AdversarialPatternGenerator:
                 tens = int_to_float(attack)
                 tens = tf.convert_to_tensor(tens)
                 gradients[j] = self.model.find_resized_gradient(tens, self.model.generateLabelFromText(labels[j]))[0]
-
-            # [scores, gradients] = find_gradient(images, true_classes) get the gradient and confidence in true class by running deepface model on images with current pertubation
             
+            # Calculate tv and dr/tv
+            print('Entered tv calculation')
             for x in range(self.num_images):
-                
-                print("second x loop: {}".format(x))
-                
                 # get the xith image's data from data storage arrays (inl gradients)
                 im = attacks[x]
                 gradient = gradients[x]
                 area_to_pert = areas_to_perturb[x]
                 movement_info = movements[x]
-
-                print("PRE ROUND: max gradient: {}\nPRE ROUND: min gradient: {}".format(np.max(gradient), np.min(gradient)))
-                print("gradient shape: {}\n".format(np.shape(gradient)))
-                print("pertubation area shape: {}\n".format(np.shape(area_to_pert)))
 
                 # normalise gradient
                 mask = np.all(area_to_pert != [0,0,0], axis=2)
@@ -191,11 +179,9 @@ class AdversarialPatternGenerator:
                 gradient[mask, :] = 0
                 gradient = gradient/np.max(np.abs(gradient)) 
                                 
-
                 # update the pertubation using total_variation from image_helper_functions
-                _, dr_tv = total_variation(im)
+                tv, dr_tv = total_variation(im)
                 dr_tv = np.nan_to_num(dr_tv)
-                print("total variation: {}\n".format(_))
                 dr_tv[mask,:] = 0
                 dr_tv = dr_tv/np.max(np.abs(dr_tv))
 
@@ -207,15 +193,11 @@ class AdversarialPatternGenerator:
                 r = np.reshape(r, im.shape)
                 
                 r, r_mask = reverse_accessory_move(r, experiment.get_mask(), movement_info)
-                r[experiment.get_mask() == 225] = 0
-
-                print("r shape: {}".format(np.shape(r)))
-                print("max r: {}\nmin r: {}".format(np.max(r), np.min(r)))
+                r[experiment.get_mask() != 0] = 0
 
                 # apply gaussian filtering per specification given to self.gauss_filtering
                 if self.gauss_filtering != 0:
                     r = gaussian_filter(r, sigma = self.gauss_filtering)
-                    #print("post gauss max r: {}\npost gauss min r: {}".format(np.max(r), np.min(r)))
                 
                 # store the pertubation
                 if i>1:
@@ -223,7 +205,8 @@ class AdversarialPatternGenerator:
                 else:
                     pertubations[x].r = r
                 pass
-
+            
+            print('Entered nps calculation')
             # get printability score using non_printability_score in image_helper_functions.py
             nps, dr_nps = non_printability_score(experiment.get_image(), experiment.get_mask()[:,:,0], printable_vals)
             if self.printability_coeff != 0:
@@ -232,22 +215,17 @@ class AdversarialPatternGenerator:
                 area_to_pert = experiment.get_mask()
                 #dr_nps[:,:,self.channels_to_fix] = 0
                 gradient[area_to_pert != 1] = 0
-                #print("PRE ROUND: max dr_nps: {}\nPRE ROUND: min dr_nps: {}".format(np.max(dr_nps), np.min(dr_nps)))
                 experiment.set_image(experiment.get_image() - print_coeff*dr_nps)
 
             # apply pertubations
             for r_i in range(len(pertubations)):
                 r = pertubations[r_i].r
                 r = (np.rint(r)).astype(int)
-                #print("PRE ROUND: max r: {}\nPRE ROUND: min r: {}".format(np.max(r), np.min(r)))
                 r[(experiment.get_image() + r) > 255] = 0
                 r[(experiment.get_image() + r) < 0] = 0       
                 result = np.add(r, experiment.get_image())                
                 
                 experiment.set_image(result)
-
-            # TODO: quantization step looks sketchy, theyre just subtracting it by 0??? mod(x,1) is always 0 or am i tripping?
-            # TODO: might need to change processed_imgs here once we add more images
 
             for k in range(self.num_images):
                 final_attacks[k] = apply_accessory(np.copy(self.processed_imgs[k][0]), experiment.get_image(), experiment.get_mask())
@@ -275,8 +253,7 @@ class AdversarialPatternGenerator:
                 print("iteration: {}".format(i))
                 print("average confidence in true class: {}".format(score_mean))
                 print("non-printability score: {}".format(nps))
-                
-                print("attack shape: {}\n".format(np.shape(attack[0])))
+                print("total_variation score: {}".format(tv))
                 
                 # print out the iteration number, deepface's current confidence in image true classes, non-printability score
                 # display the image with current pertubation
@@ -284,12 +261,12 @@ class AdversarialPatternGenerator:
             i += 1 
         
         imgs = np.concatenate((lowest_pert[2], lowest_pert[0]), axis=0)
-        cv2.imshow('VERTICAL', imgs)
+        cv2.imshow('Final Attack', imgs)
         plt.plot(scores_over_time)
         plt.figtext(0.5, 0.01, 'Classified: {}, Confidence: {}'.format(lowest_output['classified'], lowest_output['confidence']), ha="center")
         plt.show()
 
-        cv2.imwrite('Test_pert.png', lowest_pert[2])
+        #cv2.imwrite('Test_pert.png', lowest_pert[2])
         return final_attacks, experiment
 
     # return final pertubation result, with deepface's average confidence in predicting true classes
