@@ -103,12 +103,17 @@ class AdversarialPatternGenerator:
                 _, confidences[i] = get_confidence_in_selected_class(cleanup_dims(temp_attack), self.classification, label, self.model, True)
                 
             avg_true_class_conf = np.mean(confidences)
-            
-            if avg_true_class_conf < min_avg_true_class_conf:
-                min_avg_true_class_conf = avg_true_class_conf
+
+            if self.mode == "impersonation":
+                conf_dist = np.abs(1-avg_true_class_conf)
+            elif self.mode == "dodge":
+                conf_dist = avg_true_class_conf
+
+            if conf_dist < min_avg_true_class_conf:
+                min_avg_true_class_conf = conf_dist
                 best_start = Experiment(accessory_img, accessory_mask)
                 
-                print('new best start found with colour {} and confidence {}'.format(colour, min_avg_true_class_conf))
+                print('new best start found with colour {} and confidence {}'.format(colour, avg_true_class_conf))
                 
             
         return best_start
@@ -131,9 +136,9 @@ class AdversarialPatternGenerator:
         final_attacks = [np.NaN]*self.num_images # Stores final attack without any accessory movement
 
         i = 0
-        score_mean = 1
+        score_threshold = 1
 
-        while i < self.max_iter and score_mean > self.stop_prob:
+        while i < self.max_iter and score_threshold > self.stop_prob:
             
             #data storing:
             attacks = [None] * self.num_images
@@ -165,7 +170,6 @@ class AdversarialPatternGenerator:
                 areas_to_perturb[j] = round_accessory_area
                 
                 if labels[j] is None:
-                    
                     if self.mode == "impersonation":
                         labels[j] = self.target
                     elif self.mode == "dodge":
@@ -241,6 +245,7 @@ class AdversarialPatternGenerator:
                 
                 experiment.set_image(result)
 
+            # Gets score of attack after all perturbations
             for k in range(self.num_images):
                 final_attacks[k] = apply_accessory(np.copy(self.processed_imgs[k][0]), experiment.get_image(), experiment.get_mask())
                 if self.mode == "impersonation":
@@ -249,13 +254,19 @@ class AdversarialPatternGenerator:
                     label = cleanup_labels(self.processed_imgs[k][self.class_num])
 
                 output, scores[k] = get_confidence_in_selected_class(cleanup_dims(final_attacks[k]), self.classification, label, self.model)
-            
+
             score_mean = np.mean(scores)
             scores_over_time.append(score_mean)
-            
-            if score_mean <= lowest_pert[1]:
+
+            if self.mode == "impersonation":
+                score_threshold = np.abs(1-score_mean)
+            elif self.mode == "dodge":
+                score_threshold = score_mean
+
+            # Saves attack with lowest score
+            if score_threshold <= lowest_pert[1]:
                 lowest_pert[0] = np.copy(final_attacks[0])
-                lowest_pert[1] = score_mean
+                lowest_pert[1] = score_threshold
 
                 mask = np.where(experiment.get_mask() != 0)
                 acc_img = experiment.get_image().astype(np.uint8)
@@ -266,9 +277,7 @@ class AdversarialPatternGenerator:
                 
             # display
             if self.verbose:
-                
                 flavour_text = "true"
-                
                 if self.mode == "impersonation":
                     flavour_text = "target"
                                         
