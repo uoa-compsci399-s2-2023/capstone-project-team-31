@@ -112,7 +112,6 @@ class AdversarialPatternGenerator:
         print_coeff = self.printability_coeff/self.num_images
 
         print("Num GPUs Available:", tf.config.list_physical_devices('GPU'))
-        print("Entered dodge")
         
         scores_over_time = []
         printable_vals = get_printable_vals()
@@ -139,7 +138,6 @@ class AdversarialPatternGenerator:
             print_coeff = print_coeff/(1+self.decay_rate*self.max_iter)
 
             # Calculate gradient of each accessory movement
-            print('Entered gradient calculation')
             for j in range(self.num_images):
 
                 # for every image, move the accessory mask slightly 
@@ -165,7 +163,6 @@ class AdversarialPatternGenerator:
                 gradients[j] = self.model.find_resized_gradient(tens, self.model.generateLabelFromText(labels[j]))[0]
             
             # Calculate tv and dr/tv
-            print('Entered tv calculation')
             for x in range(self.num_images):
                 # get the xith image's data from data storage arrays (inl gradients)
                 im = attacks[x]
@@ -206,7 +203,6 @@ class AdversarialPatternGenerator:
                     pertubations[x].r = r
                 pass
             
-            print('Entered nps calculation')
             # get printability score using non_printability_score in image_helper_functions.py
             nps, dr_nps = non_printability_score(experiment.get_image(), experiment.get_mask()[:,:,0], printable_vals)
             if self.printability_coeff != 0:
