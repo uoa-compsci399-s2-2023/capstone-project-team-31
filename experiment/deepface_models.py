@@ -148,7 +148,7 @@ class attributeModel:
         np_gradient = gradient.numpy()
         resized = cv2.resize(np_gradient[0], (224, 224))
         gray = cv2.cvtColor(resized, cv2.COLOR_GRAY2BGR)
-        return resized
+        return gray
         
     
     def create_adversarial_pattern(self, input_image, input_label):
