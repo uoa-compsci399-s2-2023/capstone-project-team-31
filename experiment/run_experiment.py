@@ -25,9 +25,14 @@ def parse_args():
                         type = int,
                         help = "How many images are being processed"
     )
+    parser.add_argument("-r", "--decay_rate",
+                        default = 1,
+                        type = float,
+                        help = "Learning decay rate"
+    )
     parser.add_argument("-s", "--step_size",
                         default = 10,
-                        type = int,
+                        type = float,
                         help = "The step size used in the optimisation algorithm"
     )
     parser.add_argument("-l", "--lambda_tv",
@@ -89,6 +94,6 @@ def parse_args():
     return args
 
 args = parse_args()
-adv_pattern_generator = AdversarialPatternGenerator(args.accessory_type, args.classification, args.images_dir, args.num_images, args.step_size, args.lambda_tv, args.printability_coeff, args.momentum_coeff, args.gauss_filtering, args.max_iterations, args.channels_to_fix, args.stop_probability, args.horizontal_move, args.vertical_move, args.rotational_move, args.v) # and can specify any other paramenters from args
+adv_pattern_generator = AdversarialPatternGenerator(args.accessory_type, args.classification, args.images_dir, args.num_images, args.decay_rate, args.step_size, args.lambda_tv, args.printability_coeff, args.momentum_coeff, args.gauss_filtering, args.max_iterations, args.channels_to_fix, args.stop_probability, args.horizontal_move, args.vertical_move, args.rotational_move, args.v) # and can specify any other paramenters from args
 
 adv_pattern_generator.run()

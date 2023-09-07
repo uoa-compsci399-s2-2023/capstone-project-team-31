@@ -46,7 +46,8 @@ def prepare_images(images_dir: str, num_images: int) -> list:
         with open("./Faces.json", 'r') as f:
             data = json.load(f)
             for img in rand_images:
-                output.append([img, data[img]['ethnicity'], data[img]['gender'], data[img]['age'], data[img]['emotion']])
+                temp =  cv2.imread(os.path.join(abs_path, img))
+                output.append([temp, data[img]['ethnicity'], data[img]['gender'], data[img]['age'], data[img]['emotion']])
         return output
     
 from deepface.commons import functions
@@ -97,7 +98,11 @@ def image_to_face(image: tuple):
     '''
     #b64 = "data:image/jpg;base64/," + image[0]
     b64 = image[0]
-    img = convert_b64_to_np(b64)
+    if type(b64) == str:
+        img = convert_b64_to_np(b64)
+    else:
+        img = b64
+
     try:
         img = getImageContents(img)[0]
     except ValueError:
@@ -192,7 +197,6 @@ def move_accessory(accessory_image: np.ndarray, accessory_mask: np.ndarray, move
     # Save the movement info
     movement_info = {"horizontal": shift_x, "vertical": shift_y, "rotation": rotation}
 
-    
     # Transform the image
     accessory_image = np.roll(accessory_image, (shift_x, shift_y), axis=(0, 1))
     rot_aug = iaa.Affine(rotate=iap.Deterministic(rotation))
@@ -219,11 +223,13 @@ def reverse_accessory_move(accessory_image: np.ndarray, accessory_mask: np.ndarr
     '''
 
     # Transform the image
+    accessory_image = np.copy(accessory_image)
     rot_aug = iaa.Affine(rotate=iap.Deterministic(movement_info["rotation"] * -1))
     accessory_image = rot_aug.augment_image(accessory_image)
     accessory_image = np.roll(accessory_image, (movement_info['horizontal'] * -1, movement_info['vertical'] * -1), axis=(0, 1))
     
     # Transform the mask
+    accessory_mask = np.copy(accessory_mask)
     rot_aug = iaa.Affine(rotate=iap.Deterministic(movement_info["rotation"] * -1), cval=255)
     accessory_mask = rot_aug.augment_image(accessory_mask)
     accessory_mask = np.roll(accessory_mask, (movement_info['horizontal'] * -1, movement_info['vertical'] * -1), axis=(0, 1))
@@ -310,12 +316,12 @@ def non_printability_score(image: np.array, segmentation: np.array, printable_va
     # TODO: idk if this is really important or not since its literally just adding another dimension to everys single RGB value????
     printable_vals = np.reshape(printable_values, (printable_values.shape[0],1,3))
     max_norm = norm(np.array([0,0,0]), np.array([80,80,80]))
-
+    
     # Compute non-printability scores per pixel
     scores = np.ones((image.shape[0], image.shape[1]))
     for i in range(image.shape[0]):
         for j in range(image.shape[1]):
-            if segmentation[i,j,0] == 1:
+            if segmentation[i,j] == 0:
                 for k in range(printable_vals.shape[0]):
                     scores[i,j] = scores[i,j]*norm(image[i,j], printable_vals[k,0,:])/max_norm
             else:
@@ -328,7 +334,7 @@ def non_printability_score(image: np.array, segmentation: np.array, printable_va
 
     for i in range(image.shape[0]):
         for j in range(image.shape[1]):
-            if segmentation[i,j,0] == 1 and scores[i,j] != 0:
+            if segmentation[i,j] == 0 and scores[i,j] != 0:
                 for k in range(printable_vals.shape[0]):
                     f_k = norm(image[i,j], printable_vals[k,0])
 
@@ -354,7 +360,7 @@ def get_printable_vals(num_colors = 32) -> np.array:
     # inspo1: https://github.com/mahmoods01/accessorize-to-a-crime/blob/master/aux/attack/get_printable_vals.m
     # inspo2: https://github.com/mahmoods01/accessorize-to-a-crime/blob/master/aux/attack/make_printable_vals_struct.m
     
-    print_img = Image.open('./assets/printed-palette.png')
+    """ print_img = Image.open('experiment/assets/printed-palette.png')
     img_arr = np.asarray(print_img)
 
     # Cuts 3% of edges from each side (subject to change)
@@ -365,9 +371,17 @@ def get_printable_vals(num_colors = 32) -> np.array:
     # Uniform quantization, Minimum Variance Optimization not available in python (subject to change)
     printable_vals = np.round(img_arr*(num_colors/255))*(255//num_colors)
     printable_vals = printable_vals.reshape(-1, img_arr.shape[2])
-    printable_vals.sort(axis=0)
+    printable_vals.sort(axis=0) """
 
-    return np.unique(printable_vals, axis = 0)
+    printable_vals = []
+    with open('experiment/assets/printable_vals.txt') as file:
+        lines = file.readlines()
+        for line in lines:
+            line = line.split()
+            line = list(map(int, line))
+            printable_vals.append(line)
+
+    return np.array(printable_vals)
 
 def convert_b64_to_np(img_b64: str):
     decoded_img = base64.b64decode(img_b64)
