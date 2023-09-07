@@ -23,7 +23,8 @@ Yellowish: (220, 210, 50)
 
 class AdversarialPatternGenerator:
 
-    def __init__(self, accessory_type, classification, images_dir, num_images=1, decay_rate=0, step_size=10, lambda_tv=3, printability_coeff=5, momentum_coeff=0.4, gauss_filtering=0, max_iter=15, channels_to_fix=[], stop_prob=0.01, horizontal_move=4, vertical_move=4, rotational_move=4, verbose=True):
+    def __init__(self, mode, accessory_type, classification, images_dir, num_images=1, decay_rate=0, step_size=10, lambda_tv=3, printability_coeff=5, momentum_coeff=0.4, gauss_filtering=0, max_iter=15, channels_to_fix=[], stop_prob=0.01, horizontal_move=4, vertical_move=4, rotational_move=4, target=None, verbose=True):
+        self.mode = mode
         self.accessory_type = accessory_type
         self.classification = classification # what type of classification is being dodged - 'gender', 'age', 'ethnicity', 'emotion' (to do: emotion requires further preprocessing)
         if classification == 'ethnicity':
@@ -61,6 +62,11 @@ class AdversarialPatternGenerator:
         self.movement['vertical'] = vertical_move
         self.movement['rotation'] = rotational_move
         self.colours = ['grey', 'organish', 'brownish', 'goldish', 'yellowish']
+                
+        self.target = None
+        if target is not None:
+            self.target = cleanup_labels(target)
+            
         self.verbose = verbose
         
         self.model = attributeModel(self.classification)
@@ -89,20 +95,30 @@ class AdversarialPatternGenerator:
 
                 temp_attack = temp_attack.astype(np.uint8)
                 
-                _,confidences[i] = get_confidence_in_true_class(cleanup_dims(temp_attack), self.classification, cleanup_labels(self.processed_imgs[i][self.class_num]), self.model, True)
+                if self.mode == "impersonation":
+                    label = self.target
+                elif self.mode == "dodge":
+                    label = cleanup_labels(self.processed_imgs[i][self.class_num])
+                
+                _, confidences[i] = get_confidence_in_selected_class(cleanup_dims(temp_attack), self.classification, label, self.model, True)
                 
             avg_true_class_conf = np.mean(confidences)
-            
-            if avg_true_class_conf < min_avg_true_class_conf:
-                min_avg_true_class_conf = avg_true_class_conf
+
+            if self.mode == "impersonation":
+                conf_dist = np.abs(1-avg_true_class_conf)
+            elif self.mode == "dodge":
+                conf_dist = avg_true_class_conf
+
+            if conf_dist < min_avg_true_class_conf:
+                min_avg_true_class_conf = conf_dist
                 best_start = Experiment(accessory_img, accessory_mask)
                 
-                print('new best start found with colour {} and confidence {}'.format(colour, min_avg_true_class_conf))
+                print('new best start found with colour {} and confidence {}'.format(colour, avg_true_class_conf))
                 
             
         return best_start
 
-    def dodge(self, experiment: Experiment):
+    def run_experiment(self, experiment: Experiment):
         '''
         pertubates the colours within the accessory mask using gradient descent to minimise deepface's confidence in predicting true labels
         '''
@@ -112,7 +128,6 @@ class AdversarialPatternGenerator:
         print_coeff = self.printability_coeff/self.num_images
 
         print("Num GPUs Available:", tf.config.list_physical_devices('GPU'))
-        print("Entered dodge")
         
         scores_over_time = []
         printable_vals = get_printable_vals()
@@ -121,9 +136,9 @@ class AdversarialPatternGenerator:
         final_attacks = [np.NaN]*self.num_images # Stores final attack without any accessory movement
 
         i = 0
-        score_mean = 1
+        score_threshold = 1
 
-        while i < self.max_iter and score_mean > self.stop_prob:
+        while i < self.max_iter and score_threshold > self.stop_prob:
             
             #data storing:
             attacks = [None] * self.num_images
@@ -139,7 +154,6 @@ class AdversarialPatternGenerator:
             print_coeff = print_coeff/(1+self.decay_rate*self.max_iter)
 
             # Calculate gradient of each accessory movement
-            print('Entered gradient calculation')
             for j in range(self.num_images):
 
                 # for every image, move the accessory mask slightly 
@@ -156,7 +170,10 @@ class AdversarialPatternGenerator:
                 areas_to_perturb[j] = round_accessory_area
                 
                 if labels[j] is None:
-                    labels[j] = cleanup_labels(self.processed_imgs[j][self.class_num])
+                    if self.mode == "impersonation":
+                        labels[j] = self.target
+                    elif self.mode == "dodge":
+                        labels[j] = cleanup_labels(self.processed_imgs[j][self.class_num])
                 
                 #expand attack dim to work with deepface
                 attack = cleanup_dims(attack)
@@ -165,7 +182,6 @@ class AdversarialPatternGenerator:
                 gradients[j] = self.model.find_resized_gradient(tens, self.model.generateLabelFromText(labels[j]))[0]
             
             # Calculate tv and dr/tv
-            print('Entered tv calculation')
             for x in range(self.num_images):
                 # get the xith image's data from data storage arrays (inl gradients)
                 im = attacks[x]
@@ -176,6 +192,10 @@ class AdversarialPatternGenerator:
                 # normalise gradient
                 mask = np.all(area_to_pert != [0,0,0], axis=2)
                 gradient = gradient.numpy()
+                
+                if self.mode == "impersonation":
+                    gradient = np.multiply(gradient, -1) ## is there a better way to do this?
+                
                 gradient[mask, :] = 0
                 gradient = gradient/np.max(np.abs(gradient)) 
                                 
@@ -204,9 +224,7 @@ class AdversarialPatternGenerator:
                     pertubations[x].r = self.momentum_coeff*pertubations[x].r + r 
                 else:
                     pertubations[x].r = r
-                pass
             
-            print('Entered nps calculation')
             # get printability score using non_printability_score in image_helper_functions.py
             nps, dr_nps = non_printability_score(experiment.get_image(), experiment.get_mask()[:,:,0], printable_vals)
             if self.printability_coeff != 0:
@@ -227,17 +245,28 @@ class AdversarialPatternGenerator:
                 
                 experiment.set_image(result)
 
+            # Gets score of attack after all perturbations
             for k in range(self.num_images):
                 final_attacks[k] = apply_accessory(np.copy(self.processed_imgs[k][0]), experiment.get_image(), experiment.get_mask())
-                label = cleanup_labels(self.processed_imgs[k][self.class_num])
-                output, scores[k] = get_confidence_in_true_class(cleanup_dims(final_attacks[k]), self.classification, label, self.model)
+                if self.mode == "impersonation":
+                    label = self.target
+                elif self.mode == "dodge":
+                    label = cleanup_labels(self.processed_imgs[k][self.class_num])
+
+                output, scores[k] = get_confidence_in_selected_class(cleanup_dims(final_attacks[k]), self.classification, label, self.model)
 
             score_mean = np.mean(scores)
             scores_over_time.append(score_mean)
-            
-            if score_mean <= lowest_pert[1]:
+
+            if self.mode == "impersonation":
+                score_threshold = np.abs(1-score_mean)
+            elif self.mode == "dodge":
+                score_threshold = score_mean
+
+            # Saves attack with lowest score
+            if score_threshold <= lowest_pert[1]:
                 lowest_pert[0] = np.copy(final_attacks[0])
-                lowest_pert[1] = score_mean
+                lowest_pert[1] = score_threshold
 
                 mask = np.where(experiment.get_mask() != 0)
                 acc_img = experiment.get_image().astype(np.uint8)
@@ -248,10 +277,13 @@ class AdversarialPatternGenerator:
                 
             # display
             if self.verbose:
+                flavour_text = "true"
+                if self.mode == "impersonation":
+                    flavour_text = "target"
                                         
                 print("scores: {}".format(scores))
                 print("iteration: {}".format(i))
-                print("average confidence in true class: {}".format(score_mean))
+                print("average confidence in {} class: {}".format(flavour_text, score_mean))
                 print("non-printability score: {}".format(nps))
                 print("total_variation score: {}".format(tv))
                 
@@ -275,7 +307,7 @@ class AdversarialPatternGenerator:
 
         starting_point = self.get_best_starting_colour()
 
-        result, experiment_result = self.dodge(starting_point)
+        result, experiment_result = self.run_experiment(starting_point)
         
         cv2.imwrite("./results/accessory_image.png", experiment_result.get_image())        
         

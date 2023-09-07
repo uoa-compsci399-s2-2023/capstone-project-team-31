@@ -2,8 +2,8 @@ import numpy as np
 from deepface.DeepFace import *
 loss_object = tf.keras.losses.CategoricalCrossentropy()
 from deepface_models import *
-    
-def get_confidence_in_true_class(image: np.ndarray, classification:str, true_class:str, e:attributeModel, verbose=False):
+
+def get_confidence_in_selected_class(image: np.ndarray, classification:str, true_class:str, e:attributeModel, verbose=False):
     '''
     takes a single image and returns deepface's confidence in predicting its true class
     '''
