@@ -374,7 +374,7 @@ def get_printable_vals(num_colors = 32) -> np.array:
     printable_vals.sort(axis=0) """
 
     printable_vals = []
-    with open('experiment/assets/printable_vals.txt') as file:
+    with open('./assets/printable_vals.txt') as file:
         lines = file.readlines()
         for line in lines:
             line = line.split()

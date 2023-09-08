@@ -319,12 +319,12 @@ class AdversarialPatternGenerator:
         
 def cleanup_labels(true_class:str):
 ## cleaning up different classification terms
-
+    result = true_class
     if true_class.lower() == 'female':
         result = 'Woman'
     elif true_class.lower() == 'male':
         result = 'Man'
-    
+        
     return result
 
 
