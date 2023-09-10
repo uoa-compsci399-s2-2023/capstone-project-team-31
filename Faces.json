@@ -13,5 +13,1841 @@
         "age": "39",
         "gender": "Female",
         "emotion": "Neutral"
+    },
+    "Te_Hemo_Ata_Henare_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "65",
+        "gender": "Female",
+        "emotion": "neutral"
+    },
+    "Whiti_Hereaka_WORD_(cropped).jpg": {
+        "ethnicity": "European",
+        "age": "45",
+        "gender": "Female",
+        "emotion": "neutral"
+    },
+    "Joe_Williams_KNZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "55",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "Haare_Williams_2017_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "80",
+        "gender": "Male",
+        "emotion": "angry"
+    },
+    "Megan_Gale_(8595150828).jpg": {
+        "ethnicity": "Maori",
+        "age": "25",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Megan_Gale_(6280217730).jpg": {
+        "ethnicity": "Maori",
+        "age": "25",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Gail_Tipa_ONZM_(cropped).jpg": {
+        "ethnicity": "European",
+        "age": "55",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Adrian_Rurawhe_2017.jpg": {
+        "ethnicity": "Maori",
+        "age": "60",
+        "gender": "Male",
+        "emotion": "happy"
+    },
+    "Megan_Gale_(6382589029).jpg": {
+        "ethnicity": "Maori",
+        "age": "30",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Headshot_of_Moana_Jackson_at_TEU_lectern.jpg": {
+        "ethnicity": "European",
+        "age": "65",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "Megan_Gale_(6440930205).jpg": {
+        "ethnicity": "Maori",
+        "age": "25",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Cliff_Whiting_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "70",
+        "gender": "Male",
+        "emotion": "angry"
+    },
+    "Linda_Tuhiwai-Smith_November_2020.jpg": {
+        "ethnicity": "Maori",
+        "age": "65",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Tahu_Kukutai_at_2019_Research_Honours_Aotearoa_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "55",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Haare_Williams_KNZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "80",
+        "gender": "Male",
+        "emotion": "happy"
+    },
+    "Vicki-Anne_Heikell_MNZM_(cropped).jpg": {
+        "ethnicity": "European",
+        "age": "50",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Arihia_Bennett_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "45",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Megan_Gale_(6280234498).jpg": {
+        "ethnicity": "Maori",
+        "age": "30",
+        "gender": "Female",
+        "emotion": "surprised"
+    },
+    "Mike_King_ONZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "50",
+        "gender": "Male",
+        "emotion": "happy"
+    },
+    "Arapera_Royal_Tangaere_CNZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "65",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Jo_Pilkington_MNZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "40",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Bill_Apiata.jpg": {
+        "ethnicity": "European",
+        "age": "45",
+        "gender": "Male",
+        "emotion": "happy"
+    },
+    "Kura_Moeahu_QSO_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "50",
+        "gender": "Male",
+        "emotion": "disgusted"
+    },
+    "Naida_Glavish_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "50",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Pare_Keiha_QSO_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "65",
+        "gender": "Male",
+        "emotion": "happy"
+    },
+    "Adrian_Rurawhe_crop.jpg": {
+        "ethnicity": "Maori",
+        "age": "45",
+        "gender": "Male",
+        "emotion": "happy"
+    },
+    "Rawiri_Paratene_CNZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "65",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "Waihaere_Mason_ONZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "75",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "384px-Anne_Candy_2019_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "70",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Reweti_Ropiha_MNZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "55",
+        "gender": "Male",
+        "emotion": "happy"
+    },
+    "Fulbright_Award_Ceremony,_June_28,_2016_(27920329746).jpg": {
+        "ethnicity": "Maori",
+        "age": "45",
+        "gender": "Male",
+        "emotion": "sad"
+    },
+    "Hec_Busby_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "70",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "Terry_Ryan_dsc2192_(cropped).jpg": {
+        "ethnicity": "European",
+        "age": "80",
+        "gender": "Male",
+        "emotion": "happy"
+    },
+    "Richard_Wallace_QSM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "65",
+        "gender": "Male",
+        "emotion": "happy"
+    },
+    "Jacinta_Ruru_at_2019_Research_Honours_Aotearoa_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "40",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "TEU_Conference_2014_-_Margaret_Taurere.jpg": {
+        "ethnicity": "Maori",
+        "age": "45",
+        "gender": "Female",
+        "emotion": "surprised"
+    },
+    "Traci_Houpapa_MNZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "35",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Gaylene_Te_Rauna_MNZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "40",
+        "gender": "Female",
+        "emotion": "neutral"
+    },
+    "Ngahuia_Te_Awekotuku_MNZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "70",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Ngahuia_te_Awekotuku_at_2019_Research_Honours_Aotearoa_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "75",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Hinewehi_Mohi_DNZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "50",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Heta_Hingston_QSO_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "75",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "Callan_Mulvey_-_Guardians_of_the_Galaxy_premiere_-_July_2014.jpg": {
+        "ethnicity": "Maori",
+        "age": "30",
+        "gender": "Male",
+        "emotion": "angry"
+    },
+    "Daniel_Logan_GalaxyCon_Raleigh_2019.jpg": {
+        "ethnicity": "Maori",
+        "age": "35",
+        "gender": "Male",
+        "emotion": "happy"
+    },
+    "Briar_Grace-Smith_ONZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "45",
+        "gender": "Female",
+        "emotion": "neutral"
+    },
+    "Nigel_Borell_MNZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "55",
+        "gender": "Male",
+        "emotion": "happy"
+    },
+    "JAMES_TE_HUNA_(11915031893).jpg": {
+        "ethnicity": "Maori",
+        "age": "40",
+        "gender": "Male",
+        "emotion": "disgusted"
+    },
+    "Peter_Gordon_2012_Frankfurt_01.jpg": {
+        "ethnicity": "Maori",
+        "age": "50",
+        "gender": "Male",
+        "emotion": "angry"
+    },
+    "Joe_Hawke_MNZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "65",
+        "gender": "Male",
+        "emotion": "happy"
+    },
+    "Che_Fu_MNZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "45",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "Alan_Duff_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "75",
+        "gender": "Male",
+        "emotion": "happy"
+    },
+    "Jordon_Rapana_2008.jpg": {
+        "ethnicity": "Maori",
+        "age": "30",
+        "gender": "Male",
+        "emotion": "surprised"
+    },
+    "Libby_Hakaraia_MNZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "40",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Rob_McLeod_KNZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "75",
+        "gender": "Male",
+        "emotion": "happy"
+    },
+    "Piri_Sciascia_2017_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "55",
+        "gender": "Male",
+        "emotion": "happy"
+    },
+    "Daniel_Logan_Photo_Op_GalaxyCon_Raleigh_2019.jpg": {
+        "ethnicity": "Maori",
+        "age": "35",
+        "gender": "Male",
+        "emotion": "happy"
+    },
+    "Jordan_Rapana_Kiwis.jpg": {
+        "ethnicity": "Maori",
+        "age": "35",
+        "gender": "Male",
+        "emotion": "disgusted"
+    },
+    "Ngahuia_Te_Awekotuku_MNZM_investiture.jpg": {
+        "ethnicity": "Maori",
+        "age": "50",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Mere_Berryman_ONZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "50",
+        "gender": "Female",
+        "emotion": "neutral"
+    },
+    "Sarah_Goss_2016.jpg": {
+        "ethnicity": "Maori",
+        "age": "25",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Alice_Ropata_2022_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "45",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Dennis_Marsh_MNZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "75",
+        "gender": "Male",
+        "emotion": "happy"
+    },
+    "Arohanui_Lawrence_QSM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "45",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "Charles_Royal_at_2019_Research_Honours_Aotearoa_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "45",
+        "gender": "Male",
+        "emotion": "happy"
+    },
+    "Lance_O'Sullivan_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "35",
+        "gender": "Male",
+        "emotion": "happy"
+    },
+    "Tracey_McIntosh_MNZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "40",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Laura_Mariu_MNZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "35",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Jack_Thatcher_CNZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "55",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "Adrian_Rurawhe_July_2022_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "55",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "Tangihaere_Harihari-Hughes_ONZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "55",
+        "gender": "Female",
+        "emotion": "angry"
+    },
+    "Peter_Gordon_2022_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "55",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "Rob_Cooper_CNZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "65",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "Heta_Hingston_QSO_investiture.jpg": {
+        "ethnicity": "",
+        "age": "",
+        "gender": "",
+        "emotion": ""
+    },
+    "Noeline_Taurua_DNZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "45",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Anika_Moa.jpg": {
+        "ethnicity": "Maori",
+        "age": "35",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Muru_Walters_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "60",
+        "gender": "Male",
+        "emotion": "angry"
+    },
+    "Hayden_Wano_QSO_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "55",
+        "gender": "Male",
+        "emotion": "happy"
+    },
+    "Pauline_Kingi_2015_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "55",
+        "gender": "Female",
+        "emotion": "neutral"
+    },
+    "Michael_Walker_at_2019_Research_Honours_Aotearoa_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "65",
+        "gender": "Male",
+        "emotion": "happy"
+    },
+    "Megan_Gale_(6279696781).jpg": {
+        "ethnicity": "Maori",
+        "age": "30",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Hohepa_105.jpg": {
+        "ethnicity": "Maori",
+        "age": "45",
+        "gender": "Male",
+        "emotion": "angry"
+    },
+    "Sharon_Shea_MNZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "45",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Megan_Gale_(8432636492).jpg": {
+        "ethnicity": "Maori",
+        "age": "25",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Piri_Sciascia_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "55",
+        "gender": "Male",
+        "emotion": "happy"
+    },
+    "TV_WEEK_LOGIES_2011_Megan_Gale_(5679026877).jpg": {
+        "ethnicity": "Maori",
+        "age": "30",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Peter_Kelly_army_(cropped).jpg": {
+        "ethnicity": "European",
+        "age": "50",
+        "gender": "Male",
+        "emotion": "happy"
+    },
+    "Megan_Gale_(6382587973).jpg": {
+        "ethnicity": "Maori",
+        "age": "30",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Hoturoa_Barclay-Kerr_CNZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "60",
+        "gender": "Male",
+        "emotion": "happy"
+    },
+    "Rita_Powick_MNZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "55",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Megan_Gale_(2012)_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "30",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Witi_Ihimaera_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "60",
+        "gender": "Male",
+        "emotion": "happy"
+    },
+    "Megan_Gale_(6382589243).jpg": {
+        "ethnicity": "Maori",
+        "age": "30",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Megan_Gale_(6940734603).jpg": {
+        "ethnicity": "Maori",
+        "age": "30",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Fred_Graham_2018_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "75",
+        "gender": "Male",
+        "emotion": "happy"
+    },
+    "Whaea_Mere_Broughton_(18726151435).jpg": {
+        "ethnicity": "Maori",
+        "age": "60",
+        "gender": "Female",
+        "emotion": "angry"
+    },
+    "Hinerangi_Edwards_ONZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "30",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Matiu_Te_Rei_KNZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "60",
+        "gender": "Male",
+        "emotion": "happy"
+    },
+    "Paul_Morgan_QSO_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "50",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "Margareth_Broodkoorn_ONZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "60",
+        "gender": "Female",
+        "emotion": "disgusted"
+    },
+    "Megan_Gale_(6382589757).jpg": {
+        "ethnicity": "Maori",
+        "age": "30",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Dr_Haare_Williams_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "70",
+        "gender": "Male",
+        "emotion": "surprised"
+    },
+    "Janine_Morrell-Gunn_ONZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "50",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Makareta_Desai_MNZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "60",
+        "gender": "Female",
+        "emotion": "neutral"
+    },
+    "Wi_Taepa_ONZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "60",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "Ngapare_Hopa_MNZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "65",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Megan_Gale_(6382588557).jpg": {
+        "ethnicity": "Maori",
+        "age": "30",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Kaa_Williams_QSO_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "75",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Betty-Anne_Monga_MNZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "35",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Nganeko_Minhinnick_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "70",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "Adrian_Rurawhe_August_2022_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "50",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "Peter_Charleton_MNZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "60",
+        "gender": "Male",
+        "emotion": "surprised"
+    },
+    "Robyn_Corrigan_MNZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "70",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Whiti_Hereaka(c)2021_Tabitha_Arthur_Photography--2.jpg": {
+        "ethnicity": "Maori",
+        "age": "30",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Wayne_Ngata_MNZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "50",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "Willie_Apiata_-_Waitangi_2020_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "45",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "Megan_Gale_(6794622540).jpg": {
+        "ethnicity": "Maori",
+        "age": "30",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Megan_Gale_(6382589385).jpg": {
+        "ethnicity": "Maori",
+        "age": "30",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Megan_Gale_(6794787713).jpg": {
+        "ethnicity": "Maori",
+        "age": "30",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Kito_Pikaahu_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "45",
+        "gender": "Male",
+        "emotion": "happy"
+    },
+    "Megan_Gale_(8595150478).jpg": {
+        "ethnicity": "Maori",
+        "age": "30",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Colleen_Urlich_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "55",
+        "gender": "Female",
+        "emotion": "angry"
+    },
+    "Lowell_Goddard_November_2020.jpg": {
+        "ethnicity": "Maori",
+        "age": "50",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Lewis_Moeau_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "60",
+        "gender": "Male",
+        "emotion": "happy"
+    },
+    "Georgina_Kingi_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "60",
+        "gender": "Female",
+        "emotion": "neutral"
+    },
+    "Megan_Gale_(6940734989).jpg": {
+        "ethnicity": "Maori",
+        "age": "30",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Iritana_Tawhiwhirangi_DNZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "65",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Hana_Romana_Murray_CNZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "65",
+        "gender": "Female",
+        "emotion": "neutral"
+    },
+    "Megan_Gale_(8594051529).jpg": {
+        "ethnicity": "Maori",
+        "age": "30",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "George_Flavell_QSM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "75",
+        "gender": "Male",
+        "emotion": "happy"
+    },
+    "Ngatata_Love_1998_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "50",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "Toby_Curtis_KNZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "55",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "Hirini_Mead_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "70",
+        "gender": "Male",
+        "emotion": "sad"
+    },
+    "Marama_Tuuta_MNZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "50",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Monty_Soutar_ONZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "50",
+        "gender": "Male",
+        "emotion": "angry"
+    },
+    "Veranoa_Hetet_QSM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "45",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Jordan_Rapana.jpg": {
+        "ethnicity": "Maori",
+        "age": "30",
+        "gender": "Male",
+        "emotion": "angry"
+    },
+    "R\u0101nui_Ng\u0101rimu_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "60",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Adrian_Rurawhe.jpg": {
+        "ethnicity": "Maori",
+        "age": "50",
+        "gender": "Male",
+        "emotion": "happy"
+    },
+    "Keri_Kaa_CNZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "70",
+        "gender": "Female",
+        "emotion": "neutral"
+    },
+    "June_Mariu_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "65",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Anne_Candy_2019_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "70",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Kaumatua_Joe_Harawira_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "70",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "Horomona_Horo_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "45",
+        "gender": "Male",
+        "emotion": "happy"
+    },
+    "Wira_Gardiner_2021_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "60",
+        "gender": "Male",
+        "emotion": "happy"
+    },
+    "Ainsley_Gardiner_MNZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "35",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Bill_Anderson_QSM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "60",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "JAMES_TE_HUNA_(11914727385).jpg": {
+        "ethnicity": "Maori",
+        "age": "35",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "Megan_Gale_(6382587547).jpg": {
+        "ethnicity": "Maori",
+        "age": "30",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Carlton_Bidois_MNZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "45",
+        "gender": "Male",
+        "emotion": "happy"
+    },
+    "Megan_Gale_Cannes_2015.jpg": {
+        "ethnicity": "Maori",
+        "age": "30",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Megan_Gale_(6880523093).jpg": {
+        "ethnicity": "Maori",
+        "age": "30",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "June_Mariu_DNZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "45",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Moana_Tamaariki-Pohe_MNZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "60",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Lisa_Tumahai_2019_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "45",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Megan_Gale_(8449757307).jpg": {
+        "ethnicity": "Maori",
+        "age": "30",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Don_Bennett_MNZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "65",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "Alan_Duff_2012.jpg": {
+        "ethnicity": "Maori",
+        "age": "55",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "Carol_Berghan_MNZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "40",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Mairehe_Tankersley_MNZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "45",
+        "gender": "Female",
+        "emotion": "neutral"
+    },
+    "Jim_Wetere_QSM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "50",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "Rawinia_Higgins.jpg": {
+        "ethnicity": "Maori",
+        "age": "45",
+        "gender": "Female",
+        "emotion": "neutral"
+    },
+    "Ella_Henry_MNZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "60",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Richard_Garratt_MNZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "65",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "Lewis_Moeau_2016_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "65",
+        "gender": "Male",
+        "emotion": "happy"
+    },
+    "Callan_Mulvey_2013_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "30",
+        "gender": "Male",
+        "emotion": "angry"
+    },
+    "Jordanrapana.jpg": {
+        "ethnicity": "Maori",
+        "age": "30",
+        "gender": "Male",
+        "emotion": "happy"
+    },
+    "Josie_Mortensen_QSM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "50",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Taiarahia_Black.jpg": {
+        "ethnicity": "Maori",
+        "age": "55",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "Yvette_Couch-Lewis_MNZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "60",
+        "gender": "Female",
+        "emotion": "neutral"
+    },
+    "Carol_Hirschfeld_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "40",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Harry_Mikaere_CNZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "50",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "Witi_Ihimaera.jpg": {
+        "ethnicity": "Maori",
+        "age": "50",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "Herbert_John_Te_Kauru_Clarke_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "50",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "Di_Grennell_MNZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "50",
+        "gender": "Female",
+        "emotion": "neutral"
+    },
+    "Katie_Murray_MNZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "70",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Jacinta_Ruru_MNZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "35",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Witi_Ihimaera_2012_03.jpg": {
+        "ethnicity": "Maori",
+        "age": "60",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "Maureen_Lander_MNZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "70",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Peter_Gordon_2012.jpg": {
+        "ethnicity": "Maori",
+        "age": "45",
+        "gender": "Male",
+        "emotion": "happy"
+    },
+    "Hohepa_02.jpg": {
+        "ethnicity": "Maori",
+        "age": "45",
+        "gender": "Male",
+        "emotion": "happy"
+    },
+    "Melony_O'Connor_MNZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "40",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Trevor_Maxwell_CNZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "65",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "Estelle_Leask_MNZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "45",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Fiona_Pardington_MNZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "40",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Rod_Drury,_NZ_Open_Source_Awards,_2007.jpg": {
+        "ethnicity": "Maori",
+        "age": "45",
+        "gender": "Male",
+        "emotion": "angry"
+    },
+    "Mavis_Mullins_at_Pukaha_Reserve_ceremony.jpg": {
+        "ethnicity": "Maori",
+        "age": "65",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "10.17.09DanielLoganByLuigiNovi.jpg": {
+        "ethnicity": "Maori",
+        "age": "25",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "Hinemoa_Elder_MNZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "50",
+        "gender": "Female",
+        "emotion": "neutral"
+    },
+    "Georgina_Kirby_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "75",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Arohia_Durie_2011_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "55",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "John_Tait_MNZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "55",
+        "gender": "Male",
+        "emotion": "happy"
+    },
+    "Gg-apr19-hillsshotoverjet_248.jpg": {
+        "ethnicity": "Maori",
+        "age": "70",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "Mick_Brown_2013_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "70",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "Margaret_Taurere_(8183274003).jpg": {
+        "ethnicity": "Maori",
+        "age": "45",
+        "gender": "Female",
+        "emotion": "surprised"
+    },
+    "Rawinia_Higgins_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "35",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Moana_Jackson_-_lectern.jpg": {
+        "ethnicity": "Maori",
+        "age": "65",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "Mihi_Te_Huia_QSM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "70",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "June_Jackson_DNZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "55",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Sir_Hec_Busby_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "75",
+        "gender": "Male",
+        "emotion": "happy"
+    },
+    "Aroha_Reriti-Crofts_DNZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "65",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Hohepa_03.jpg": {
+        "ethnicity": "Maori",
+        "age": "50",
+        "gender": "Male",
+        "emotion": "happy"
+    },
+    "Sharon_Shea_MNZM_investiture_in_korowai_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "45",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Whina_Cooper_in_Hamilton.jpg": {
+        "ethnicity": "Maori",
+        "age": "65",
+        "gender": "Female",
+        "emotion": "angry"
+    },
+    "Dame_Patsy_with_Dr_Jim_Mather_and_George_Reedy_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "50",
+        "gender": "Male",
+        "emotion": "happy"
+    },
+    "Witi_Ihimaera_2012_04.jpg": {
+        "ethnicity": "Maori",
+        "age": "55",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "Margaret_Forsyth_ONZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "55",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Haare_Williams_MNZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "65",
+        "gender": "Male",
+        "emotion": "happy"
+    },
+    "Te_Puea_Winiata_ONZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "60",
+        "gender": "Female",
+        "emotion": "neutral"
+    },
+    "Moana_Jackson_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "65",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "Tanea_Heke_MNZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "55",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Chrissie_Hape_MNZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "45",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Megan_Gale_(6794788313).jpg": {
+        "ethnicity": "Maori",
+        "age": "30",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Ngahiwi_Apanui_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "45",
+        "gender": "Male",
+        "emotion": "happy"
+    },
+    "Areta_Koopu_DNZM.jpg": {
+        "ethnicity": "Maori",
+        "age": "70",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "384px-Don_Bennett_MNZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "75",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "Rima_Te_Wiata_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "45",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Megan_Gale_(6382589889).jpg": {
+        "ethnicity": "Maori",
+        "age": "30",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Te_Haumihiata_Mason_ONZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "75",
+        "gender": "Female",
+        "emotion": "neutral"
+    },
+    "Patu_Hohepa_2015_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "60",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "Eddie_Durie_DCNZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "50",
+        "gender": "Male",
+        "emotion": "happy"
+    },
+    "Tawhiri_Williams_MNZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "65",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "Diane_Menzies_ONZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "50",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Reremoana_Norman_QSM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "55",
+        "gender": "Female",
+        "emotion": "sad"
+    },
+    "Jacqui_Caine_2020_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "35",
+        "gender": "Female",
+        "emotion": "neutral"
+    },
+    "Joe_Williams_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "50",
+        "gender": "Male",
+        "emotion": "happy"
+    },
+    "Lowell_Goddard.jpg": {
+        "ethnicity": "Maori",
+        "age": "45",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Megan_Gale_(8595150902).jpg": {
+        "ethnicity": "Maori",
+        "age": "30",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "James_Te_Huna.jpg": {
+        "ethnicity": "Maori",
+        "age": "35",
+        "gender": "Male",
+        "emotion": "sad"
+    },
+    "Matahi_Brightwell_ONZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "60",
+        "gender": "Male",
+        "emotion": "angry"
+    },
+    "Paul_Morgan_CNZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "50",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "Kathy_Allen_QSM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "50",
+        "gender": "Female",
+        "emotion": "neutral"
+    },
+    "Chelsea_Winstanley_ONZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "50",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Naida_Glavish_DNZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "55",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Toby_Curtis_KNZM_investiture_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "60",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "Callan_Mulvey_-_Guardians_of_the_Galaxy_premiere_-_July_2014_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "30",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "Wira_Gardiner_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "50",
+        "gender": "Male",
+        "emotion": "happy"
+    },
+    "Derek_Lardelli_KNZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "55",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "Michael_Campbell_holding_U.S._Open_Trophy.jpg": {
+        "ethnicity": "Maori",
+        "age": "30",
+        "gender": "Male",
+        "emotion": "happy"
+    },
+    "Anika_Moa_cropped.jpg": {
+        "ethnicity": "Maori",
+        "age": "35",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Waimarama_Taumaunu_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "40",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "JAMES_TE_HUNA_(11915122594).jpg": {
+        "ethnicity": "Maori",
+        "age": "30",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "Michael_Campbell_Wellington_2005.jpg": {
+        "ethnicity": "Maori",
+        "age": "35",
+        "gender": "Male",
+        "emotion": "happy"
+    },
+    "Huhana_Smith.jpg": {
+        "ethnicity": "Maori",
+        "age": "50",
+        "gender": "Female",
+        "emotion": "neutral"
+    },
+    "Ng\u0101_Pae_o_te_M\u0101ramatanga_wins_Te_Rangaunua_Hiranga_M\u0101ori_Award_at_2019_Research_Honours_Aotearoa_(cropped,_01).jpg": {
+        "ethnicity": "Maori",
+        "age": "50",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Huhana_Smith_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "50",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Wini_Solomon_QSM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "60",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Rik_Tau_speaking_at_Rehua_Marae.jpg": {
+        "ethnicity": "Maori",
+        "age": "75",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "Michael_Campbell_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "35",
+        "gender": "Male",
+        "emotion": "happy"
+    },
+    "Selwyn_Parata_2011_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "50",
+        "gender": "Male",
+        "emotion": "angry"
+    },
+    "JAMES_TE_HUNA_(11915179724).jpg": {
+        "ethnicity": "Maori",
+        "age": "35",
+        "gender": "Male",
+        "emotion": "angry"
+    },
+    "Sarah_Hirini_MNZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "25",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Ruia_Morrison_DNZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "75",
+        "gender": "Female",
+        "emotion": "neutral"
+    },
+    "Tracey_Wright-Tawha_MNZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "50",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Timoti_Karetu_KNZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "75",
+        "gender": "Male",
+        "emotion": "happy"
+    },
+    "Megan_Gale_(6382586995).jpg": {
+        "ethnicity": "Maori",
+        "age": "30",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Megan_Gale_(6280215406).jpg": {
+        "ethnicity": "Maori",
+        "age": "30",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Darcy_Nicholas_QSO_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "60",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "Maisey_Rika_-_Whakaari_commemoration_(2020)_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "30",
+        "gender": "Female",
+        "emotion": "neutral"
+    },
+    "Waihoroi_Shortland_2022.jpg": {
+        "ethnicity": "Maori",
+        "age": "50",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "Kiri_Nathan_MNZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "30",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Megan_Gale_(6382590441).jpg": {
+        "ethnicity": "Maori",
+        "age": "30",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Rik_Tau_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "70",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "Mavis_Mullins_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "55",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "JAMES_TE_HUNA_(11915560886).jpg": {
+        "ethnicity": "Maori",
+        "age": "30",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "Jane_Tehira_ONZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "75",
+        "gender": "Female",
+        "emotion": "neutral"
+    },
+    "Tamati_Reedy_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "55",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "Roka_Ngarimu-Cameron_MNZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "55",
+        "gender": "Female",
+        "emotion": "neutral"
+    },
+    "Wharehuia_Milroy_CNZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "70",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "Linda_Tuhiwai_Smith_2786_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "60",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Rawinia_Higgins_November_2020.jpg": {
+        "ethnicity": "Maori",
+        "age": "35",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Patu_Hohepa_2015.jpg": {
+        "ethnicity": "Maori",
+        "age": "55",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "Kura_Moeahu_2016_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "50",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "Ngakoma_Ngamane_MNZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "55",
+        "gender": "Male",
+        "emotion": "surprised"
+    },
+    "Megan_Gale_2011.jpg": {
+        "ethnicity": "Maori",
+        "age": "30",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Brian_Coffey_MNZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "55",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "Joe_Davis_MNZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "60",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "Cathy_Dewes_ONZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "50",
+        "gender": "Female",
+        "emotion": "neutral"
+    },
+    "Megan_Gale_(6382590207).jpg": {
+        "ethnicity": "Maori",
+        "age": "30",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Moana_Jackson.jpg": {
+        "ethnicity": "Maori",
+        "age": "60",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "Megan_Gale_(6382588725).jpg": {
+        "ethnicity": "Maori",
+        "age": "30",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Wayne_Shelford_KNZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "45",
+        "gender": "Male",
+        "emotion": "happy"
+    },
+    "Haare_Williams_KNZM_(tight_crop).jpg": {
+        "ethnicity": "Maori",
+        "age": "70",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "Rawiri_Paratene_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "40",
+        "gender": "Male",
+        "emotion": "happy"
+    },
+    "Kito_Pikaahu_ONZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "40",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "Hoana_Burgman_MNZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "45",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Linda_Smith_CNZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "40",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Henare_Ngata_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "80",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "Megan_Gale_(8450843560).jpg": {
+        "ethnicity": "Maori",
+        "age": "30",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Linda_Waimarie_Nikora_at_2019_Research_Honours_Aotearoa_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "60",
+        "gender": "Female",
+        "emotion": "neutral"
+    },
+    "Callan_Mulvey_2013.jpg": {
+        "ethnicity": "Maori",
+        "age": "30",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "Paul_Quinn_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "40",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "Hera_White_ONZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "80",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Ian_Taylor_KNZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "55",
+        "gender": "Male",
+        "emotion": "happy"
+    },
+    "Megan_Gale_2013.jpg": {
+        "ethnicity": "Maori",
+        "age": "30",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Iritana_Tawhiwhirangi_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "75",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Waihoroi_Shortland_2022_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "75",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "Archie_Taiaroa_KNZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "70",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "Adrian_Rurawhe_Youth_Parliament_2022.jpg": {
+        "ethnicity": "Maori",
+        "age": "55",
+        "gender": "Male",
+        "emotion": "happy"
+    },
+    "Pat_Newman_MNZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "60",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "Hoturoa_Barclay-Kerr_2019_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "65",
+        "gender": "Male",
+        "emotion": "happy"
+    },
+    "Megan_Gale_(6280216088).jpg": {
+        "ethnicity": "Maori",
+        "age": "30",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Hurimoana_Dennis_MNZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "40",
+        "gender": "Male",
+        "emotion": "happy"
+    },
+    "Kim_Workman_KNZM_(cropped).jpg": {
+        "ethnicity": "Maori",
+        "age": "55",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "Traci_Houpapa_MNZM_(cropped_again).jpg": {
+        "ethnicity": "Maori",
+        "age": "40",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "Whiti_Hereaka(c)2021_Tabitha_Arthur_Photography_lr--6.jpg": {
+        "ethnicity": "Maori",
+        "age": "30",
+        "gender": "Female",
+        "emotion": "neutral"
+    },
+    "Megan_Gale_in_January_2012.jpg": {
+        "ethnicity": "Maori",
+        "age": "30",
+        "gender": "Female",
+        "emotion": "happy"
     }
 }
