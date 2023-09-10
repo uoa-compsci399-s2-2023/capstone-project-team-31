@@ -40,7 +40,7 @@ class AdversarialPatternGenerator:
         self.images_dir = images_dir
         self.num_images = num_images
         
-        processed_imgs = prepare_processed_images(self.images_dir, self.num_images)
+        processed_imgs = prepare_processed_images(images_dir=self.images_dir, num_images=self.num_images, mode=self.mode, classification=self.classification, target=target)
         self.processed_imgs = processed_imgs
         
         if len(processed_imgs) < self.num_images:
