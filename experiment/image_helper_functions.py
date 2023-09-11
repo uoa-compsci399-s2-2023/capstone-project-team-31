@@ -59,7 +59,7 @@ from deepface.commons import functions
 
 def getImageObjects(img_path,
     enforce_detection=True,
-    detector_backend="opencv",
+    detector_backend="retinaface",
     align=True,
 ):
     img_objs = functions.extract_faces(
