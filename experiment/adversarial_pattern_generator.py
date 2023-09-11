@@ -83,7 +83,7 @@ class AdversarialPatternGenerator:
         
         for colour in self.colours:
             
-            accessory_img, accessory_mask = prepare_accessory(colour, "./assets/{}.png".format(self.accessory_type.lower()), self.accessory_type)
+            accessory_img, accessory_mask = prepare_accessory(colour, "experiment/assets/{}.png".format(self.accessory_type.lower()), self.accessory_type)
             
             confidences = np.empty(self.num_images)
             
@@ -134,7 +134,8 @@ class AdversarialPatternGenerator:
         pertubations = [Pertubation() for i in range(self.num_images)] ## where information for each image pertubation is stored: [movement_info, r]
         lowest_pert = [np.NaN, np.inf, np.NaN] # Stores the lowest recorded attack, score, and accessory
         final_attacks = [np.NaN]*self.num_images # Stores final attack without any accessory movement
-
+        scores = [1] * self.num_images # Scores of each image perturbation
+        
         i = 0
         score_threshold = 1
 
@@ -145,7 +146,6 @@ class AdversarialPatternGenerator:
             movements = [None] * self.num_images
             areas_to_perturb = [None] * self.num_images
             gradients = [None] * self.num_images
-            scores = [None] * self.num_images
             labels = [None] * self.num_images
 
             # Learning rate decay
@@ -240,7 +240,8 @@ class AdversarialPatternGenerator:
                 r = pertubations[r_i].r
                 r = (np.rint(r)).astype(int)
                 r[(experiment.get_image() + r) > 255] = 0
-                r[(experiment.get_image() + r) < 0] = 0       
+                r[(experiment.get_image() + r) < 0] = 0
+                r = r*(scores[r_i]/np.max(scores))
                 result = np.add(r, experiment.get_image())                
                 
                 experiment.set_image(result)
@@ -298,7 +299,7 @@ class AdversarialPatternGenerator:
         plt.figtext(0.5, 0.01, 'Classified: {}, Confidence: {}'.format(lowest_output['classified'], lowest_output['confidence']), ha="center")
         plt.show()
 
-        #cv2.imwrite('Test_pert.png', lowest_pert[2])
+        cv2.imwrite('Test_pert.png', lowest_pert[2])
         return final_attacks, experiment
 
     # return final pertubation result, with deepface's average confidence in predicting true classes
@@ -309,7 +310,7 @@ class AdversarialPatternGenerator:
 
         result, experiment_result = self.run_experiment(starting_point)
         
-        cv2.imwrite("./results/accessory_image.png", experiment_result.get_image())        
+        #cv2.imwrite("./results/accessory_image.png", experiment_result.get_image())        
         
         for attack in result:
             cv2.imshow('image window', attack)
