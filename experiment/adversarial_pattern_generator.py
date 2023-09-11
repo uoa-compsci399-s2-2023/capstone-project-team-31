@@ -134,7 +134,8 @@ class AdversarialPatternGenerator:
         pertubations = [Pertubation() for i in range(self.num_images)] ## where information for each image pertubation is stored: [movement_info, r]
         lowest_pert = [np.NaN, np.inf, np.NaN] # Stores the lowest recorded attack, score, and accessory
         final_attacks = [np.NaN]*self.num_images # Stores final attack without any accessory movement
-
+        scores = [1] * self.num_images # Scores of each image perturbation
+        
         i = 0
         score_threshold = 1
 
@@ -145,7 +146,6 @@ class AdversarialPatternGenerator:
             movements = [None] * self.num_images
             areas_to_perturb = [None] * self.num_images
             gradients = [None] * self.num_images
-            scores = [None] * self.num_images
             labels = [None] * self.num_images
 
             # Learning rate decay
@@ -240,7 +240,8 @@ class AdversarialPatternGenerator:
                 r = pertubations[r_i].r
                 r = (np.rint(r)).astype(int)
                 r[(experiment.get_image() + r) > 255] = 0
-                r[(experiment.get_image() + r) < 0] = 0       
+                r[(experiment.get_image() + r) < 0] = 0
+                r = r*(scores[r_i]/np.max(scores))
                 result = np.add(r, experiment.get_image())                
                 
                 experiment.set_image(result)
