@@ -13,7 +13,7 @@ def pre_process_imgs():
     pass
 
 
-def prepare_images(images_dir: str, num_images: int) -> list:
+def prepare_images(images_dir: str, num_images: int, mode="dodge", classification=None, target=None, seperate=True) -> list:
     '''
     Which images will be used for generating an adversarial pattern (could be all in the images directory)
     the silouhette mask for the chosen accessory, in the given colour
@@ -36,7 +36,12 @@ def prepare_images(images_dir: str, num_images: int) -> list:
     if images_dir.endswith(".db"): # if the images are stored in a database
         conn = sqlite3.connect(abs_path)
         cursor = conn.cursor()
-        images = cursor.execute("SELECT * FROM images ORDER BY RANDOM() LIMIT ?", (num_images,)).fetchall()
+        if mode == "impersonation" and seperate:
+            print(classification, target)
+            command = "SELECT * FROM images WHERE {} != ? ORDER BY RANDOM() LIMIT {}".format(classification, num_images)
+            images = cursor.execute(command, (target,)).fetchall()
+        else:
+            images = cursor.execute("SELECT * FROM images ORDER BY RANDOM() LIMIT ?", (num_images,)).fetchall()
         conn.close()
         return images
     else: # if the images are stored in a directory
@@ -70,7 +75,7 @@ def getImageObjects(img_path,
     
 def getImageContents(img_path,
     enforce_detection=True,
-    detector_backend="opencv",
+    detector_backend="ssd",
     align=True,
 ):
     img_objs = getImageObjects(img_path, 
@@ -115,7 +120,7 @@ def image_to_face(image: tuple):
     
     return outputImage
 
-def prepare_processed_images(images_dir: str, num_images: int):
+def prepare_processed_images(images_dir: str, num_images: int,  mode="dodge", classification=None, target=None, seperate=True):
     '''
     Detect faces and normalize a given amount of images
     
@@ -126,7 +131,7 @@ def prepare_processed_images(images_dir: str, num_images: int):
     Returns:
     * list of processed images in the form  (img , ethnicity, gender, age, emotion)
     '''
-    image_list = prepare_images(images_dir, num_images)
+    image_list = prepare_images(images_dir, num_images,  mode=mode, classification=classification, target=target, seperate=seperate)
     output_list = []
     for image in image_list:
         prepared_image = image_to_face(image)     
