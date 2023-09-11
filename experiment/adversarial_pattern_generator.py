@@ -83,7 +83,7 @@ class AdversarialPatternGenerator:
         
         for colour in self.colours:
             
-            accessory_img, accessory_mask = prepare_accessory(colour, "experiment/assets/{}.png".format(self.accessory_type.lower()), self.accessory_type)
+            accessory_img, accessory_mask = prepare_accessory(colour, "./assets/{}.png".format(self.accessory_type.lower()), self.accessory_type)
             
             confidences = np.empty(self.num_images)
             
@@ -299,7 +299,7 @@ class AdversarialPatternGenerator:
         plt.figtext(0.5, 0.01, 'Classified: {}, Confidence: {}'.format(lowest_output['classified'], lowest_output['confidence']), ha="center")
         plt.show()
 
-        cv2.imwrite('Test_pert.png', lowest_pert[2])
+        #cv2.imwrite('Test_pert.png', lowest_pert[2])
         return final_attacks, experiment
 
     # return final pertubation result, with deepface's average confidence in predicting true classes
@@ -310,7 +310,7 @@ class AdversarialPatternGenerator:
 
         result, experiment_result = self.run_experiment(starting_point)
         
-        #cv2.imwrite("./results/accessory_image.png", experiment_result.get_image())        
+        cv2.imwrite("./results/accessory_image.png", experiment_result.get_image())        
         
         for attack in result:
             cv2.imshow('image window', attack)
