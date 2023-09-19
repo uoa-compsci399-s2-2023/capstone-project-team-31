@@ -46,13 +46,14 @@ def prepare_images(images_dir: str, num_images: int, mode="dodge", classificatio
         return images
     else: # if the images are stored in a directory
         images = os.listdir(abs_path)
+        print(len(images))
         rand_images = random.sample(images, num_images)
         output = []
-        with open("./Faces.json", 'r') as f:
+        with open("./../CelebA.json", 'r') as f:
             data = json.load(f)
             for img in rand_images:
                 temp =  cv2.imread(os.path.join(abs_path, img))
-                output.append([temp, data[img]['ethnicity'], data[img]['gender'], data[img]['age'], data[img]['emotion']])
+                output.append([temp, data[img]['Ethnicity'], data[img]['Male'], data[img]['Age'], data[img]['Emotion']])
         return output
     
 from deepface.commons import functions

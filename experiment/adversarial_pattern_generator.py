@@ -100,7 +100,7 @@ class AdversarialPatternGenerator:
                 elif self.mode == "dodge":
                     label = cleanup_labels(self.processed_imgs[i][self.class_num])
                 
-                _, confidences[i] = get_confidence_in_selected_class(cleanup_dims(temp_attack), self.classification, label, self.model, True)
+                _, confidences[i] = get_confidence_in_selected_class(cleanup_dims(temp_attack), self.classification, label, self.model)
                 
             avg_true_class_conf = np.mean(confidences)
 
@@ -312,10 +312,10 @@ class AdversarialPatternGenerator:
         
         cv2.imwrite("./results/accessory_image.png", experiment_result.get_image())        
         
-        for attack in result:
-            cv2.imshow('image window', attack)
-            cv2.waitKey(0)
-            cv2.destroyAllWindows()
+        # for attack in result:
+        #     cv2.imshow('image window', attack)
+        #     cv2.waitKey(0)
+        #     cv2.destroyAllWindows()
         
         
 def cleanup_labels(true_class:str):
