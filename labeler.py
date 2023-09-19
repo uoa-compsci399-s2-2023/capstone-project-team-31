@@ -201,11 +201,11 @@ class Ui_MainWindow(object):
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
         
     def setup_emotion_combo(self):
-        self.emotion_combo.addItems(["", "happy", "sad", "angry", "neutral", "surprised", "disgusted", "fear"])
+        self.emotion_combo.addItems(["", "happy", "sad", "angry", "neutral", "surprised", "disgust", "fear"])
     def setup_age_combo(self):
         self.age_combo.addItems([""] + [str(i) for i in range(100)])
     def setup_gender_combo(self):
-        self.gender_combo.addItems(["", "Male", "Female"])
+        self.gender_combo.addItems(["", "Man", "Woman"])
     def setup_ethnicity_combo(self):
         self.ethnicity_combo.addItems(["", "Asian", "Maori", "Pacific Islander", "European", "Middle Eastern", "Latin American", "African", "Other"])
         

@@ -13,11 +13,12 @@ class attributeModel:
 
         elif "age" == action:
             self.model = build_model("Age")
-            self.labels = Age.labels
+            # Manually construct 100 labels
+            self.labels = [str(x) for x in list(range(0, 101))]
         elif "gender"  == action:
             self.model = build_model("Gender")
             self.labels = Gender.labels
-        elif "race" == action:
+        elif "race" == action  or "ethnicity" == action:
             self.model = build_model("Race")
             self.labels = Race.labels
         else:
@@ -40,29 +41,32 @@ class attributeModel:
                 output["emotion"][emotion_label] = emotion_prediction
 
             output["dominant_emotion"] = Emotion.labels[np.argmax(prediction)]
-            output["classfied"] = output["dominant_emotion"]
+            output["classified"] = output["dominant_emotion"]
             
         elif self.action == "age":
             apparent_age = Age.findApparentAge(prediction)
-            # int cast is for exception - object of type 'float32' is not JSON serializable
-            output["age"] = int(apparent_age)
+            # int cast is for exception - object of type 'float32' is not JSON serializable'
+            output["age"] = {}
+            for i, age_label in enumerate(self.labels):
+                output["age"][age_label] = prediction[i]
+            output["apparentAge"] = int(apparent_age)
             output["classified"] = output["age"]
         elif self.action == "gender":
             output["gender"] = {}
-            for i, gender_label in enumerate(Gender.labels):
+            for i, gender_label in enumerate(self.labels):
                 gender_prediction = 100 * prediction[i]
                 output["gender"][gender_label] = gender_prediction
 
             output["dominant_gender"] = Gender.labels[np.argmax(prediction)]
             output["classified"] = output["dominant_gender"]
             
-        elif self.action == "race":
+        elif self.action == "race" or self.action == "ethnicity":
             sum_of_predictions = prediction.sum()
 
-            output["race"] = {}
+            output["ethnicity"] = {}
             for i, race_label in enumerate(Race.labels):
                 race_prediction = 100 * prediction[i] / sum_of_predictions
-                output["race"][race_label] = race_prediction
+                output["ethnicity"][race_label] = race_prediction
 
             output["dominant_race"] = Race.labels[np.argmax(prediction)]
             output["classified"] = output["dominant_race"]
@@ -87,7 +91,10 @@ class attributeModel:
     
     def image_resize(self, img):
         if self.action == "emotion":
-            img_gray = cv2.cvtColor(img[0], cv2.COLOR_BGR2GRAY)
+            img_np = img
+            if(not isinstance(img, np.ndarray)):
+                img_np = img.numpy()
+            img_gray = cv2.cvtColor(img_np[0], cv2.COLOR_BGR2GRAY)
             img_gray = cv2.resize(img_gray, (48, 48))
             img_gray = np.expand_dims(img_gray, axis=0)
 
@@ -148,7 +155,9 @@ class attributeModel:
         np_gradient = gradient.numpy()
         resized = cv2.resize(np_gradient[0], (224, 224))
         gray = cv2.cvtColor(resized, cv2.COLOR_GRAY2BGR)
-        return gray
+        gray = np.expand_dims(gray, axis=0)
+        gray_tensor = tf.convert_to_tensor(gray)
+        return gray_tensor
         
     
     def create_adversarial_pattern(self, input_image, input_label):

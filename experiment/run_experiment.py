@@ -4,6 +4,11 @@ from adversarial_pattern_generator import AdversarialPatternGenerator
 def parse_args():
     parser = argparse.ArgumentParser(description='Run the experiment')
 
+    parser.add_argument("-md", "--mode",
+                        default="dodge",
+                        type = str,
+                        help = "Whether the attack is a dodge or impersonation attack"
+    )
     parser.add_argument("-a", "--accessory_type",
                         required = True,
                         type = str,
@@ -25,9 +30,14 @@ def parse_args():
                         type = int,
                         help = "How many images are being processed"
     )
+    parser.add_argument("-r", "--decay_rate",
+                        default = 1,
+                        type = float,
+                        help = "Learning decay rate"
+    )
     parser.add_argument("-s", "--step_size",
-                        default = 20,
-                        type = int,
+                        default = 10,
+                        type = float,
                         help = "The step size used in the optimisation algorithm"
     )
     parser.add_argument("-l", "--lambda_tv",
@@ -51,7 +61,7 @@ def parse_args():
                         help = "" # TODO: Where is this used and for what
     )
     parser.add_argument("-i", "--max_iterations",
-                        default = 15,
+                        default = 5,
                         type = int,
                         help = "Maximum number of iterations during perturbtion" 
     )
@@ -78,17 +88,22 @@ def parse_args():
                         default = 4,
                         type = int,
                         help = "Rotational movement distance")
+    parser.add_argument("-t", "--target",
+                        default = None,
+                        type = str,
+                        help = "impersonation target")
     parser.add_argument("-v", "--v",
                         default = True,
                         type = bool,
                         help = "Verbosity of experiment"
     )
 
+
     args = parser.parse_args()
 
     return args
 
 args = parse_args()
-adv_pattern_generator = AdversarialPatternGenerator(args.accessory_type, args.classification, args.images_dir, args.num_images, args.step_size, args.lambda_tv, args.printability_coeff, args.momentum_coeff, args.gauss_filtering, args.max_iterations, args.channels_to_fix, args.stop_probability, args.horizontal_move, args.vertical_move, args.rotational_move, args.v) # and can specify any other paramenters from args
+adv_pattern_generator = AdversarialPatternGenerator(args.mode, args.accessory_type, args.classification, args.images_dir, args.num_images, args.decay_rate, args.step_size, args.lambda_tv, args.printability_coeff, args.momentum_coeff, args.gauss_filtering, args.max_iterations, args.channels_to_fix, args.stop_probability, args.horizontal_move, args.vertical_move, args.rotational_move, args.target, args.v) # and can specify any other paramenters from args
 
 adv_pattern_generator.run()

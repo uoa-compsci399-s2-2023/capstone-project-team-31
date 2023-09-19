@@ -9,7 +9,7 @@ actions = ['age', 'gender', 'race', 'emotion']
 def getObjects(img_path,
     actions=("emotion", "age", "gender", "race"),
     enforce_detection=True,
-    detector_backend="opencv",
+    detector_backend="ssd", # set it to [opencv, ssd, dlib, mtcnn, retinaface, mediapipe, yolov8 face, yunet] for face alignment
     align=True,
     silent=False,
 ):

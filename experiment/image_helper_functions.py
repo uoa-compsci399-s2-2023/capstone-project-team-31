@@ -13,7 +13,7 @@ def pre_process_imgs():
     pass
 
 
-def prepare_images(images_dir: str, num_images: int) -> list:
+def prepare_images(images_dir: str, num_images: int, mode="dodge", classification=None, target=None, seperate=True) -> list:
     '''
     Which images will be used for generating an adversarial pattern (could be all in the images directory)
     the silouhette mask for the chosen accessory, in the given colour
@@ -36,7 +36,12 @@ def prepare_images(images_dir: str, num_images: int) -> list:
     if images_dir.endswith(".db"): # if the images are stored in a database
         conn = sqlite3.connect(abs_path)
         cursor = conn.cursor()
-        images = cursor.execute("SELECT * FROM images ORDER BY RANDOM() LIMIT ?", (num_images,)).fetchall()
+        if mode == "impersonation" and seperate:
+            print(classification, target)
+            command = "SELECT * FROM images WHERE {} != ? ORDER BY RANDOM() LIMIT {}".format(classification, num_images)
+            images = cursor.execute(command, (target,)).fetchall()
+        else:
+            images = cursor.execute("SELECT * FROM images ORDER BY RANDOM() LIMIT ?", (num_images,)).fetchall()
         conn.close()
         return images
     else: # if the images are stored in a directory
@@ -46,14 +51,15 @@ def prepare_images(images_dir: str, num_images: int) -> list:
         with open("./Faces.json", 'r') as f:
             data = json.load(f)
             for img in rand_images:
-                output.append([img, data[img]['ethnicity'], data[img]['gender'], data[img]['age'], data[img]['emotion']])
+                temp =  cv2.imread(os.path.join(abs_path, img))
+                output.append([temp, data[img]['ethnicity'], data[img]['gender'], data[img]['age'], data[img]['emotion']])
         return output
     
 from deepface.commons import functions
 
 def getImageObjects(img_path,
     enforce_detection=True,
-    detector_backend="opencv",
+    detector_backend="retinaface",
     align=True,
 ):
     img_objs = functions.extract_faces(
@@ -69,7 +75,7 @@ def getImageObjects(img_path,
     
 def getImageContents(img_path,
     enforce_detection=True,
-    detector_backend="opencv",
+    detector_backend="ssd",
     align=True,
 ):
     img_objs = getImageObjects(img_path, 
@@ -97,7 +103,11 @@ def image_to_face(image: tuple):
     '''
     #b64 = "data:image/jpg;base64/," + image[0]
     b64 = image[0]
-    img = convert_b64_to_np(b64)
+    if type(b64) == str:
+        img = convert_b64_to_np(b64)
+    else:
+        img = b64
+
     try:
         img = getImageContents(img)[0]
     except ValueError:
@@ -110,7 +120,7 @@ def image_to_face(image: tuple):
     
     return outputImage
 
-def prepare_processed_images(images_dir: str, num_images: int):
+def prepare_processed_images(images_dir: str, num_images: int,  mode="dodge", classification=None, target=None, seperate=True):
     '''
     Detect faces and normalize a given amount of images
     
@@ -121,7 +131,7 @@ def prepare_processed_images(images_dir: str, num_images: int):
     Returns:
     * list of processed images in the form  (img , ethnicity, gender, age, emotion)
     '''
-    image_list = prepare_images(images_dir, num_images)
+    image_list = prepare_images(images_dir, num_images,  mode=mode, classification=classification, target=target, seperate=seperate)
     output_list = []
     for image in image_list:
         prepared_image = image_to_face(image)     
@@ -143,23 +153,28 @@ def prepare_accessory(colour: str, accessory_dir: str, accessory_type: str) -> t
     Returns:
         tuple: (accessory_image, silhouette_mask)
     """
-    if accessory_type.lower() == "glasses":
+    
+    fname = accessory_type.lower()
+
+    if fname == "glasses" or fname == "facemask" or fname == "bandana" or fname == "earrings":
         # load glasses_silhouette, find what pixels are white (i.e. colour value not rgb (0,0,0)) and make a colour mask of the chosen colour
-        glasses = cv2.imread(accessory_dir)
+        accessory = cv2.imread(accessory_dir)
+    else:
+        print("Please check your accessory spelling")
         
-        if glasses is None:
-            print("Error loading accessory from {}".format(accessory_dir))
-        glasses = np.bitwise_not(glasses)
-        mask = cv2.threshold(glasses, 0, 1, cv2.THRESH_BINARY)[1]
+    if accessory is None:
+        print("Error loading accessory from {}".format(accessory_dir))
+    accessory = np.bitwise_not(accessory)
+    mask = cv2.threshold(accessory, 0, 1, cv2.THRESH_BINARY)[1]
+    
+    # make a colour mask of the chosen colour
+    colour_info = json.load(open("./assets/starting_colours.json", 'r'))
+    colour = colour_info[colour]
         
-        # make a colour mask of the chosen colour
-        colour_info = json.load(open("D:/Github/capstone-project-team-31/experiment/assets/starting_colours.json", 'r'))
-        colour = colour_info[colour]
-            
-        coloured_matrix = np.array([[colour for i in range(glasses.shape[1])] for j in range(glasses.shape[0])])
-        coloured_glasses = np.multiply(coloured_matrix, mask).astype(np.uint8)
-        coloured_glasses = cv2.cvtColor(coloured_glasses, cv2.COLOR_RGB2BGR)
-        return coloured_glasses, np.bitwise_not(glasses)
+    coloured_matrix = np.array([[colour for i in range(accessory.shape[1])] for j in range(accessory.shape[0])])
+    coloured_accessory = np.multiply(coloured_matrix, mask).astype(np.uint8)
+    coloured_accessory = cv2.cvtColor(coloured_accessory, cv2.COLOR_RGB2BGR)
+    return coloured_accessory, np.bitwise_not(accessory)
     
 
 def move_accessory(accessory_image: np.ndarray, accessory_mask: np.ndarray, movement: dict) -> tuple:
@@ -187,7 +202,6 @@ def move_accessory(accessory_image: np.ndarray, accessory_mask: np.ndarray, move
     # Save the movement info
     movement_info = {"horizontal": shift_x, "vertical": shift_y, "rotation": rotation}
 
-    
     # Transform the image
     accessory_image = np.roll(accessory_image, (shift_x, shift_y), axis=(0, 1))
     rot_aug = iaa.Affine(rotate=iap.Deterministic(rotation))
@@ -212,13 +226,15 @@ def reverse_accessory_move(accessory_image: np.ndarray, accessory_mask: np.ndarr
     * accessory_image: the new image of the accessory in np.ndarray format
     * accessory_mask: the new mask of the accessory in np.ndarray format
     '''
-    print("accessory_image shape:{}\naccessory_image: {}".format(np.shape(accessory_image), accessory_image))
+
     # Transform the image
+    accessory_image = np.copy(accessory_image)
     rot_aug = iaa.Affine(rotate=iap.Deterministic(movement_info["rotation"] * -1))
     accessory_image = rot_aug.augment_image(accessory_image)
     accessory_image = np.roll(accessory_image, (movement_info['horizontal'] * -1, movement_info['vertical'] * -1), axis=(0, 1))
     
     # Transform the mask
+    accessory_mask = np.copy(accessory_mask)
     rot_aug = iaa.Affine(rotate=iap.Deterministic(movement_info["rotation"] * -1), cval=255)
     accessory_mask = rot_aug.augment_image(accessory_mask)
     accessory_mask = np.roll(accessory_mask, (movement_info['horizontal'] * -1, movement_info['vertical'] * -1), axis=(0, 1))
@@ -305,12 +321,12 @@ def non_printability_score(image: np.array, segmentation: np.array, printable_va
     # TODO: idk if this is really important or not since its literally just adding another dimension to everys single RGB value????
     printable_vals = np.reshape(printable_values, (printable_values.shape[0],1,3))
     max_norm = norm(np.array([0,0,0]), np.array([80,80,80]))
-
+    
     # Compute non-printability scores per pixel
     scores = np.ones((image.shape[0], image.shape[1]))
     for i in range(image.shape[0]):
         for j in range(image.shape[1]):
-            if segmentation[i,j,0] == 1:
+            if segmentation[i,j] == 0:
                 for k in range(printable_vals.shape[0]):
                     scores[i,j] = scores[i,j]*norm(image[i,j], printable_vals[k,0,:])/max_norm
             else:
@@ -323,7 +339,7 @@ def non_printability_score(image: np.array, segmentation: np.array, printable_va
 
     for i in range(image.shape[0]):
         for j in range(image.shape[1]):
-            if segmentation[i,j,0] == 1 and scores[i,j] != 0:
+            if segmentation[i,j] == 0 and scores[i,j] != 0:
                 for k in range(printable_vals.shape[0]):
                     f_k = norm(image[i,j], printable_vals[k,0])
 
@@ -349,7 +365,7 @@ def get_printable_vals(num_colors = 32) -> np.array:
     # inspo1: https://github.com/mahmoods01/accessorize-to-a-crime/blob/master/aux/attack/get_printable_vals.m
     # inspo2: https://github.com/mahmoods01/accessorize-to-a-crime/blob/master/aux/attack/make_printable_vals_struct.m
     
-    print_img = Image.open('./assets/printed-palette.png')
+    """ print_img = Image.open('experiment/assets/printed-palette.png')
     img_arr = np.asarray(print_img)
 
     # Cuts 3% of edges from each side (subject to change)
@@ -360,9 +376,17 @@ def get_printable_vals(num_colors = 32) -> np.array:
     # Uniform quantization, Minimum Variance Optimization not available in python (subject to change)
     printable_vals = np.round(img_arr*(num_colors/255))*(255//num_colors)
     printable_vals = printable_vals.reshape(-1, img_arr.shape[2])
-    printable_vals.sort(axis=0)
+    printable_vals.sort(axis=0) """
 
-    return np.unique(printable_vals, axis = 0)
+    printable_vals = []
+    with open('./assets/printable_vals.txt') as file:
+        lines = file.readlines()
+        for line in lines:
+            line = line.split()
+            line = list(map(int, line))
+            printable_vals.append(line)
+
+    return np.array(printable_vals)
 
 def convert_b64_to_np(img_b64: str):
     decoded_img = base64.b64decode(img_b64)
