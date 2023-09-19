@@ -6,13 +6,13 @@
         "ethnicity": "Pacific Islander",
         "age": "47",
         "gender": "Female",
-        "emotion": "Angry"
+        "emotion": "angry"
     },
     "jacinda.jpg": {
         "ethnicity": "Maori",
         "age": "39",
         "gender": "Female",
-        "emotion": "Neutral"
+        "emotion": "neutral"
     },
     "IMG_4919.JPG": {
         "ethnicity": "European",
@@ -36,7 +36,7 @@
         "ethnicity": "European",
         "age": "21",
         "gender": "Male",
-        "emotion": "surprised"
+        "emotion": "surprise"
     },
     "IMG_5030.JPG": {
         "ethnicity": "European",
@@ -63,7 +63,7 @@
         "emotion": "fear"
     },
     "IMG_4924.JPG": {
-        "ethnicity": "",
+        "ethnicity": "Asian",
         "age": "23",
         "gender": "Male",
         "emotion": "neutral"
@@ -78,7 +78,7 @@
         "ethnicity": "European",
         "age": "23",
         "gender": "Female",
-        "emotion": "disgusted"
+        "emotion": "disgust"
     },
     "IMG_4926.JPG": {
         "ethnicity": "Asian",
@@ -102,25 +102,25 @@
         "ethnicity": "European",
         "age": "21",
         "gender": "Male",
-        "emotion": "disgusted"
+        "emotion": "disgust"
     },
     "IMG_5026.JPG": {
         "ethnicity": "European",
         "age": "21",
         "gender": "Male",
-        "emotion": "disgusted"
+        "emotion": "disgust"
     },
     "IMG_5032.JPG": {
         "ethnicity": "European",
         "age": "21",
         "gender": "Male",
-        "emotion": "disgusted"
+        "emotion": "disgust"
     },
     "IMG_4933.JPG": {
         "ethnicity": "Asian",
         "age": "23",
         "gender": "Male",
-        "emotion": "surprised"
+        "emotion": "surprise"
     },
     "IMG_4927.JPG": {
         "ethnicity": "Asian",
@@ -134,11 +134,101 @@
         "gender": "Male",
         "emotion": "neutral"
     },
+    "IMG_4928.JPG": {
+        "ethnicity": "Asian",
+        "age": "23",
+        "gender": "Male",
+        "emotion": "happy"
+    },
+    "IMG_4929.JPG": {
+        "ethnicity": "Asian",
+        "age": "23",
+        "gender": "Male",
+        "emotion": "happy"
+    },
+    "IMG_4934.JPG": {
+        "ethnicity": "Asian",
+        "age": "23",
+        "gender": "Male",
+        "emotion": "fear"
+    },
+    "IMG_4935.JPG": {
+        "ethnicity": "Asian",
+        "age": "23",
+        "gender": "Male",
+        "emotion": "fear"
+    },
+    "IMG_4936.JPG": {
+        "ethnicity": "Asian",
+        "age": "23",
+        "gender": "Male",
+        "emotion": "disgust"
+    },
     "IMG_4937.JPG": {
         "ethnicity": "Asian",
         "age": "23",
         "gender": "Male",
-        "emotion": "surprised"
+        "emotion": "disgust"
+    },
+    "IMG_4938.JPG": {
+        "ethnicity": "Asian",
+        "age": "23",
+        "gender": "Male",
+        "emotion": "disgust"
+    },
+    "IMG_4939.JPG": {
+        "ethnicity": "Asian",
+        "age": "23",
+        "gender": "Male",
+        "emotion": "disgust"
+    },
+    "IMG_4940.JPG": {
+        "ethnicity": "Asian",
+        "age": "23",
+        "gender": "Male",
+        "emotion": "angry"
+    },
+    "IMG_4941.JPG": {
+        "ethnicity": "Asian",
+        "age": "23",
+        "gender": "Male",
+        "emotion": "angry"
+    },
+    "IMG_4942.JPG": {
+        "ethnicity": "Asian",
+        "age": "23",
+        "gender": "Male",
+        "emotion": "angry"
+    },
+    "IMG_4943.JPG": {
+        "ethnicity": "Asian",
+        "age": "23",
+        "gender": "Male",
+        "emotion": "angry"
+    },
+    "IMG_4944.JPG": {
+        "ethnicity": "Asian",
+        "age": "23",
+        "gender": "Male",
+        "emotion": "sad"
+    },
+    "IMG_4945.JPG": {
+        "ethnicity": "Asian",
+        "age": "23",
+        "gender": "Male",
+        "emotion": "sad"
+    },
+    "IMG_4946.JPG": {
+        "ethnicity": "Asian",
+        "age": "23",
+        "gender": "Male",
+        "emotion": "sad"
+    },
+    "IMG_4947.JPG": {
+        "ethnicity": "Asian",
+        "age": "23",
+        "gender": "Male",
+        "emotion": "sad"
     },
     "IMG_5036.JPG": {
         "ethnicity": "European",
@@ -150,13 +240,13 @@
         "ethnicity": "European",
         "age": "21",
         "gender": "Male",
-        "emotion": "surprised"
+        "emotion": "surprise"
     },
     "IMG_5023.JPG": {
         "ethnicity": "European",
         "age": "21",
         "gender": "Male",
-        "emotion": "surprised"
+        "emotion": "surprise"
     },
     "IMG_5037.JPG": {
         "ethnicity": "European",
@@ -164,10 +254,742 @@
         "gender": "Male",
         "emotion": "happy"
     },
+    "IMG_5001.JPG": {
+        "ethnicity": "European",
+        "age": "20",
+        "gender": "Female",
+        "emotion": "fear"
+    },
+    "IMG_5002.JPG": {
+        "ethnicity": "European",
+        "age": "20",
+        "gender": "Female",
+        "emotion": "fear"
+    },
+    "IMG_5003.JPG": {
+        "ethnicity": "European",
+        "age": "20",
+        "gender": "Female",
+        "emotion": "fear"
+    },
+    "IMG_5004.JPG": {
+        "ethnicity": "European",
+        "age": "20",
+        "gender": "Female",
+        "emotion": "fear"
+    },
     "IMG_4895.JPG": {
         "ethnicity": "European",
         "age": "23",
         "gender": "Female",
         "emotion": "neutral"
+    },
+    "IMG_4896.JPG": {
+        "ethnicity": "European",
+        "age": "23",
+        "gender": "Female",
+        "emotion": "neutral"
+    },
+    "IMG_4897.JPG": {
+        "ethnicity": "European",
+        "age": "23",
+        "gender": "Female",
+        "emotion": "neutral"
+    },
+    "IMG_4898.JPG": {
+        "ethnicity": "European",
+        "age": "23",
+        "gender": "Female",
+        "emotion": "neutral"
+    },
+    "IMG_4899.JPG": {
+        "ethnicity": "European",
+        "age": "23",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "IMG_4900.JPG": {
+        "ethnicity": "European",
+        "age": "23",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "IMG_4901.JPG": {
+        "ethnicity": "European",
+        "age": "23",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "IMG_4902.JPG": {
+        "ethnicity": "European",
+        "age": "23",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "IMG_4903.JPG": {
+        "ethnicity": "European",
+        "age": "23",
+        "gender": "Female",
+        "emotion": "fear"
+    },
+    "IMG_4905.JPG": {
+        "ethnicity": "European",
+        "age": "23",
+        "gender": "Female",
+        "emotion": "fear"
+    },
+    "IMG_4906.JPG": {
+        "ethnicity": "European",
+        "age": "23",
+        "gender": "Female",
+        "emotion": "fear"
+    },
+    "IMG_4907.JPG": {
+        "ethnicity": "European",
+        "age": "23",
+        "gender": "Female",
+        "emotion": "surprise"
+    },
+    "IMG_4908.JPG": {
+        "ethnicity": "European",
+        "age": "23",
+        "gender": "Female",
+        "emotion": "surprise"
+    },
+    "IMG_4909.JPG": {
+        "ethnicity": "European",
+        "age": "23",
+        "gender": "Female",
+        "emotion": "surprise"
+    },
+    "IMG_4910.JPG": {
+        "ethnicity": "European",
+        "age": "23",
+        "gender": "Female",
+        "emotion": "surprise"
+    },
+    "IMG_4911.JPG": {
+        "ethnicity": "European",
+        "age": "23",
+        "gender": "Female",
+        "emotion": "angry"
+    },
+    "IMG_4912.JPG": {
+        "ethnicity": "European",
+        "age": "23",
+        "gender": "Female",
+        "emotion": "angry"
+    },
+    "IMG_4913.JPG": {
+        "ethnicity": "European",
+        "age": "23",
+        "gender": "Female",
+        "emotion": "angry"
+    },
+    "IMG_4914.JPG": {
+        "ethnicity": "European",
+        "age": "23",
+        "gender": "Female",
+        "emotion": "angry"
+    },
+    "IMG_4915.JPG": {
+        "ethnicity": "European",
+        "age": "23",
+        "gender": "Female",
+        "emotion": "disgust"
+    },
+    "IMG_4916.JPG": {
+        "ethnicity": "European",
+        "age": "23",
+        "gender": "Female",
+        "emotion": "disgust"
+    },
+    "IMG_4917.JPG": {
+        "ethnicity": "European",
+        "age": "23",
+        "gender": "Female",
+        "emotion": "disgust"
+    },    
+    "IMG_4920.JPG": {
+        "ethnicity": "European",
+        "age": "23",
+        "gender": "Female",
+        "emotion": "sad"
+    },
+    "IMG_4921.JPG": {
+        "ethnicity": "European",
+        "age": "23",
+        "gender": "Female",
+        "emotion": "sad"
+    },
+    "IMG_4922.JPG": {
+        "ethnicity": "European",
+        "age": "23",
+        "gender": "Female",
+        "emotion": "sad"
+    },
+    "IMG_4949.JPG": {
+        "ethnicity": "Asian",
+        "age": "22",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "IMG_4948.JPG": {
+        "ethnicity": "Asian",
+        "age": "22",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "IMG_4950.JPG": {
+        "ethnicity": "Asian",
+        "age": "22",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "IMG_4951.JPG": {
+        "ethnicity": "Asian",
+        "age": "22",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "IMG_4952.JPG": {
+        "ethnicity": "Asian",
+        "age": "22",
+        "gender": "Male",
+        "emotion": "happy"
+    },
+    "IMG_4953.JPG": {
+        "ethnicity": "Asian",
+        "age": "22",
+        "gender": "Male",
+        "emotion": "happy"
+    },
+    "IMG_4954.JPG": {
+        "ethnicity": "Asian",
+        "age": "22",
+        "gender": "Male",
+        "emotion": "happy"
+    },
+    "IMG_4955.JPG": {
+        "ethnicity": "Asian",
+        "age": "22",
+        "gender": "Male",
+        "emotion": "happy"
+    },
+    "IMG_4956.JPG": {
+        "ethnicity": "Asian",
+        "age": "22",
+        "gender": "Male",
+        "emotion": "sad"
+    },
+    "IMG_4957.JPG": {
+        "ethnicity": "Asian",
+        "age": "22",
+        "gender": "Male",
+        "emotion": "sad"
+    },
+    "IMG_4958.JPG": {
+        "ethnicity": "Asian",
+        "age": "22",
+        "gender": "Male",
+        "emotion": "sad"
+    },
+    "IMG_4959.JPG": {
+        "ethnicity": "Asian",
+        "age": "22",
+        "gender": "Male",
+        "emotion": "sad"
+    },
+    "IMG_4960.JPG": {
+        "ethnicity": "Asian",
+        "age": "22",
+        "gender": "Male",
+        "emotion": "fear"
+    },
+    "IMG_4961.JPG": {
+        "ethnicity": "Asian",
+        "age": "22",
+        "gender": "Male",
+        "emotion": "fear"
+    },
+    "IMG_4962.JPG": {
+        "ethnicity": "Asian",
+        "age": "22",
+        "gender": "Male",
+        "emotion": "fear"
+    },
+    "IMG_4963.JPG": {
+        "ethnicity": "Asian",
+        "age": "22",
+        "gender": "Male",
+        "emotion": "fear"
+    },
+    "IMG_4964.JPG": {
+        "ethnicity": "Asian",
+        "age": "22",
+        "gender": "Male",
+        "emotion": "surprise"
+    },
+    "IMG_4965.JPG": {
+        "ethnicity": "Asian",
+        "age": "22",
+        "gender": "Male",
+        "emotion": "surprise"
+    },
+    "IMG_4966.JPG": {
+        "ethnicity": "Asian",
+        "age": "22",
+        "gender": "Male",
+        "emotion": "surprise"
+    },
+    "IMG_4967.JPG": {
+        "ethnicity": "Asian",
+        "age": "22",
+        "gender": "Male",
+        "emotion": "surprise"
+    },
+    "IMG_4968.JPG": {
+        "ethnicity": "Asian",
+        "age": "22",
+        "gender": "Male",
+        "emotion": "angry"
+    },
+    "IMG_4969.JPG": {
+        "ethnicity": "Asian",
+        "age": "22",
+        "gender": "Male",
+        "emotion": "angry"
+    },
+    "IMG_4970.JPG": {
+        "ethnicity": "Asian",
+        "age": "22",
+        "gender": "Male",
+        "emotion": "angry"
+    },
+    "IMG_4971.JPG": {
+        "ethnicity": "Asian",
+        "age": "22",
+        "gender": "Male",
+        "emotion": "angry"
+    },
+    "IMG_4972.JPG": {
+        "ethnicity": "Asian",
+        "age": "22",
+        "gender": "Male",
+        "emotion": "disgust"
+    },
+    "IMG_4973.JPG": {
+        "ethnicity": "Asian",
+        "age": "22",
+        "gender": "Male",
+        "emotion": "disgust"
+    },
+    "IMG_4974.JPG": {
+        "ethnicity": "Asian",
+        "age": "22",
+        "gender": "Male",
+        "emotion": "disgust"
+    },
+    "IMG_4975.JPG": {
+        "ethnicity": "Asian",
+        "age": "22",
+        "gender": "Male",
+        "emotion": "disgust"
+    },
+    "IMG_4976.JPG": {
+        "ethnicity": "European",
+        "age": "20",
+        "gender": "Female",
+        "emotion": "neutral"
+    },
+    "IMG_4977.JPG": {
+        "ethnicity": "European",
+        "age": "20",
+        "gender": "Female",
+        "emotion": "neutral"
+    },
+    "IMG_4978.JPG": {
+        "ethnicity": "European",
+        "age": "20",
+        "gender": "Female",
+        "emotion": "neutral"
+    },
+    "IMG_4979.JPG": {
+        "ethnicity": "European",
+        "age": "20",
+        "gender": "Female",
+        "emotion": "neutral"
+    },
+    "IMG_4980.JPG": {
+        "ethnicity": "European",
+        "age": "20",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "IMG_4981.JPG": {
+        "ethnicity": "European",
+        "age": "20",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "IMG_4982.JPG": {
+        "ethnicity": "European",
+        "age": "20",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "IMG_4983.JPG": {
+        "ethnicity": "European",
+        "age": "20",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "IMG_4984.JPG": {
+        "ethnicity": "European",
+        "age": "20",
+        "gender": "Female",
+        "emotion": "surprise"
+    },
+    "IMG_4985.JPG": {
+        "ethnicity": "European",
+        "age": "20",
+        "gender": "Female",
+        "emotion": "surprise"
+    },
+    "IMG_4986.JPG": {
+        "ethnicity": "European",
+        "age": "20",
+        "gender": "Female",
+        "emotion": "surprise"
+    },
+    "IMG_4987.JPG": {
+        "ethnicity": "European",
+        "age": "20",
+        "gender": "Female",
+        "emotion": "surprise"
+    },
+    "IMG_4988.JPG": {
+        "ethnicity": "European",
+        "age": "20",
+        "gender": "Female",
+        "emotion": "sad"
+    },
+    "IMG_4989.JPG": {
+        "ethnicity": "European",
+        "age": "20",
+        "gender": "Female",
+        "emotion": "sad"
+    },
+    "IMG_4990.JPG": {
+        "ethnicity": "European",
+        "age": "20",
+        "gender": "Female",
+        "emotion": "sad"
+    },
+    "IMG_4991.JPG": {
+        "ethnicity": "European",
+        "age": "20",
+        "gender": "Female",
+        "emotion": "sad"
+    },
+    "IMG_4992.JPG": {
+        "ethnicity": "European",
+        "age": "20",
+        "gender": "Female",
+        "emotion": "angry"
+    },
+    "IMG_4993.JPG": {
+        "ethnicity": "European",
+        "age": "20",
+        "gender": "Female",
+        "emotion": "angry"
+    },
+    "IMG_4994.JPG": {
+        "ethnicity": "European",
+        "age": "20",
+        "gender": "Female",
+        "emotion": "angry"
+    },
+    "IMG_4995.JPG": {
+        "ethnicity": "European",
+        "age": "20",
+        "gender": "Female",
+        "emotion": "angry"
+    },
+    "IMG_5000.JPG": {
+        "ethnicity": "European",
+        "age": "20",
+        "gender": "Female",
+        "emotion": "disgust"
+    },
+    "IMG_4997.JPG": {
+        "ethnicity": "European",
+        "age": "20",
+        "gender": "Female",
+        "emotion": "disgust"
+    },
+    "IMG_4998.JPG": {
+        "ethnicity": "European",
+        "age": "20",
+        "gender": "Female",
+        "emotion": "disgust"
+    },
+    "IMG_4999.JPG": {
+        "ethnicity": "European",
+        "age": "20",
+        "gender": "Female",
+        "emotion": "disgust"
+    },
+    "IMG_5005.JPG": {
+        "ethnicity": "European",
+        "age": "21",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "IMG_5006.JPG": {
+        "ethnicity": "European",
+        "age": "21",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "IMG_5007.JPG": {
+        "ethnicity": "European",
+        "age": "21",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "IMG_5008.JPG": {
+        "ethnicity": "European",
+        "age": "21",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "IMG_5009.JPG": {
+        "ethnicity": "European",
+        "age": "21",
+        "gender": "Male",
+        "emotion": "happy"
+    },
+    "IMG_5010.JPG": {
+        "ethnicity": "European",
+        "age": "21",
+        "gender": "Male",
+        "emotion": "happy"
+    },
+    "IMG_5011.JPG": {
+        "ethnicity": "European",
+        "age": "21",
+        "gender": "Male",
+        "emotion": "happy"
+    },
+    "IMG_5012.JPG": {
+        "ethnicity": "European",
+        "age": "21",
+        "gender": "Male",
+        "emotion": "happy"
+    },
+    "IMG_5013.JPG": {
+        "ethnicity": "European",
+        "age": "21",
+        "gender": "Male",
+        "emotion": "sad"
+    },
+    "IMG_5014.JPG": {
+        "ethnicity": "European",
+        "age": "21",
+        "gender": "Male",
+        "emotion": "sad"
+    },
+    "IMG_5015.JPG": {
+        "ethnicity": "European",
+        "age": "21",
+        "gender": "Male",
+        "emotion": "sad"
+    },
+    "IMG_5016.JPG": {
+        "ethnicity": "European",
+        "age": "21",
+        "gender": "Male",
+        "emotion": "sad"
+    },
+    "IMG_5017.JPG": {
+        "ethnicity": "European",
+        "age": "21",
+        "gender": "Male",
+        "emotion": "fear"
+    },
+    "IMG_5020.JPG": {
+        "ethnicity": "European",
+        "age": "21",
+        "gender": "Male",
+        "emotion": "fear"
+    },
+    "IMG_5021.JPG": {
+        "ethnicity": "European",
+        "age": "21",
+        "gender": "Male",
+        "emotion": "surprise"
+    },
+    "IMG_5028.JPG": {
+        "ethnicity": "European",
+        "age": "21",
+        "gender": "Male",
+        "emotion": "disgust"
+    },
+    "IMG_5029.JPG": {
+        "ethnicity": "European",
+        "age": "21",
+        "gender": "Male",
+        "emotion": "angry"
+    },
+    "IMG_5034.JPG": {
+        "ethnicity": "European",
+        "age": "20",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "IMG_5035.JPG": {
+        "ethnicity": "European",
+        "age": "20",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "IMG_5038.JPG": {
+        "ethnicity": "European",
+        "age": "20",
+        "gender": "Male",
+        "emotion": "happy"
+    },
+    "IMG_5039.JPG": {
+        "ethnicity": "European",
+        "age": "20",
+        "gender": "Male",
+        "emotion": "happy"
+    },
+    "IMG_5040.JPG": {
+        "ethnicity": "European",
+        "age": "20",
+        "gender": "Male",
+        "emotion": "happy"
+    },
+    "IMG_5041.JPG": {
+        "ethnicity": "European",
+        "age": "20",
+        "gender": "Male",
+        "emotion": "surprise"
+    },
+    "IMG_5042.JPG": {
+        "ethnicity": "European",
+        "age": "20",
+        "gender": "Male",
+        "emotion": "surprise"
+    },    
+    "IMG_5043.JPG": {
+        "ethnicity": "European",
+        "age": "20",
+        "gender": "Male",
+        "emotion": "surprise"
+    },    
+    "IMG_5044.JPG": {
+        "ethnicity": "European",
+        "age": "20",
+        "gender": "Male",
+        "emotion": "surprise"
+    },
+    "IMG_5045.JPG": {
+        "ethnicity": "European",
+        "age": "20",
+        "gender": "Male",
+        "emotion": "disgust"
+    },
+    "IMG_5046.JPG": {
+        "ethnicity": "European",
+        "age": "20",
+        "gender": "Male",
+        "emotion": "disgust"
+    },
+    "IMG_5047.JPG": {
+        "ethnicity": "European",
+        "age": "20",
+        "gender": "Male",
+        "emotion": "disgust"
+    },
+    "IMG_5048.JPG": {
+        "ethnicity": "European",
+        "age": "20",
+        "gender": "Male",
+        "emotion": "disgust"
+    },
+    "IMG_5049.JPG": {
+        "ethnicity": "European",
+        "age": "20",
+        "gender": "Male",
+        "emotion": "angry"
+    },
+    "IMG_5050.JPG": {
+        "ethnicity": "European",
+        "age": "20",
+        "gender": "Male",
+        "emotion": "angry"
+    },
+    "IMG_5051.JPG": {
+        "ethnicity": "European",
+        "age": "20",
+        "gender": "Male",
+        "emotion": "angry"
+    },
+    "IMG_5052.JPG": {
+        "ethnicity": "European",
+        "age": "20",
+        "gender": "Male",
+        "emotion": "angry"
+    },
+    "IMG_5053.JPG": {
+        "ethnicity": "European",
+        "age": "20",
+        "gender": "Male",
+        "emotion": "sad"
+    },
+    "IMG_5054.JPG": {
+        "ethnicity": "European",
+        "age": "20",
+        "gender": "Male",
+        "emotion": "sad"
+    },
+    "IMG_5055.JPG": {
+        "ethnicity": "European",
+        "age": "20",
+        "gender": "Male",
+        "emotion": "sad"
+    },
+    "IMG_5056.JPG": {
+        "ethnicity": "European",
+        "age": "20",
+        "gender": "Male",
+        "emotion": "sad"
+    },
+    "IMG_5057.JPG": {
+        "ethnicity": "European",
+        "age": "20",
+        "gender": "Male",
+        "emotion": "fear"
+    },
+    "IMG_5058.JPG": {
+        "ethnicity": "European",
+        "age": "20",
+        "gender": "Male",
+        "emotion": "fear"
+    },
+    "IMG_5059.JPG": {
+        "ethnicity": "European",
+        "age": "20",
+        "gender": "Male",
+        "emotion": "fear"
+    },
+    "IMG_5060.JPG": {
+        "ethnicity": "European",
+        "age": "20",
+        "gender": "Male",
+        "emotion": "fear"
     }
 }
