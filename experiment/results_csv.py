@@ -14,7 +14,7 @@ class ResultsCSV:
         
         images = prepare_processed_images(self.images_dir, self.num_images)
         
-        cols = ['True Gender', 'Classified Gender', 'Classification confidence', 'True Ethnicity', 'Classified Ethnicity', 'Classification confidence', 'True Mood', 'Classified Mood', 'Classification confidence', 'True Age', 'Classified Age', 'Classification confidence']
+        cols = ['True Gender', 'Classified Gender', 'Gender confidence', 'True Ethnicity', 'Classified Ethnicity', 'Ethnicity confidence', 'True Mood', 'Classified Mood', 'Mood confidence', 'True Age', 'Classified Age', 'Age confidence']
         
         df = pd.DataFrame(columns=cols)
         
