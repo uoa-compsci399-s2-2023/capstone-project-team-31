@@ -1,2 +1,2 @@
-,True Gender,Classified Gender,Gender Accuracy,True Ethnicity,Classified Ethnicity,Ethnicity Accuracy,True Mood,Classified Mood,Mood Accuracy,True Age,Classified Age,Age Accuracy
-0,female,Man,,European,white,,happy,surprise,,21,22,1
+,True Gender,Classified Gender,Classification confidence,True Ethnicity,Classified Ethnicity,Classification confidence,True Mood,Classified Mood,Classification confidence,True Age,Classified Age,Classification confidence
+0,female,Woman,1.0,European,white,1.0,happy,happy,1.0,23,28,1.0

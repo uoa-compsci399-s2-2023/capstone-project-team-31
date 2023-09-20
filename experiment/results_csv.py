@@ -14,7 +14,7 @@ class ResultsCSV:
         
         images = prepare_processed_images(self.images_dir, self.num_images)
         
-        cols = ['True Gender', 'Classified Gender', 'Gender Accuracy', 'True Ethnicity', 'Classified Ethnicity', 'Ethnicity Accuracy', 'True Mood', 'Classified Mood', 'Mood Accuracy', 'True Age', 'Classified Age', 'Age Accuracy']
+        cols = ['True Gender', 'Classified Gender', 'Classification confidence', 'True Ethnicity', 'Classified Ethnicity', 'Classification confidence', 'True Mood', 'Classified Mood', 'Classification confidence', 'True Age', 'Classified Age', 'Classification confidence']
         
         df = pd.DataFrame(columns=cols)
         
@@ -31,24 +31,24 @@ class ResultsCSV:
             
             true_gender = image[2]
             gender_prediction = gender_model.predict_verbose(img_contents)
-            img_data += [true_gender, gender_prediction['dominant_gender'], None]
+            img_data += [true_gender, gender_prediction['dominant_gender'], gender_prediction['confidence']]
             
             print(gender_prediction)
             
             true_ethnicity = image[1]
             ethnicity_prediction = ethnicity_model.predict_verbose(img_contents)
-            img_data += [true_ethnicity, ethnicity_prediction['dominant_race'], None]
+            img_data += [true_ethnicity, ethnicity_prediction['dominant_race'], gender_prediction['confidence']]
             
             print(ethnicity_prediction)
             
             true_mood = image[4]
             mood_prediction = mood_model.predict_verbose(img_contents)
-            img_data += [true_mood, mood_prediction['dominant_emotion'], None]
+            img_data += [true_mood, mood_prediction['dominant_emotion'], gender_prediction['confidence']]
             print(mood_prediction)
             
             true_age = image[3]
             age_prediction = age_model.predict_verbose(img_contents)
-            img_data += [true_age, age_prediction['apparentAge'], abs(int(true_age) - int(age_prediction['apparentAge']))]
+            img_data += [true_age, age_prediction['apparentAge'], gender_prediction['confidence']]
             print(age_prediction)
             
             df.loc[len(df)] = img_data
