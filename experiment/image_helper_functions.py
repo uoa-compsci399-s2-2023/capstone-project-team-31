@@ -75,7 +75,7 @@ def getImageObjects(img_path,
     
 def getImageContents(img_path,
     enforce_detection=True,
-    detector_backend="ssd",
+    detector_backend="opencv",
     align=True,
 ):
     img_objs = getImageObjects(img_path, 
@@ -365,6 +365,21 @@ def get_printable_vals(num_colors = 32) -> np.array:
     # inspo1: https://github.com/mahmoods01/accessorize-to-a-crime/blob/master/aux/attack/get_printable_vals.m
     # inspo2: https://github.com/mahmoods01/accessorize-to-a-crime/blob/master/aux/attack/make_printable_vals_struct.m
     
+    
+    """ print_img = Image.open('experiment/assets/printed-palette.png')
+    img_arr = np.asarray(print_img)
+
+    # Cuts 3% of edges from each side (subject to change)
+    cut_h = round(0.015*img_arr.shape[1])
+    cut_v = round(0.015*img_arr.shape[0])
+    img_arr = img_arr[cut_v:-cut_v, cut_h:-cut_h,:]
+
+    # Uniform quantization, Minimum Variance Optimization not available in python (subject to change)
+    printable_vals = np.round(img_arr*(num_colors/255))*(255//num_colors)
+    printable_vals = printable_vals.reshape(-1, img_arr.shape[2])
+    printable_vals.sort(axis=0) """
+
+
     """ print_img = Image.open('experiment/assets/printed-palette.png')
     img_arr = np.asarray(print_img)
 

@@ -83,7 +83,7 @@ class AdversarialPatternGenerator:
         
         for colour in self.colours:
             
-            accessory_img, accessory_mask = prepare_accessory(colour, "./assets/{}.png".format(self.accessory_type.lower()), self.accessory_type)
+            accessory_img, accessory_mask = prepare_accessory(colour, "experiment/assets/{}.png".format(self.accessory_type.lower()), self.accessory_type)
             
             confidences = np.empty(self.num_images)
             
@@ -100,7 +100,7 @@ class AdversarialPatternGenerator:
                 elif self.mode == "dodge":
                     label = cleanup_labels(self.processed_imgs[i][self.class_num])
                 
-                _, confidences[i] = get_confidence_in_selected_class(cleanup_dims(temp_attack), self.classification, label, self.model, True)
+                _, confidences[i] = get_confidence_in_selected_class(cleanup_dims(temp_attack), self.classification, label, self.model)
                 
             avg_true_class_conf = np.mean(confidences)
 
@@ -241,7 +241,12 @@ class AdversarialPatternGenerator:
                 r = (np.rint(r)).astype(int)
                 r[(experiment.get_image() + r) > 255] = 0
                 r[(experiment.get_image() + r) < 0] = 0
-                r = r*(scores[r_i]/np.max(scores))
+
+                if self.mode == "impersonation":
+                    r = r*(1-(scores[r_i]/np.max(scores)))
+                elif self.mode == "dodge": 
+                    r = r*(scores[r_i]/np.max(scores))
+                    
                 result = np.add(r, experiment.get_image())                
                 
                 experiment.set_image(result)
@@ -299,20 +304,20 @@ class AdversarialPatternGenerator:
         plt.figtext(0.5, 0.01, 'Classified: {}, Confidence: {}'.format(lowest_output['classified'], lowest_output['confidence']), ha="center")
         plt.show()
 
-        #cv2.imwrite('Test_pert.png', lowest_pert[2])
+        cv2.imwrite('Results/Test_pert.png', lowest_pert[2])
         return final_attacks, experiment
 
     # return final pertubation result, with deepface's average confidence in predicting true classes
 
     def run(self):
+        with tf.device('/device:GPU:0'):
+            starting_point = self.get_best_starting_colour()
 
-        starting_point = self.get_best_starting_colour()
-
-        result, experiment_result = self.run_experiment(starting_point)
+            result, experiment_result = self.run_experiment(starting_point)
         
-        cv2.imwrite("./results/accessory_image.png", experiment_result.get_image())        
+        #cv2.imwrite("./results/accessory_image.png", experiment_result.get_image())        
         
-        for attack in result:
+        for attack in result[::int(self.num_images*0.80)]:
             cv2.imshow('image window', attack)
             cv2.waitKey(0)
             cv2.destroyAllWindows()
@@ -325,9 +330,45 @@ def cleanup_labels(true_class:str):
         result = 'Woman'
     elif true_class.lower() == 'male':
         result = 'Man'
+    else:
+        result = true_class.lower()
         
     return result
 
+def validate_images(val_images_dir: str, accessory_dir: str, accessory_type: str, num_images: int, mode="dodge", classification=None, target=None, seperate=True, verbose=False) -> float:
+    get_images = prepare_images(val_images_dir, num_images, mode, classification, target, seperate)
+    _, accessory_mask = prepare_accessory('red', "experiment/assets/{}.png".format(accessory_type.lower()), accessory_type)
+    accessory = cv2.imread(accessory_dir)
+
+    e = attributeModel(classification)
+
+    counter = 0
+    u_count = 0
+
+    for ind, im in enumerate(get_images):
+        print(ind, '/', num_images, ' images')
+        prep_img = image_to_face(im)
+
+        if prep_img != None:
+            img_copy = np.copy(prep_img[0])
+            image = apply_accessory(img_copy, accessory, accessory_mask)
+            preds = e.predict_verbose(cleanup_dims(image))
+
+            if preds['classified'].lower() == target.lower():
+                counter += 1
+            
+            if verbose == True:
+                print(preds)
+                cv2.imshow('image', image)
+                cv2.waitKey(0)
+                cv2.destroyAllWindows()
+
+        else:
+            u_count += 1
+
+    s_rate = counter/(num_images-u_count)
+    print('Success rate with val data: ', s_rate)
+    print('Unidentified faces: ', u_count)
 
 def cleanup_dims(image):
     
