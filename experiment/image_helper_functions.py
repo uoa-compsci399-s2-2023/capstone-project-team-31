@@ -75,7 +75,7 @@ def getImageObjects(img_path,
     
 def getImageContents(img_path,
     enforce_detection=True,
-    detector_backend="ssd",
+    detector_backend="opencv",
     align=True,
 ):
     img_objs = getImageObjects(img_path, 
@@ -240,6 +240,32 @@ def reverse_accessory_move(accessory_image: np.ndarray, accessory_mask: np.ndarr
     accessory_mask = np.roll(accessory_mask, (movement_info['horizontal'] * -1, movement_info['vertical'] * -1), axis=(0, 1))
     return accessory_image, accessory_mask
 
+def merge_accessories(accessory_dir: str, num_images: int) -> np.ndarray:
+    '''
+    Merges accessories into one by averaging each pixel
+
+    Args:
+    * accessory_dir: directory of accessories
+    * num_images: sample size
+
+    Returns:
+    * final_mask: averaged mask
+    '''
+    abs_path = os.path.abspath(os.path.join(os.path.dirname( __file__ ), os.pardir, accessory_dir))
+
+    images = os.listdir(accessory_dir)
+    rand_images = random.sample(images, num_images)
+    mat_sum = np.zeros((224,224,3))
+
+    for img in rand_images:
+        temp =  cv2.imread(os.path.join(abs_path, img))
+        mat_sum = mat_sum + temp
+    
+    mat_sum = mat_sum/num_images
+    final_mask = mat_sum.astype(np.uint8)
+
+    return final_mask
+
 def apply_accessory(image: np.ndarray, aug_accessory_image: np.ndarray, org_accessory_image) -> np.ndarray:
     mask = np.where(org_accessory_image == 0)
     image[mask] = aug_accessory_image[mask]
@@ -364,19 +390,6 @@ def get_printable_vals(num_colors = 32) -> np.array:
     '''
     # inspo1: https://github.com/mahmoods01/accessorize-to-a-crime/blob/master/aux/attack/get_printable_vals.m
     # inspo2: https://github.com/mahmoods01/accessorize-to-a-crime/blob/master/aux/attack/make_printable_vals_struct.m
-    
-    """ print_img = Image.open('experiment/assets/printed-palette.png')
-    img_arr = np.asarray(print_img)
-
-    # Cuts 3% of edges from each side (subject to change)
-    cut_h = round(0.015*img_arr.shape[1])
-    cut_v = round(0.015*img_arr.shape[0])
-    img_arr = img_arr[cut_v:-cut_v, cut_h:-cut_h,:]
-
-    # Uniform quantization, Minimum Variance Optimization not available in python (subject to change)
-    printable_vals = np.round(img_arr*(num_colors/255))*(255//num_colors)
-    printable_vals = printable_vals.reshape(-1, img_arr.shape[2])
-    printable_vals.sort(axis=0) """
 
     printable_vals = []
     with open('./assets/printable_vals.txt') as file:
