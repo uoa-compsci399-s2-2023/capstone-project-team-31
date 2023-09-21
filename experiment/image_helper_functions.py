@@ -46,11 +46,13 @@ def prepare_images(images_dir: str, num_images: int, mode="dodge", classificatio
         return images
     else: # if the images are stored in a directory
         images = os.listdir(abs_path)
-        rand_images = random.sample(images, num_images)
+        #rand_images = random.sample(images, num_images)
         output = []
-        with open("./Faces.json", 'r') as f:
+        with open("./my_face.json", 'r') as f:
             data = json.load(f)
-            for img in rand_images:
+            temp_images = random.sample(list(data.keys()), num_images)
+
+            for img in temp_images:
                 temp =  cv2.imread(os.path.join(abs_path, img))
                 output.append([temp, data[img]['ethnicity'], data[img]['gender'], data[img]['age'], data[img]['emotion']])
         return output
@@ -59,7 +61,7 @@ from deepface.commons import functions
 
 def getImageObjects(img_path,
     enforce_detection=True,
-    detector_backend="retinaface",
+    detector_backend="opencv",
     align=True,
 ):
     img_objs = functions.extract_faces(
@@ -137,6 +139,8 @@ def prepare_processed_images(images_dir: str, num_images: int,  mode="dodge", cl
         prepared_image = image_to_face(image)     
         if(prepared_image != None):
             output_list.append(prepared_image)
+        if len(output_list) == 50:
+            break
         
     return output_list
 
@@ -168,7 +172,7 @@ def prepare_accessory(colour: str, accessory_dir: str, accessory_type: str) -> t
     mask = cv2.threshold(accessory, 0, 1, cv2.THRESH_BINARY)[1]
     
     # make a colour mask of the chosen colour
-    colour_info = json.load(open("./assets/starting_colours.json", 'r'))
+    colour_info = json.load(open("experiment/assets/starting_colours.json", 'r'))
     colour = colour_info[colour]
         
     coloured_matrix = np.array([[colour for i in range(accessory.shape[1])] for j in range(accessory.shape[0])])
@@ -364,37 +368,9 @@ def get_printable_vals(num_colors = 32) -> np.array:
     '''
     # inspo1: https://github.com/mahmoods01/accessorize-to-a-crime/blob/master/aux/attack/get_printable_vals.m
     # inspo2: https://github.com/mahmoods01/accessorize-to-a-crime/blob/master/aux/attack/make_printable_vals_struct.m
-    
-    
-    """ print_img = Image.open('experiment/assets/printed-palette.png')
-    img_arr = np.asarray(print_img)
-
-    # Cuts 3% of edges from each side (subject to change)
-    cut_h = round(0.015*img_arr.shape[1])
-    cut_v = round(0.015*img_arr.shape[0])
-    img_arr = img_arr[cut_v:-cut_v, cut_h:-cut_h,:]
-
-    # Uniform quantization, Minimum Variance Optimization not available in python (subject to change)
-    printable_vals = np.round(img_arr*(num_colors/255))*(255//num_colors)
-    printable_vals = printable_vals.reshape(-1, img_arr.shape[2])
-    printable_vals.sort(axis=0) """
-
-
-    """ print_img = Image.open('experiment/assets/printed-palette.png')
-    img_arr = np.asarray(print_img)
-
-    # Cuts 3% of edges from each side (subject to change)
-    cut_h = round(0.015*img_arr.shape[1])
-    cut_v = round(0.015*img_arr.shape[0])
-    img_arr = img_arr[cut_v:-cut_v, cut_h:-cut_h,:]
-
-    # Uniform quantization, Minimum Variance Optimization not available in python (subject to change)
-    printable_vals = np.round(img_arr*(num_colors/255))*(255//num_colors)
-    printable_vals = printable_vals.reshape(-1, img_arr.shape[2])
-    printable_vals.sort(axis=0) """
 
     printable_vals = []
-    with open('./assets/printable_vals.txt') as file:
+    with open('experiment/assets/printable_vals.txt') as file:
         lines = file.readlines()
         for line in lines:
             line = line.split()
