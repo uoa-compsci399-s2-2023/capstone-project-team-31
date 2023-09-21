@@ -14,7 +14,7 @@ def get_confidence_in_selected_class(image: np.ndarray, classification:str, true
     labeledOutput = e.predict_verbose(image_after)
     if verbose:
         print(labeledOutput)
-    print(labeledOutput)
+        
     confidence = labeledOutput[classification][true_class]
     
     return labeledOutput, confidence/100
