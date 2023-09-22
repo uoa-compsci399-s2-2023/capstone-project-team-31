@@ -2017,6 +2017,103 @@
         "age": "24",
         "gender": "Male",
         "emotion": "happy"
+    },
+    "charles-c.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "41",
+        "gender": "Male",
+        "emotion": "happy"
+    },
+    "barbara-e.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "42",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "kris-f.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "44",
+        "gender": "Male",
+        "emotion": "happy"
+    },
+    "anahila-k.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "48",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "luamanuvao-w.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "63",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "anae-n.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "38",
+        "gender": "Male",
+        "emotion": "happy"
+    },
+    "agnes-l.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "47",
+        "gender": "Female",
+        "emotion": "neutral"
+    },
+    "sam-l.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "39",
+        "gender": "Male",
+        "emotion": "happy"
+    },
+    "alfred-n.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "53",
+        "gender": "Male",
+        "emotion": "happy"
+    },
+    "teri-s.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "41",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "jenny-s.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "49",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "carmel-s.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "46",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "william-s.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "59",
+        "gender": "Male",
+        "emotion": "happy"
+    },
+    "teanu-t.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "47",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "tangi-u.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "43",
+        "gender": "Male",
+        "emotion": "happy"
+    },
+    "potu-w.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "58",
+        "gender": "Female",
+        "emotion": "happy"
     }
+
 
 }
