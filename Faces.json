@@ -2113,6 +2113,156 @@
         "age": "58",
         "gender": "Female",
         "emotion": "happy"
+    },
+    "toni-w.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "71",
+        "gender": "Male",
+        "emotion": "happy"
+    },
+    "brooke-f.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "27",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "christian-l.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "26",
+        "gender": "Male",
+        "emotion": "happy"
+    },
+    "sekope-k.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "31",
+        "gender": "Male",
+        "emotion": "sad"
+    },
+    "lalakai-f.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "20",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "taine-t.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "24",
+        "gender": "Male",
+        "emotion": "angry"
+    },
+    "marata-n.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "22",
+        "gender": "Male",
+        "emotion": "angry"
+    },
+    "aaron-p.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "20",
+        "gender": "Male",
+        "emotion": "angry"
+    },
+    "ben-m.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "26",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "marcelo-m.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "20",
+        "gender": "Male",
+        "emotion": "fear"
+    },
+    "marcelo-m.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "20",
+        "gender": "Male",
+        "emotion": "fear"
+    },
+    "addin-f.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "20",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "eliesa-k.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "23",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "jamayne-t.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "21",
+        "gender": "Male",
+        "emotion": "surprised"
+    },
+    "king-v.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "24",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "poasa-f.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "25",
+        "gender": "Male",
+        "emotion": "fear"
+    },
+    "chanel-h.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "23",
+        "gender": "Male",
+        "emotion": "angry"
+    },
+    "taane-m.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "24",
+        "gender": "Male",
+        "emotion": "surprised"
+    },
+    "peta-h.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "27",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "leivaha-p.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "24",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "tohu-h.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "30",
+        "gender": "Male",
+        "emotion": "angry"
+    },
+    "isaiah-p.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "18",
+        "gender": "Male",
+        "emotion": "fear"
+    },
+    "tevita-s.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "25",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "roger-t.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "26",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "ata-h.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "18",
+        "gender": "Male",
+        "emotion": "neutral"
     }
 
 
