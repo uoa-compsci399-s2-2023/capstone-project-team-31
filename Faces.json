@@ -2263,7 +2263,60 @@
         "age": "18",
         "gender": "Male",
         "emotion": "neutral"
+    },
+    "tanya-k.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "23",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "ayesha-l.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "23",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "maria-t.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "22",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "noeline-t.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "52",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "valerie-a.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "25",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "beatrice-f.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "39",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "louisa-w.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "48",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "rita-f.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "51",
+        "gender": "Female",
+        "emotion": "fear"
+    },
+    "rita-f.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "51",
+        "gender": "Female",
+        "emotion": "fear"
     }
-
 
 }
