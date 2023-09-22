@@ -2311,6 +2311,24 @@
         "age": "51",
         "gender": "Female",
         "emotion": "fear"
+    },
+    "lima-s.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "25",
+        "gender": "Male",
+        "emotion": "surprised"
+    },
+    "mike-k.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "57",
+        "gender": "Male",
+        "emotion": "happy"
+    },
+    "vaaiga-t.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "39",
+        "gender": "Male",
+        "emotion": "happy"
     }
 
 }
