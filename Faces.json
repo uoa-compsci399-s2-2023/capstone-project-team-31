@@ -1849,5 +1849,174 @@
         "age": "30",
         "gender": "Female",
         "emotion": "happy"
+    },
+    "anton-l.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "22",
+        "gender": "Male",
+        "emotion": "angry"
+    },
+    "ardie-s.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "24",
+        "gender": "Male",
+        "emotion": "angry"
+    },
+    "aulii-c.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "16",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "charles-p.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "25",
+        "gender": "Male",
+        "emotion": "happy"
+    },
+    "charlie-f.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "30",
+        "gender": "Male",
+        "emotion": "happy"
+    },
+    "courtney-e.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "20",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "dwayne-j.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "41",
+        "gender": "Male",
+        "emotion": "happy"
+    },
+    "jason-m.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "39",
+        "gender": "Male",
+        "emotion": "happy"
+    },
+    "jerome-k.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "33",
+        "gender": "Male",
+        "emotion": "happy"
+    },
+    "jonah-l.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "39",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "julian-s.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "25",
+        "gender": "Male",
+        "emotion": "fear"
+    },
+    "keven-m.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "36",
+        "gender": "Male",
+        "emotion": "happy"
+    },
+    "ma'a-n.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "29",
+        "gender": "Male",
+        "emotion": "happy"
+    },
+    "michael-j.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "52",
+        "gender": "Male",
+        "emotion": "happy"
+    },
+    "nepo-l.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "27",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "nicole-s.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "34",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "parris-g.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "29",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "piri-w.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "32",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "richie-m.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "27",
+        "gender": "Male",
+        "emotion": "fear"
+    },
+    "rieko-i.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "18",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "rose-m.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "29",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "shannon-f.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "25",
+        "gender": "Male",
+        "emotion": "angry"
+    },
+    "sitiveni-s.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "33",
+        "gender": "Male",
+        "emotion": "happy"
+    },
+    "sonny-bill-w.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "26",
+        "gender": "Male",
+        "emotion": "happy"
+    },
+    "steve-l.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "29",
+        "gender": "Male",
+        "emotion": "fear"
+    },
+    "temuera-m.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "56",
+        "gender": "Male",
+        "emotion": "angry"
+    },
+    "tupou-v.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "21",
+        "gender": "Male",
+        "emotion": "angry"
+    },
+    "victor-v.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "24",
+        "gender": "Male",
+        "emotion": "happy"
     }
+
 }
