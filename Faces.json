@@ -2407,6 +2407,54 @@
         "age": "56",
         "gender": "Female",
         "emotion": "happy"
+    },
+    "tuilaepa-a.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "69",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "frank-b.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "60",
+        "gender": "Male",
+        "emotion": "happy"
+    },
+    "laisenia-q.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "64",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "mahendra-c.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "81",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "savenaca-n.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "67",
+        "gender": "Male",
+        "emotion": "happy"
+    },
+    "siaosi-s.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "52",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "pohiva-t.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "69",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "semisi-s.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "51",
+        "gender": "Male",
+        "emotion": "neutral"
     }
 
 }
