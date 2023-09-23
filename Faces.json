@@ -2323,6 +2323,90 @@
         "age": "39",
         "gender": "Male",
         "emotion": "happy"
+    },
+    "russ-k.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "48",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "ishmael-k.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "46",
+        "gender": "Male",
+        "emotion": "angry"
+    },
+    "edourd-f.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "58",
+        "gender": "Male",
+        "emotion": "angry"
+    },
+    "kausea-n.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "66",
+        "gender": "Male",
+        "emotion": "happy"
+    },
+    "mark-b.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "57",
+        "gender": "Male",
+        "emotion": "happy"
+    },
+    "david-k.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "70",
+        "gender": "Male",
+        "emotion": "happy"
+    },
+    "sitiveni-r.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "72",
+        "gender": "Male",
+        "emotion": "happy"
+    },
+    "david-p.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "49",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "james-m.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "52",
+        "gender": "Male",
+        "emotion": "happy"
+    },
+    "manasseh-s.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "59",
+        "gender": "Male",
+        "emotion": "happy"
+    },
+    "taneti-m.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "63",
+        "gender": "Male",
+        "emotion": "happy"
+    },
+    "dalton-t.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "54",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "surangel-w.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "54",
+        "gender": "Male",
+        "emotion": "happy"
+    },
+    "fiame-n.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "56",
+        "gender": "Female",
+        "emotion": "happy"
     }
 
 }
