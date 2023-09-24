@@ -37,7 +37,7 @@ def prepare_images(images_dir: str, num_images: int, mode="dodge", classificatio
         conn = sqlite3.connect(abs_path)
         cursor = conn.cursor()
         if mode == "impersonation" and seperate:
-            print(classification, target)
+            
             command = "SELECT * FROM images WHERE {} != ? ORDER BY RANDOM() LIMIT {}".format(classification, num_images)
             images = cursor.execute(command, (target,)).fetchall()
         else:
@@ -48,11 +48,14 @@ def prepare_images(images_dir: str, num_images: int, mode="dodge", classificatio
         images = os.listdir(abs_path)
         rand_images = random.sample(images, num_images)
         output = []
-        with open("./Faces.json", 'r') as f:
+        with open("D:/Github/capstone-project-team-31/Faces.json", 'r') as f:
             data = json.load(f)
+            available_images = list(data.keys())
             for img in rand_images:
                 temp =  cv2.imread(os.path.join(abs_path, img))
-                output.append([temp, data[img]['ethnicity'], data[img]['gender'], data[img]['age'], data[img]['emotion']])
+                if img in available_images:
+                    if data[img]['gender'].lower() != target.lower():
+                        output.append([temp, data[img]['ethnicity'], data[img]['gender'], data[img]['age'], data[img]['emotion']])
         return output
     
 from deepface.commons import functions
@@ -75,7 +78,7 @@ def getImageObjects(img_path,
     
 def getImageContents(img_path,
     enforce_detection=True,
-    detector_backend="ssd",
+    detector_backend="retinaface",
     align=True,
 ):
     img_objs = getImageObjects(img_path, 
@@ -168,7 +171,7 @@ def prepare_accessory(colour: str, accessory_dir: str, accessory_type: str) -> t
     mask = cv2.threshold(accessory, 0, 1, cv2.THRESH_BINARY)[1]
     
     # make a colour mask of the chosen colour
-    colour_info = json.load(open("./assets/starting_colours.json", 'r'))
+    colour_info = json.load(open("D:/Github/capstone-project-team-31/experiment/assets/starting_colours.json", 'r'))
     colour = colour_info[colour]
         
     coloured_matrix = np.array([[colour for i in range(accessory.shape[1])] for j in range(accessory.shape[0])])

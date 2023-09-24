@@ -100,7 +100,7 @@ class AdversarialPatternGenerator:
                 elif self.mode == "dodge":
                     label = cleanup_labels(self.processed_imgs[i][self.class_num])
                 
-                _, confidences[i] = get_confidence_in_selected_class(cleanup_dims(temp_attack), self.classification, label, self.model, True)
+                _, confidences[i] = get_confidence_in_selected_class(cleanup_dims(temp_attack), self.classification, label, self.model, False)
                 
             avg_true_class_conf = np.mean(confidences)
 
