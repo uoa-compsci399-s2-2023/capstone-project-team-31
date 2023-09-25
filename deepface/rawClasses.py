@@ -195,7 +195,7 @@ def sideBySide(imageA, labelA, imageB, labelB):
 
 def getImageObjects(img_path,
     enforce_detection=True,
-    detector_backend="opencv",
+    detector_backend="retinaface",
     align=True,
 ):
     img_objs = functions.extract_faces(
@@ -211,7 +211,7 @@ def getImageObjects(img_path,
     
 def getImageContents(img_path,
     enforce_detection=True,
-    detector_backend="opencv",
+    detector_backend="retinaface",
     align=True,
 ):
     img_objs = getImageObjects(img_path, 

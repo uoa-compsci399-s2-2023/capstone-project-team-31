@@ -1,0 +1,18 @@
+Accuracy on predicting ethnicity (10 images, ethnicity: White): 0.6
+Accuracy on predicting ethnicity (10 images, ethnicity: White): 0.8
+Accuracy on predicting ethnicity (10 images, ethnicity: White): 0.9
+Accuracy on predicting ethnicity (10 images, ethnicity: White): 0.9
+Accuracy on predicting ethnicity (10 images, ethnicity: White): 0.8
+Accuracy on predicting ethnicity (10 images, ethnicity: White): 0.9
+Accuracy on predicting ethnicity (10 images, ethnicity: Black): 0.9
+Accuracy on predicting ethnicity (10 images, ethnicity: Black): 1.0
+Accuracy on predicting ethnicity (10 images, ethnicity: Black): 1.0
+Accuracy on predicting ethnicity (10 images, ethnicity: Black): 0.8
+Accuracy on predicting ethnicity (10 images, ethnicity: Black): 0.8
+Accuracy on predicting ethnicity (10 images, ethnicity: Black): 0.9
+Accuracy on predicting ethnicity (10 images, ethnicity: East Asian): 1.0
+Accuracy on predicting ethnicity (10 images, ethnicity: East Asian): 0.8
+Accuracy on predicting ethnicity (10 images, ethnicity: East Asian): 0.9
+Accuracy on predicting ethnicity (10 images, ethnicity: East Asian): 1.0
+Accuracy on predicting ethnicity (10 images, ethnicity: East Asian): 0.8
+Accuracy on predicting ethnicity (10 images, ethnicity: East Asian): 0.9

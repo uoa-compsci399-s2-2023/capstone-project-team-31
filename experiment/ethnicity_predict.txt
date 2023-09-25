@@ -1,0 +1,18 @@
+Accuracy on predicting ethnicity (1000 images, ethnicity: White, accessory type: facemask, accessory colour: white): 0.74
+Accuracy on predicting ethnicity (1000 images, ethnicity: White, accessory type: bandana, accessory colour: white): 0.818
+Accuracy on predicting ethnicity (1000 images, ethnicity: White, accessory type: glasses, accessory colour: white): 0.947
+Accuracy on predicting ethnicity (1000 images, ethnicity: White, accessory type: facemask, accessory colour: black): 0.667
+Accuracy on predicting ethnicity (1000 images, ethnicity: White, accessory type: bandana, accessory colour: black): 0.826
+Accuracy on predicting ethnicity (1000 images, ethnicity: White, accessory type: glasses, accessory colour: black): 0.788
+Accuracy on predicting ethnicity (1000 images, ethnicity: Black, accessory type: facemask, accessory colour: white): 0.15
+Accuracy on predicting ethnicity (1000 images, ethnicity: Black, accessory type: bandana, accessory colour: white): 0.713
+Accuracy on predicting ethnicity (1000 images, ethnicity: Black, accessory type: glasses, accessory colour: white): 0.354
+Accuracy on predicting ethnicity (1000 images, ethnicity: Black, accessory type: facemask, accessory colour: black): 0.674
+Accuracy on predicting ethnicity (1000 images, ethnicity: Black, accessory type: bandana, accessory colour: black): 0.793
+Accuracy on predicting ethnicity (1000 images, ethnicity: Black, accessory type: glasses, accessory colour: black): 0.782
+Accuracy on predicting ethnicity (1000 images, ethnicity: East Asian, accessory type: facemask, accessory colour: white): 0.767
+Accuracy on predicting ethnicity (1000 images, ethnicity: East Asian, accessory type: bandana, accessory colour: white): 0.69
+Accuracy on predicting ethnicity (1000 images, ethnicity: East Asian, accessory type: glasses, accessory colour: white): 0.515
+Accuracy on predicting ethnicity (1000 images, ethnicity: East Asian, accessory type: facemask, accessory colour: black): 0.79
+Accuracy on predicting ethnicity (1000 images, ethnicity: East Asian, accessory type: bandana, accessory colour: black): 0.82
+Accuracy on predicting ethnicity (1000 images, ethnicity: East Asian, accessory type: glasses, accessory colour: black): 0.868
