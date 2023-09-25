@@ -1849,5 +1849,276 @@
         "age": "30",
         "gender": "Female",
         "emotion": "happy"
+    },
+    "anne-blank.jpg": {
+        "ethnicity": "European",
+        "age": "23",
+        "gender": "Female",
+        "emotion": "neutral"
+    },
+    "eric-blank.jpg": {
+        "ethnicity": "Asian",
+        "age": "22",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "matt-blank.jpg": {
+        "ethnicity": "Asian",
+        "age": "23",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "ivan-blank.jpg": {
+        "ethnicity": "European",
+        "age": "20",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "mikayla-blank.jpg": {
+        "ethnicity": "European",
+        "age": "22",
+        "gender": "Female",
+        "emotion": "neutral"
+    },
+    "anne-m1.jpg": {
+        "ethnicity": "European",
+        "age": "23",
+        "gender": "Female",
+        "emotion": "neutral"
+    },
+    "eric-m1.jpg": {
+        "ethnicity": "Asian",
+        "age": "22",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "matt-m1.jpg": {
+        "ethnicity": "Asian",
+        "age": "23",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "ivan-m1.jpg": {
+        "ethnicity": "European",
+        "age": "20",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "mikayla-m1.jpg": {
+        "ethnicity": "European",
+        "age": "22",
+        "gender": "Female",
+        "emotion": "neutral"
+    },
+    "anne-m1-bent.jpg": {
+        "ethnicity": "European",
+        "age": "23",
+        "gender": "Female",
+        "emotion": "neutral"
+    },
+    "eric-m1-bent.jpg": {
+        "ethnicity": "Asian",
+        "age": "22",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "matt-m1-bent.jpg": {
+        "ethnicity": "Asian",
+        "age": "23",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "ivan-m1-bent.jpg": {
+        "ethnicity": "European",
+        "age": "20",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "mikayla-m1-bent.jpg": {
+        "ethnicity": "European",
+        "age": "22",
+        "gender": "Female",
+        "emotion": "neutral"
+    },
+    "anne-m2.jpg": {
+        "ethnicity": "European",
+        "age": "23",
+        "gender": "Female",
+        "emotion": "neutral"
+    },
+    "eric-m2.jpg": {
+        "ethnicity": "Asian",
+        "age": "22",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "matt-m2.jpg": {
+        "ethnicity": "Asian",
+        "age": "23",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "ivan-m2.jpg": {
+        "ethnicity": "European",
+        "age": "20",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "mikayla-m2.jpg": {
+        "ethnicity": "European",
+        "age": "22",
+        "gender": "Female",
+        "emotion": "neutral"
+    },
+    "anne-m2-bent.jpg": {
+        "ethnicity": "European",
+        "age": "23",
+        "gender": "Female",
+        "emotion": "neutral"
+    },
+    "eric-m2-bent.jpg": {
+        "ethnicity": "Asian",
+        "age": "22",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "matt-m2-bent.jpg": {
+        "ethnicity": "Asian",
+        "age": "23",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "ivan-m2-bent.jpg": {
+        "ethnicity": "European",
+        "age": "20",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "mikayla-m2-bent.jpg": {
+        "ethnicity": "European",
+        "age": "22",
+        "gender": "Female",
+        "emotion": "neutral"
+    },
+    "anne-m3.jpg": {
+        "ethnicity": "European",
+        "age": "23",
+        "gender": "Female",
+        "emotion": "neutral"
+    },
+    "eric-m3.jpg": {
+        "ethnicity": "Asian",
+        "age": "22",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "matt-m3.jpg": {
+        "ethnicity": "Asian",
+        "age": "23",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "ivan-m3.jpg": {
+        "ethnicity": "European",
+        "age": "20",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "mikayla-m3.jpg": {
+        "ethnicity": "European",
+        "age": "22",
+        "gender": "Female",
+        "emotion": "neutral"
+    },
+    "anne-m3-bent.jpg": {
+        "ethnicity": "European",
+        "age": "23",
+        "gender": "Female",
+        "emotion": "neutral"
+    },
+    "eric-m3-bent.jpg": {
+        "ethnicity": "Asian",
+        "age": "22",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "matt-m3-bent.jpg": {
+        "ethnicity": "Asian",
+        "age": "23",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "ivan-m3-bent.jpg": {
+        "ethnicity": "European",
+        "age": "20",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "mikayla-m3-bent.jpg": {
+        "ethnicity": "European",
+        "age": "22",
+        "gender": "Female",
+        "emotion": "neutral"
+    },
+    "anne-m4.jpg": {
+        "ethnicity": "European",
+        "age": "23",
+        "gender": "Female",
+        "emotion": "neutral"
+    },
+    "eric-m4.jpg": {
+        "ethnicity": "Asian",
+        "age": "22",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "matt-m4.jpg": {
+        "ethnicity": "Asian",
+        "age": "23",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "ivan-m4.jpg": {
+        "ethnicity": "European",
+        "age": "20",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "mikayla-m4.jpg": {
+        "ethnicity": "European",
+        "age": "22",
+        "gender": "Female",
+        "emotion": "neutral"
+    },
+    "anne-m4-bent.jpg": {
+        "ethnicity": "European",
+        "age": "23",
+        "gender": "Female",
+        "emotion": "neutral"
+    },
+    "eric-m4-bent.jpg": {
+        "ethnicity": "Asian",
+        "age": "22",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "matt-m4-bent.jpg": {
+        "ethnicity": "Asian",
+        "age": "23",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "ivan-m4-bent.jpg": {
+        "ethnicity": "European",
+        "age": "20",
+        "gender": "Male",
+        "emotion": "neutral"
+    },
+    "mikayla-m4-bent.jpg": {
+        "ethnicity": "European",
+        "age": "22",
+        "gender": "Female",
+        "emotion": "neutral"
     }
+
 }
