@@ -13,7 +13,7 @@ def pre_process_imgs():
     pass
 
 
-def prepare_images(images_dir: str, num_images: int) -> list:
+def prepare_images(images_dir: str, num_images: int, mode="dodge", classification=None, target=None, seperate=True) -> list:
     '''
     Which images will be used for generating an adversarial pattern (could be all in the images directory)
     the silouhette mask for the chosen accessory, in the given colour
@@ -36,7 +36,12 @@ def prepare_images(images_dir: str, num_images: int) -> list:
     if images_dir.endswith(".db"): # if the images are stored in a database
         conn = sqlite3.connect(abs_path)
         cursor = conn.cursor()
-        images = cursor.execute("SELECT * FROM images ORDER BY RANDOM() LIMIT ?", (num_images,)).fetchall()
+        if mode == "impersonation" and seperate:
+            print(classification, target)
+            command = "SELECT * FROM images WHERE {} != ? ORDER BY RANDOM() LIMIT {}".format(classification, num_images)
+            images = cursor.execute(command, (target,)).fetchall()
+        else:
+            images = cursor.execute("SELECT * FROM images ORDER BY RANDOM() LIMIT ?", (num_images,)).fetchall()
         conn.close()
         return images
     else: # if the images are stored in a directory
@@ -54,7 +59,7 @@ from deepface.commons import functions
 
 def getImageObjects(img_path,
     enforce_detection=True,
-    detector_backend="opencv",
+    detector_backend="retinaface",
     align=True,
 ):
     img_objs = functions.extract_faces(
@@ -115,7 +120,7 @@ def image_to_face(image: tuple):
     
     return outputImage
 
-def prepare_processed_images(images_dir: str, num_images: int):
+def prepare_processed_images(images_dir: str, num_images: int,  mode="dodge", classification=None, target=None, seperate=True):
     '''
     Detect faces and normalize a given amount of images
     
@@ -126,7 +131,7 @@ def prepare_processed_images(images_dir: str, num_images: int):
     Returns:
     * list of processed images in the form  (img , ethnicity, gender, age, emotion)
     '''
-    image_list = prepare_images(images_dir, num_images)
+    image_list = prepare_images(images_dir, num_images,  mode=mode, classification=classification, target=target, seperate=seperate)
     output_list = []
     for image in image_list:
         prepared_image = image_to_face(image)     
@@ -234,6 +239,32 @@ def reverse_accessory_move(accessory_image: np.ndarray, accessory_mask: np.ndarr
     accessory_mask = rot_aug.augment_image(accessory_mask)
     accessory_mask = np.roll(accessory_mask, (movement_info['horizontal'] * -1, movement_info['vertical'] * -1), axis=(0, 1))
     return accessory_image, accessory_mask
+
+def merge_accessories(accessory_dir: str, num_images: int) -> np.ndarray:
+    '''
+    Merges accessories into one by averaging each pixel
+
+    Args:
+    * accessory_dir: directory of accessories
+    * num_images: sample size
+
+    Returns:
+    * final_mask: averaged mask
+    '''
+    abs_path = os.path.abspath(os.path.join(os.path.dirname( __file__ ), os.pardir, accessory_dir))
+
+    images = os.listdir(accessory_dir)
+    rand_images = random.sample(images, num_images)
+    mat_sum = np.zeros((224,224,3))
+
+    for img in rand_images:
+        temp =  cv2.imread(os.path.join(abs_path, img))
+        mat_sum = mat_sum + temp
+    
+    mat_sum = mat_sum/num_images
+    final_mask = mat_sum.astype(np.uint8)
+
+    return final_mask
 
 def apply_accessory(image: np.ndarray, aug_accessory_image: np.ndarray, org_accessory_image) -> np.ndarray:
     mask = np.where(org_accessory_image == 0)
@@ -359,19 +390,6 @@ def get_printable_vals(num_colors = 32) -> np.array:
     '''
     # inspo1: https://github.com/mahmoods01/accessorize-to-a-crime/blob/master/aux/attack/get_printable_vals.m
     # inspo2: https://github.com/mahmoods01/accessorize-to-a-crime/blob/master/aux/attack/make_printable_vals_struct.m
-    
-    """ print_img = Image.open('experiment/assets/printed-palette.png')
-    img_arr = np.asarray(print_img)
-
-    # Cuts 3% of edges from each side (subject to change)
-    cut_h = round(0.015*img_arr.shape[1])
-    cut_v = round(0.015*img_arr.shape[0])
-    img_arr = img_arr[cut_v:-cut_v, cut_h:-cut_h,:]
-
-    # Uniform quantization, Minimum Variance Optimization not available in python (subject to change)
-    printable_vals = np.round(img_arr*(num_colors/255))*(255//num_colors)
-    printable_vals = printable_vals.reshape(-1, img_arr.shape[2])
-    printable_vals.sort(axis=0) """
 
     printable_vals = []
     with open('./assets/printable_vals.txt') as file:

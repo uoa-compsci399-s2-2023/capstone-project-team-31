@@ -1,1 +1,4 @@
 *.pyc
+/Fairfacedb
+/test_images
+/Results
