@@ -1,0 +1,6 @@
+Accuracy on predicting male (1000 images, ethnicity: White): 0.973
+Accuracy on predicting female (1000 images, ethnicity: White): 0.495
+Accuracy on predicting male (1000 images, ethnicity: Black): 0.979
+Accuracy on predicting female (1000 images, ethnicity: Black): 0.192
+Accuracy on predicting male (1000 images, ethnicity: East Asian): 0.963
+Accuracy on predicting female (1000 images, ethnicity: East Asian): 0.538

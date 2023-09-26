@@ -1,0 +1,36 @@
+Accuracy on predicting male (1000 images, ethnicity: White, accessory type: facemask, accessory colour: white): 0.995
+Accuracy on predicting female (100 images, ethnicity: White, accessory type: facemask, accessory colour: white): 0.13
+Accuracy on predicting male (1000 images, ethnicity: White, accessory type: bandana, accessory colour: white): 0.982
+Accuracy on predicting female (100 images, ethnicity: White, accessory type: bandana, accessory colour: white): 0.29
+Accuracy on predicting male (1000 images, ethnicity: White, accessory type: glasses, accessory colour: white): 0.947
+Accuracy on predicting female (100 images, ethnicity: White, accessory type: glasses, accessory colour: white): 0.51
+Accuracy on predicting male (1000 images, ethnicity: White, accessory type: facemask, accessory colour: black): 0.987
+Accuracy on predicting female (100 images, ethnicity: White, accessory type: facemask, accessory colour: black): 0.12
+Accuracy on predicting male (1000 images, ethnicity: White, accessory type: bandana, accessory colour: black): 0.955
+Accuracy on predicting female (100 images, ethnicity: White, accessory type: bandana, accessory colour: black): 0.41
+Accuracy on predicting male (1000 images, ethnicity: White, accessory type: glasses, accessory colour: black): 0.95
+Accuracy on predicting female (100 images, ethnicity: White, accessory type: glasses, accessory colour: black): 0.45
+Accuracy on predicting male (1000 images, ethnicity: Black, accessory type: facemask, accessory colour: white): 0.999
+Accuracy on predicting female (100 images, ethnicity: Black, accessory type: facemask, accessory colour: white): 0.04
+Accuracy on predicting male (1000 images, ethnicity: Black, accessory type: bandana, accessory colour: white): 0.991
+Accuracy on predicting female (100 images, ethnicity: Black, accessory type: bandana, accessory colour: white): 0.06
+Accuracy on predicting male (1000 images, ethnicity: Black, accessory type: glasses, accessory colour: white): 0.951
+Accuracy on predicting female (100 images, ethnicity: Black, accessory type: glasses, accessory colour: white): 0.16
+Accuracy on predicting male (1000 images, ethnicity: Black, accessory type: facemask, accessory colour: black): 0.993
+Accuracy on predicting female (100 images, ethnicity: Black, accessory type: facemask, accessory colour: black): 0.07
+Accuracy on predicting male (1000 images, ethnicity: Black, accessory type: bandana, accessory colour: black): 0.984
+Accuracy on predicting female (100 images, ethnicity: Black, accessory type: bandana, accessory colour: black): 0.11
+Accuracy on predicting male (1000 images, ethnicity: Black, accessory type: glasses, accessory colour: black): 0.963
+Accuracy on predicting female (100 images, ethnicity: Black, accessory type: glasses, accessory colour: black): 0.16
+Accuracy on predicting male (1000 images, ethnicity: East Asian, accessory type: facemask, accessory colour: white): 0.997
+Accuracy on predicting female (100 images, ethnicity: East Asian, accessory type: facemask, accessory colour: white): 0.07
+Accuracy on predicting male (1000 images, ethnicity: East Asian, accessory type: bandana, accessory colour: white): 0.971
+Accuracy on predicting female (100 images, ethnicity: East Asian, accessory type: bandana, accessory colour: white): 0.32
+Accuracy on predicting male (1000 images, ethnicity: East Asian, accessory type: glasses, accessory colour: white): 0.955
+Accuracy on predicting female (100 images, ethnicity: East Asian, accessory type: glasses, accessory colour: white): 0.38
+Accuracy on predicting male (1000 images, ethnicity: East Asian, accessory type: facemask, accessory colour: black): 0.994
+Accuracy on predicting female (100 images, ethnicity: East Asian, accessory type: facemask, accessory colour: black): 0.18
+Accuracy on predicting male (1000 images, ethnicity: East Asian, accessory type: bandana, accessory colour: black): 0.935
+Accuracy on predicting female (100 images, ethnicity: East Asian, accessory type: bandana, accessory colour: black): 0.44
+Accuracy on predicting male (1000 images, ethnicity: East Asian, accessory type: glasses, accessory colour: black): 0.951
+Accuracy on predicting female (100 images, ethnicity: East Asian, accessory type: glasses, accessory colour: black): 0.33
