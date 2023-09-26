@@ -2455,6 +2455,198 @@
         "age": "51",
         "gender": "Male",
         "emotion": "neutral"
+    },
+    "w1.png": {
+        "ethnicity": "Pacific Islander",
+        "age": "66",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "w2.png": {
+        "ethnicity": "Pacific Islander",
+        "age": "62",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "w3.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "65",
+        "gender": "Female",
+        "emotion": "neutral"
+    },
+    "w4.png": {
+        "ethnicity": "Pacific Islander",
+        "age": "59",
+        "gender": "Female",
+        "emotion": "neutral"
+    },
+    "w5.png": {
+        "ethnicity": "Pacific Islander",
+        "age": "32",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "w11.png": {
+        "ethnicity": "Pacific Islander",
+        "age": "29",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "w12.png": {
+        "ethnicity": "Pacific Islander",
+        "age": "34",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "w13.png": {
+        "ethnicity": "Pacific Islander",
+        "age": "61",
+        "gender": "Female",
+        "emotion": "neutral"
+    },
+    "w15.png": {
+        "ethnicity": "Pacific Islander",
+        "age": "63",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "w16.png": {
+        "ethnicity": "Pacific Islander",
+        "age": "45",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "w17.png": {
+        "ethnicity": "Pacific Islander",
+        "age": "58",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "w18.png": {
+        "ethnicity": "Pacific Islander",
+        "age": "56",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "w19.png": {
+        "ethnicity": "Pacific Islander",
+        "age": "57",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "w20.png": {
+        "ethnicity": "Pacific Islander",
+        "age": "64",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "w21.png": {
+        "ethnicity": "Pacific Islander",
+        "age": "58",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "w22.png": {
+        "ethnicity": "Pacific Islander",
+        "age": "62",
+        "gender": "Female",
+        "emotion": "neutral"
+    },
+    "w23.png": {
+        "ethnicity": "Pacific Islander",
+        "age": "43",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "w24.png": {
+        "ethnicity": "Pacific Islander",
+        "age": "47",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "w25.png": {
+        "ethnicity": "Pacific Islander",
+        "age": "32",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "w26.png": {
+        "ethnicity": "Pacific Islander",
+        "age": "69",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "w27.png": {
+        "ethnicity": "Pacific Islander",
+        "age": "45",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "w28.png": {
+        "ethnicity": "Pacific Islander",
+        "age": "31",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "w29.png": {
+        "ethnicity": "Pacific Islander",
+        "age": "37",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "w30.png": {
+        "ethnicity": "Pacific Islander",
+        "age": "73",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "w31.png": {
+        "ethnicity": "Pacific Islander",
+        "age": "71",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "w32.png": {
+        "ethnicity": "Pacific Islander",
+        "age": "52",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "w6.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "39",
+        "gender": "Female",
+        "emotion": "neutral"
+    },
+    "w7.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "61",
+        "gender": "Female",
+        "emotion": "angry"
+    },
+    "w8.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "63",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "w9.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "65",
+        "gender": "Female",
+        "emotion": "happy"
+    },
+    "w10.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "52",
+        "gender": "Female",
+        "emotion": "sad"
+    },
+    "w14.jpg": {
+        "ethnicity": "Pacific Islander",
+        "age": "74",
+        "gender": "Female",
+        "emotion": "happy"
     }
 
 }
