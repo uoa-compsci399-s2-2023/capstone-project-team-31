@@ -1,0 +1,6 @@
+,True Gender,Classified Gender,Gender confidence,True Ethnicity,Classified Ethnicity,Ethnicity confidence,True Mood,Classified Mood,Mood confidence,True Age,Classified Age,Age confidence
+0,Female,Woman,1.0,European,white,1.0,neutral,happy,1.0,23,22,1.0
+1,Female,Man,1.0,European,black,1.0,neutral,angry,1.0,22,23,1.0
+2,Male,Man,1.0,European,white,1.0,neutral,neutral,1.0,20,19,1.0
+3,Male,Man,1.0,Asian,asian,1.0,neutral,happy,1.0,22,32,1.0
+4,Male,Man,1.0,Asian,middle eastern,1.0,neutral,happy,1.0,23,29,1.0
