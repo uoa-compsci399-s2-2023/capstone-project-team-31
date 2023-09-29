@@ -29,7 +29,6 @@ class Ui_MainWindow(object):
         self.Image.setMinimumSize(QtCore.QSize(0, 500))
         self.Image.setObjectName("Image")
         self.Image.setPixmap(QtGui.QPixmap())
-        self.Image.setScaledContents(True)
         self.display_layout.addWidget(self.Image)
         self.next_image = QtWidgets.QPushButton(self.centralwidget)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Preferred)

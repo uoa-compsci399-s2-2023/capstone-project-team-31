@@ -81,8 +81,7 @@ class Ui_MainWindow(object):
         self.impersonation_label.setSizePolicy(sizePolicy)
         self.impersonation_label.setMinimumSize(QtCore.QSize(0, 100))
         self.impersonation_label.setMaximumSize(QtCore.QSize(16777215, 100))
-        font = QtGui.QFont()
-        font.setPointSize(20)
+
         self.impersonation_label.setFont(font)
         self.impersonation_label.setAlignment(QtCore.Qt.AlignCenter)
         self.impersonation_label.setObjectName("impersonation_label")
@@ -107,7 +106,6 @@ class Ui_MainWindow(object):
         self.digital_attack_btn.setSizePolicy(sizePolicy)
         self.digital_attack_btn.setMinimumSize(QtCore.QSize(0, 50))
 
-        font = QtGui.QFont()
         font.setPointSize(15)
         self.digital_attack_btn.setFont(font)
         self.digital_attack_btn.setObjectName("digital_attack_btn")
