@@ -8,6 +8,7 @@ from experiment_model import Experiment
 from scipy.ndimage.filters import gaussian_filter
 import tensorflow as tf
 import matplotlib.pyplot as plt
+from collections import Counter
 
 ## define an experiment object with relevant parameters
 
@@ -83,7 +84,7 @@ class AdversarialPatternGenerator:
         
         for colour in self.colours:
             
-            accessory_img, accessory_mask = prepare_accessory(colour, "./assets/{}.png".format(self.accessory_type.lower()), self.accessory_type)
+            accessory_img, accessory_mask = prepare_accessory(colour, "experiment/assets/{}.png".format(self.accessory_type.lower()), self.accessory_type)
             
             confidences = np.empty(self.num_images)
             
@@ -165,10 +166,20 @@ class AdversarialPatternGenerator:
                 img_copy = np.copy(self.processed_imgs[j][0])
                 attack = apply_accessory(img_copy, round_accessory_im, round_accessory_area)
 
+                """ cv2.imshow('image window', attack)
+                cv2.waitKey(0)
+                cv2.destroyAllWindows() """
+
                 attacks[j] = attack
                 movements[j] = movement_info
                 areas_to_perturb[j] = round_accessory_area
-                
+
+                attack, _ = change_con_bright(np.copy(attack), 20)
+
+                """ cv2.imshow('image window', attack)
+                cv2.waitKey(0)
+                cv2.destroyAllWindows() """
+
                 if labels[j] is None:
                     if self.mode == "impersonation":
                         labels[j] = self.target
@@ -280,6 +291,12 @@ class AdversarialPatternGenerator:
 
                 lowest_pert[2] = np.copy(acc_img)
                 lowest_output = output
+
+                imgs = np.concatenate((lowest_pert[2], lowest_pert[0]), axis=0)
+
+                """ cv2.imshow('image window', imgs)
+                cv2.waitKey(0)
+                cv2.destroyAllWindows() """
                 
             # display
             if self.verbose:
@@ -304,17 +321,18 @@ class AdversarialPatternGenerator:
         plt.figtext(0.5, 0.01, 'Classified: {}, Confidence: {}'.format(lowest_output['classified'], lowest_output['confidence']), ha="center")
         plt.show()
 
-        #cv2.imwrite('Test_pert.png', lowest_pert[2])
+        cv2.imwrite('Results/Test_pert.png', lowest_pert[2])
         return final_attacks, experiment
 
     # return final pertubation result, with deepface's average confidence in predicting true classes
 
     def run(self):
-        starting_point = self.get_best_starting_colour()
+        with tf.device('/device:GPU:0'):
+            starting_point = self.get_best_starting_colour()
 
-        result, experiment_result = self.run_experiment(starting_point)
+            result, experiment_result = self.run_experiment(starting_point)
         
-        cv2.imwrite("./results/accessory_image.png", experiment_result.get_image())        
+        #cv2.imwrite("./results/accessory_image.png", experiment_result.get_image())        
         
         for attack in result[::int(self.num_images*0.80)]:
             cv2.imshow('image window', attack)
@@ -334,34 +352,17 @@ def cleanup_labels(true_class:str):
         
     return result
 
-def validate_images(val_images_dir: str, accessory_dir: str, accessory_type: str, num_images: int, mode="dodge", classification=None, target=None, seperate=True, verbose=False) -> tuple:
-    '''
-    Returns performance of generated accessory on validation set
-
-    Args:
-    * val_images_dir: directory of validation set
-    * accessory_dir: directory of accessory file
-    * accessory_type: type of accessory
-    * num_images: number of images to be validated
-    * mode: dodge or impersonation
-    * classification: classification task
-    * target: if impersonation, must specify target class
-    * separate: option to isolate the dataaset class
-    * verbose: add more details in runtime
-
-    Returns:
-    * s_rate: success rate of accessory attack
-    * u_count: unidentified faces in validation set
-    '''
-
+def validate_images(val_images_dir: str, accessory_dir: str, accessory_type: str, num_images: int, mode="dodge", classification=None, target=None, seperate=True, verbose=False) -> float:
     get_images = prepare_images(val_images_dir, num_images, mode, classification, target, seperate)
-    _, accessory_mask = prepare_accessory('red', "experiment/assets/{}.png".format(accessory_type.lower()), accessory_type)
-    accessory = cv2.imread(accessory_dir)
+    
+    if accessory_dir != '':
+        _, accessory_mask = prepare_accessory('red', "experiment/assets/{}.png".format(accessory_type.lower()), accessory_type)
+        accessory = cv2.imread(accessory_dir)
 
     e = attributeModel(classification)
 
-    counter = 0
-    u_count = 0
+    i_count = 0
+    val_list = []
 
     for ind, im in enumerate(get_images):
         print(ind, '/', num_images, ' images')
@@ -369,11 +370,15 @@ def validate_images(val_images_dir: str, accessory_dir: str, accessory_type: str
 
         if prep_img != None:
             img_copy = np.copy(prep_img[0])
-            image = apply_accessory(img_copy, accessory, accessory_mask)
+
+            if accessory_dir != '':
+                image = apply_accessory(img_copy, accessory, accessory_mask)
+            else:
+                image = img_copy
+
             preds = e.predict_verbose(cleanup_dims(image))
 
-            if preds['classified'].lower() == target.lower():
-                counter += 1
+            val_list.append(preds['classified'].lower())
             
             if verbose == True:
                 print(preds)
@@ -381,14 +386,12 @@ def validate_images(val_images_dir: str, accessory_dir: str, accessory_type: str
                 cv2.waitKey(0)
                 cv2.destroyAllWindows()
 
-        else:
-            u_count += 1
+            i_count += 1
+    
+    count = Counter(val_list)
+    print('Identified faces: ', i_count)
 
-    s_rate = counter/(num_images-u_count)
-    print('Success rate with val data: ', s_rate)
-    print('Unidentified faces: ', u_count)
-
-    return s_rate, u_count
+    return count
 
 def cleanup_dims(image):
     

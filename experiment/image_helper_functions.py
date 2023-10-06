@@ -30,7 +30,8 @@ def prepare_images(images_dir: str, num_images: int, mode="dodge", classificatio
     # take a random permutation of image filenames from images_dir of size num_images
     # for each iamge filename, load the image and store it in some type of structure (e.g. list/json whatever)
 
-    
+    random.seed(0)
+
     abs_path = os.path.abspath(os.path.join(os.path.dirname( __file__ ), os.pardir, images_dir)) #bug fixing
     
     if images_dir.endswith(".db"): # if the images are stored in a database
@@ -46,11 +47,13 @@ def prepare_images(images_dir: str, num_images: int, mode="dodge", classificatio
         return images
     else: # if the images are stored in a directory
         images = os.listdir(abs_path)
-        rand_images = random.sample(images, num_images)
+        #rand_images = random.sample(images, num_images)
         output = []
-        with open("./Faces.json", 'r') as f:
+        with open("./test_images/male_test.json", 'r') as f:
             data = json.load(f)
-            for img in rand_images:
+            temp_images = random.sample(list(data.keys()), num_images)
+
+            for img in temp_images:
                 temp =  cv2.imread(os.path.join(abs_path, img))
                 output.append([temp, data[img]['ethnicity'], data[img]['gender'], data[img]['age'], data[img]['emotion']])
         return output
@@ -59,7 +62,7 @@ from deepface.commons import functions
 
 def getImageObjects(img_path,
     enforce_detection=True,
-    detector_backend="retinaface",
+    detector_backend="opencv",
     align=True,
 ):
     img_objs = functions.extract_faces(
@@ -156,7 +159,7 @@ def prepare_accessory(colour: str, accessory_dir: str, accessory_type: str) -> t
     
     fname = accessory_type.lower()
 
-    if fname == "glasses" or fname == "facemask" or fname == "bandana" or fname == "earrings":
+    if fname == "glasses" or fname == "facemask" or fname == "bandana" or fname == "new_glasses":
         # load glasses_silhouette, find what pixels are white (i.e. colour value not rgb (0,0,0)) and make a colour mask of the chosen colour
         accessory = cv2.imread(accessory_dir)
     else:
@@ -168,7 +171,7 @@ def prepare_accessory(colour: str, accessory_dir: str, accessory_type: str) -> t
     mask = cv2.threshold(accessory, 0, 1, cv2.THRESH_BINARY)[1]
     
     # make a colour mask of the chosen colour
-    colour_info = json.load(open("./assets/starting_colours.json", 'r'))
+    colour_info = json.load(open("experiment/assets/starting_colours.json", 'r'))
     colour = colour_info[colour]
         
     coloured_matrix = np.array([[colour for i in range(accessory.shape[1])] for j in range(accessory.shape[0])])
@@ -270,6 +273,29 @@ def apply_accessory(image: np.ndarray, aug_accessory_image: np.ndarray, org_acce
     mask = np.where(org_accessory_image == 0)
     image[mask] = aug_accessory_image[mask]
     return image
+
+def change_con_bright(image: np.ndarray, range: int) -> tuple:
+    '''
+    Changes contrast and brightness of image
+
+    Args:
+        image: single rgb matric with shape (h,w,3)
+        range: range at which brightness and contrast is randomised
+    
+    Returns:
+        changed_image: image with modified brightness and contrast
+        ab_params: contrast and brightness parameters
+
+    '''
+
+    beta = np.random.randint(-range, range)
+    alpha =  1 + beta/100
+
+    img_copy = np.copy(image)
+    changed_image = cv2.convertScaleAbs(img_copy, alpha=alpha, beta=beta)
+    ab_params = (alpha, beta)
+
+    return changed_image, ab_params
 
 def total_variation(image: np.array, beta = 1) -> tuple:
     '''
@@ -392,7 +418,7 @@ def get_printable_vals(num_colors = 32) -> np.array:
     # inspo2: https://github.com/mahmoods01/accessorize-to-a-crime/blob/master/aux/attack/make_printable_vals_struct.m
 
     printable_vals = []
-    with open('./assets/printable_vals.txt') as file:
+    with open('experiment/assets/printable_vals.txt') as file:
         lines = file.readlines()
         for line in lines:
             line = line.split()
