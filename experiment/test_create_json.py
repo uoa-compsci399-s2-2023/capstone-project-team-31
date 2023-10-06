@@ -16,9 +16,10 @@ import os
 os.chdir('C:/Users/matta/Desktop/Capstone/')
 os.getcwd()
 
-classification = 'gender'
-label = 'Female'
+classification = 'ethnicity'
+label = 'black'
 database = 'val'
+besides = True
 
 train_df = pd.read_csv("Fairfacedb/fairface_label_train.csv")
 test_df = pd.read_csv("Fairfacedb/fairface_label_val.csv")
@@ -46,11 +47,18 @@ elif database == 'val':
 idx = final_df[(final_df['ethnicity'] == 'East Asian') | (final_df['ethnicity'] == 'Southeast Asian')].index
 final_df.loc[idx, 'ethnicity'] = 'Asian'
 
-sorted_df = final_df[final_df[classification] == label]
+if besides:
+    sorted_df = final_df[final_df[classification] != label]
+else: 
+    sorted_df = final_df[final_df[classification] == label]
 print(sorted_df)
 
 label_json = sorted_df.to_dict(orient='index')
-json_name = str(label + '_' + database +'.json')
+
+if besides:
+    json_name = str('not' + label + '_' + database +'.json')
+else:
+    json_name = str('not' + label + '_' + database +'.json')
 
 with open(json_name, "w") as outfile:
     json.dump(label_json, outfile)

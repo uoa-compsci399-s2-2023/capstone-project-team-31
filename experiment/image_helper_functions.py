@@ -30,7 +30,8 @@ def prepare_images(images_dir: str, num_images: int, mode="dodge", classificatio
     # take a random permutation of image filenames from images_dir of size num_images
     # for each iamge filename, load the image and store it in some type of structure (e.g. list/json whatever)
 
-    
+    random.seed(0)
+
     abs_path = os.path.abspath(os.path.join(os.path.dirname( __file__ ), os.pardir, images_dir)) #bug fixing
     
     if images_dir.endswith(".db"): # if the images are stored in a database
@@ -48,7 +49,7 @@ def prepare_images(images_dir: str, num_images: int, mode="dodge", classificatio
         images = os.listdir(abs_path)
         #rand_images = random.sample(images, num_images)
         output = []
-        with open("./my_face.json", 'r') as f:
+        with open("./test_images/male_test.json", 'r') as f:
             data = json.load(f)
             temp_images = random.sample(list(data.keys()), num_images)
 
@@ -139,8 +140,6 @@ def prepare_processed_images(images_dir: str, num_images: int,  mode="dodge", cl
         prepared_image = image_to_face(image)     
         if(prepared_image != None):
             output_list.append(prepared_image)
-        if len(output_list) == 50:
-            break
         
     return output_list
 
@@ -160,7 +159,7 @@ def prepare_accessory(colour: str, accessory_dir: str, accessory_type: str) -> t
     
     fname = accessory_type.lower()
 
-    if fname == "glasses" or fname == "facemask" or fname == "bandana" or fname == "earrings":
+    if fname == "glasses" or fname == "facemask" or fname == "bandana" or fname == "new_glasses":
         # load glasses_silhouette, find what pixels are white (i.e. colour value not rgb (0,0,0)) and make a colour mask of the chosen colour
         accessory = cv2.imread(accessory_dir)
     else:
@@ -244,10 +243,59 @@ def reverse_accessory_move(accessory_image: np.ndarray, accessory_mask: np.ndarr
     accessory_mask = np.roll(accessory_mask, (movement_info['horizontal'] * -1, movement_info['vertical'] * -1), axis=(0, 1))
     return accessory_image, accessory_mask
 
+def merge_accessories(accessory_dir: str, num_images: int) -> np.ndarray:
+    '''
+    Merges accessories into one by averaging each pixel
+
+    Args:
+    * accessory_dir: directory of accessories
+    * num_images: sample size
+
+    Returns:
+    * final_mask: averaged mask
+    '''
+    abs_path = os.path.abspath(os.path.join(os.path.dirname( __file__ ), os.pardir, accessory_dir))
+
+    images = os.listdir(accessory_dir)
+    rand_images = random.sample(images, num_images)
+    mat_sum = np.zeros((224,224,3))
+
+    for img in rand_images:
+        temp =  cv2.imread(os.path.join(abs_path, img))
+        mat_sum = mat_sum + temp
+    
+    mat_sum = mat_sum/num_images
+    final_mask = mat_sum.astype(np.uint8)
+
+    return final_mask
+
 def apply_accessory(image: np.ndarray, aug_accessory_image: np.ndarray, org_accessory_image) -> np.ndarray:
     mask = np.where(org_accessory_image == 0)
     image[mask] = aug_accessory_image[mask]
     return image
+
+def change_con_bright(image: np.ndarray, range: int) -> tuple:
+    '''
+    Changes contrast and brightness of image
+
+    Args:
+        image: single rgb matric with shape (h,w,3)
+        range: range at which brightness and contrast is randomised
+    
+    Returns:
+        changed_image: image with modified brightness and contrast
+        ab_params: contrast and brightness parameters
+
+    '''
+
+    beta = np.random.randint(-range, range)
+    alpha =  1 + beta/100
+
+    img_copy = np.copy(image)
+    changed_image = cv2.convertScaleAbs(img_copy, alpha=alpha, beta=beta)
+    ab_params = (alpha, beta)
+
+    return changed_image, ab_params
 
 def total_variation(image: np.array, beta = 1) -> tuple:
     '''

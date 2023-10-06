@@ -8,10 +8,12 @@ import deepface_models as dm
 import cv2
 from adversarial_pattern_generator import cleanup_dims, validate_images
 import image_helper_functions as imh
+import os
+import numpy as np
 print(tf.config.list_physical_devices('GPU'))
 
-""" e = dm.attributeModel('ethnicity')
-img = cv2.imread('Results/testing1.png')
+""" e = dm.attributeModel('gender')
+img = cv2.imread('Results/test4.png')
 temp = [img, 'Asian', 'male', '23', 'neutral']
 prep_img = imh.image_to_face(temp)
 
@@ -21,8 +23,22 @@ cv2.imshow('image',final_img)
 cv2.waitKey(0)
 cv2.destroyAllWindows() """
 
-validate_images('Fairfacedb', 'Results/Test_pert.png', 'facemask', 2000, 'impersonation', 'ethnicity', 'white')
+
+print(validate_images('test_images/test_2', '', 'new_glasses', 6, 'impersonation', 'gender', 'woman', verbose=True))
 #validate_images('test_images', 'Results/Test_pert.png', 'facemask', 13, 'impersonation', 'ethnicity', 'black', verbose=True)
+
+
+""" path = 'Results\Team_masks\merge4'
+impersonation = 'disgust_indian_impersonation_mask.png'
+
+merged_mask = imh.merge_accessories(path, 2)
+cv2.imshow('duh', merged_mask)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+
+print(os.path.join(path, impersonation))
+
+cv2.imwrite(os.path.join(path, impersonation), merged_mask) """
 
 """ test = np.random.rand(4,4,3)
 test = test/np.max(np.abs(test))
