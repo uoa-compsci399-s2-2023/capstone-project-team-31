@@ -1,5 +1,6 @@
 import numpy as np
 
+# Class of image with perturbed accessory
 class Experiment:
     
     def __init__(self, accessory_image, accessory_mask):

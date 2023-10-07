@@ -25,6 +25,11 @@ def parse_args():
                         type = str,
                         help = "Source directory of the images, either directory or .db file"
     )
+    parser.add_argument("-j", "--json_dir",
+                        required = False,
+                        type = str,
+                        help = "Source directory of json file"
+    )
     parser.add_argument("-n", "--num_images",
                         default = 1,
                         type = int,
@@ -43,22 +48,27 @@ def parse_args():
     parser.add_argument("-l", "--lambda_tv",
                         default = 3,
                         type = float,
-                        help = "Size of changes in total variation"
+                        help = "Weight of gradient descent in terms of total variation score"
     )
     parser.add_argument("-p", "--printability_coeff",
                         default = 5,
                         type = float,
-                        help = "" # TODO: Where is this used and for what
+                        help = "Weight of gradient descent in terms of printability score"
     )
     parser.add_argument("-m", "--momentum_coeff",
-                        default = 0.4,
+                        default = 0.9,
                         type = float,
-                        help = "" # TODO: Where is this used and for what
+                        help = "Apply momentum term in gradient descent"
     )
     parser.add_argument("-g", "--gauss_filtering",
                         default = 0,
                         type = float,
-                        help = "" # TODO: Where is this used and for what
+                        help = "Blurring perturbations in accessory"
+    )
+    parser.add_argument("-b", "--bright_con_variation",
+                        default = 0,
+                        type = float,
+                        help = "Brightness and contrast variation for each image"
     )
     parser.add_argument("-i", "--max_iterations",
                         default = 5,
@@ -104,6 +114,6 @@ def parse_args():
     return args
 
 args = parse_args()
-adv_pattern_generator = AdversarialPatternGenerator(args.mode, args.accessory_type, args.classification, args.images_dir, args.num_images, args.decay_rate, args.step_size, args.lambda_tv, args.printability_coeff, args.momentum_coeff, args.gauss_filtering, args.max_iterations, args.channels_to_fix, args.stop_probability, args.horizontal_move, args.vertical_move, args.rotational_move, args.target, args.v) # and can specify any other paramenters from args
+adv_pattern_generator = AdversarialPatternGenerator(args.mode, args.accessory_type, args.classification, args.images_dir, args.json_dir, args.num_images, args.decay_rate, args.step_size, args.lambda_tv, args.printability_coeff, args.momentum_coeff, args.gauss_filtering, args.bright_con_variation, args.max_iterations, args.channels_to_fix, args.stop_probability, args.horizontal_move, args.vertical_move, args.rotational_move, args.target, args.v) # and can specify any other paramenters from args
 
 adv_pattern_generator.run()

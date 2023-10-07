@@ -10,8 +10,6 @@ import tensorflow as tf
 import matplotlib.pyplot as plt
 from collections import Counter
 
-## define an experiment object with relevant parameters
-
 '''
 Potential starting colours as in glasses paper (r,g,b)
 Grey: (127, 127, 127)
@@ -21,13 +19,12 @@ Goldish: (200, 175, 30)
 Yellowish: (220, 210, 50)
 '''
 
-
 class AdversarialPatternGenerator:
 
-    def __init__(self, mode, accessory_type, classification, images_dir, num_images=1, decay_rate=0, step_size=10, lambda_tv=3, printability_coeff=5, momentum_coeff=0.4, gauss_filtering=0, max_iter=15, channels_to_fix=[], stop_prob=0.01, horizontal_move=4, vertical_move=4, rotational_move=4, target=None, verbose=True):
+    def __init__(self, mode, accessory_type, classification, images_dir, json_dir, num_images=1, decay_rate=0, step_size=10, lambda_tv=3, printability_coeff=5, momentum_coeff=0.9, gauss_filtering=0, bright_con_var =0, max_iter=15, channels_to_fix=[], stop_prob=0.01, horizontal_move=4, vertical_move=4, rotational_move=4, target=None, verbose=True):
         self.mode = mode
         self.accessory_type = accessory_type
-        self.classification = classification # what type of classification is being dodged - 'gender', 'age', 'ethnicity', 'emotion' (to do: emotion requires further preprocessing)
+        self.classification = classification # what type of classification is being dodged - 'gender', 'ethnicity', 'emotion' (to do: emotion requires further preprocessing)
         if classification == 'ethnicity':
             self.class_num = 1
         elif classification == 'gender':
@@ -37,11 +34,12 @@ class AdversarialPatternGenerator:
         elif classification == 'emotion':
             self.class_num = 4
         else:
-            print("ERROR: {} is an invalid classification. Check spelling is one of: 'ethnicity', 'gender', 'age', 'emotion".format(classification))
+            print("ERROR: {} is an invalid classification. Check spelling is one of: 'ethnicity', 'gender', 'emotion".format(classification))
         self.images_dir = images_dir
+        self.json_dir = json_dir
         self.num_images = num_images
         
-        processed_imgs = prepare_processed_images(images_dir=self.images_dir, num_images=self.num_images, mode=self.mode, classification=self.classification, target=target)
+        processed_imgs = prepare_processed_images(images_dir=self.images_dir, json_dir = self.json_dir, num_images=self.num_images, mode=self.mode, classification=self.classification, target=target)
         self.processed_imgs = processed_imgs
         
         if len(processed_imgs) < self.num_images:
@@ -55,6 +53,7 @@ class AdversarialPatternGenerator:
         self.printability_coeff = printability_coeff
         self.momentum_coeff = momentum_coeff
         self.gauss_filtering = gauss_filtering
+        self.bright_con_var = bright_con_var
         self.max_iter = max_iter
         self.channels_to_fix = channels_to_fix
         self.stop_prob = stop_prob
@@ -84,13 +83,13 @@ class AdversarialPatternGenerator:
         
         for colour in self.colours:
             
-            accessory_img, accessory_mask = prepare_accessory(colour, "experiment/assets/{}.png".format(self.accessory_type.lower()), self.accessory_type)
+            accessory_img, accessory_mask = prepare_accessory(colour, "./assets/{}.png".format(self.accessory_type.lower()), self.accessory_type)
             
             confidences = np.empty(self.num_images)
             
             for i in range(self.num_images):
                 
-                img_copy = np.copy(self.processed_imgs[i][0]) #otherwise self.processed_imgs edited
+                img_copy = np.copy(self.processed_imgs[i][0])
             
                 temp_attack = apply_accessory(img_copy, accessory_img, accessory_mask)
 
@@ -110,6 +109,7 @@ class AdversarialPatternGenerator:
             elif self.mode == "dodge":
                 conf_dist = avg_true_class_conf
 
+            # Saves best starting color from color choices
             if conf_dist < min_avg_true_class_conf:
                 min_avg_true_class_conf = conf_dist
                 best_start = Experiment(accessory_img, accessory_mask)
@@ -142,7 +142,7 @@ class AdversarialPatternGenerator:
 
         while i < self.max_iter and score_threshold > self.stop_prob:
             
-            #data storing:
+            # Data storing
             attacks = [None] * self.num_images
             movements = [None] * self.num_images
             areas_to_perturb = [None] * self.num_images
@@ -159,26 +159,17 @@ class AdversarialPatternGenerator:
 
                 # for every image, move the accessory mask slightly 
                 [round_accessory_im, round_accessory_area, movement_info] = move_accessory(experiment.get_image(), experiment.get_mask(), self.movement)
-                pertubations[j].movement_info = movement_info
-                
-                ##TODO: don't touch any rgb channel which have been fixed (fixed_rgb_channels) (if we want this?)             
+                pertubations[j].movement_info = movement_info         
                 
                 img_copy = np.copy(self.processed_imgs[j][0])
                 attack = apply_accessory(img_copy, round_accessory_im, round_accessory_area)
-
-                """ cv2.imshow('image window', attack)
-                cv2.waitKey(0)
-                cv2.destroyAllWindows() """
 
                 attacks[j] = attack
                 movements[j] = movement_info
                 areas_to_perturb[j] = round_accessory_area
 
-                attack, _ = change_con_bright(np.copy(attack), 20)
-
-                """ cv2.imshow('image window', attack)
-                cv2.waitKey(0)
-                cv2.destroyAllWindows() """
+                # Change the brightness and contrast of each image
+                attack, _ = change_con_bright(np.copy(attack), self.bright_con_var)
 
                 if labels[j] is None:
                     if self.mode == "impersonation":
@@ -186,7 +177,7 @@ class AdversarialPatternGenerator:
                     elif self.mode == "dodge":
                         labels[j] = cleanup_labels(self.processed_imgs[j][self.class_num])
                 
-                #expand attack dim to work with deepface
+                # expand attack dim to work with deepface
                 attack = cleanup_dims(attack)
                 tens = int_to_float(attack)
                 tens = tf.convert_to_tensor(tens)
@@ -205,7 +196,7 @@ class AdversarialPatternGenerator:
                 gradient = gradient.numpy()
                 
                 if self.mode == "impersonation":
-                    gradient = np.multiply(gradient, -1) ## is there a better way to do this?
+                    gradient = np.multiply(gradient, -1)
                 
                 gradient[mask, :] = 0
                 gradient = gradient/np.max(np.abs(gradient)) 
@@ -242,7 +233,6 @@ class AdversarialPatternGenerator:
                 dr_nps[(dr_nps + experiment.get_image()) > 255] = 0
                 dr_nps[(dr_nps + experiment.get_image()) < 0] = 0
                 area_to_pert = experiment.get_mask()
-                #dr_nps[:,:,self.channels_to_fix] = 0
                 gradient[area_to_pert != 1] = 0
                 experiment.set_image(experiment.get_image() - print_coeff*dr_nps)
 
@@ -293,10 +283,6 @@ class AdversarialPatternGenerator:
                 lowest_output = output
 
                 imgs = np.concatenate((lowest_pert[2], lowest_pert[0]), axis=0)
-
-                """ cv2.imshow('image window', imgs)
-                cv2.waitKey(0)
-                cv2.destroyAllWindows() """
                 
             # display
             if self.verbose:
@@ -311,7 +297,6 @@ class AdversarialPatternGenerator:
                 print("total_variation score: {}".format(tv))
                 
                 # print out the iteration number, deepface's current confidence in image true classes, non-printability score
-                # display the image with current pertubation
 
             i += 1 
         
@@ -324,21 +309,18 @@ class AdversarialPatternGenerator:
         cv2.imwrite('Results/Test_pert.png', lowest_pert[2])
         return final_attacks, experiment
 
-    # return final pertubation result, with deepface's average confidence in predicting true classes
-
     def run(self):
         with tf.device('/device:GPU:0'):
             starting_point = self.get_best_starting_colour()
 
             result, experiment_result = self.run_experiment(starting_point)
         
-        #cv2.imwrite("./results/accessory_image.png", experiment_result.get_image())        
-        
         for attack in result[::int(self.num_images*0.80)]:
             cv2.imshow('image window', attack)
             cv2.waitKey(0)
             cv2.destroyAllWindows()
         
+        #cv2.imwrite("./results/accessory_image.png", experiment_result.get_image())
         
 def cleanup_labels(true_class:str):
 ## cleaning up different classification terms
@@ -353,10 +335,30 @@ def cleanup_labels(true_class:str):
     return result
 
 def validate_images(val_images_dir: str, accessory_dir: str, accessory_type: str, num_images: int, mode="dodge", classification=None, target=None, seperate=True, verbose=False) -> float:
+    '''
+    Validates set of images with either an accessory or by itself
+
+    Args:
+    * val_images_dir: image directory. Can either be db or file folder
+    * accessory_dir: accessory directory
+    * accessory_type: type of accessory 
+    * num_images: number of images to validate set
+    * mode: dodge or impersonation
+    * classification: type of classification task
+    * target: target label
+    * seperate: if prefer to seperate labels, only works for database files
+    * verbose: add logging display
+
+    Returns:
+    * Dictionary of counts of all classified labels
+    '''
+    
+    # Retrieves the images from directory
     get_images = prepare_images(val_images_dir, num_images, mode, classification, target, seperate)
     
+    # If accessory available, prepares the accessory
     if accessory_dir != '':
-        _, accessory_mask = prepare_accessory('red', "experiment/assets/{}.png".format(accessory_type.lower()), accessory_type)
+        _, accessory_mask = prepare_accessory('red', "./assets/{}.png".format(accessory_type.lower()), accessory_type)
         accessory = cv2.imread(accessory_dir)
 
     e = attributeModel(classification)
@@ -371,6 +373,7 @@ def validate_images(val_images_dir: str, accessory_dir: str, accessory_type: str
         if prep_img != None:
             img_copy = np.copy(prep_img[0])
 
+            # If accessory available, applies it to image
             if accessory_dir != '':
                 image = apply_accessory(img_copy, accessory, accessory_mask)
             else:
@@ -388,13 +391,13 @@ def validate_images(val_images_dir: str, accessory_dir: str, accessory_type: str
 
             i_count += 1
     
+    # Returns dictionary of counts per label
     count = Counter(val_list)
     print('Identified faces: ', i_count)
 
     return count
 
 def cleanup_dims(image):
-    
     ## cleaning up dimension issues:
     if len(np.shape(image)) == 3:
         image = np.expand_dims(image, axis=0)
@@ -408,6 +411,5 @@ def int_to_float(image):
     return image
 
 def float_to_int(image):
-    
     image = np.multiply(image, 255)
     image = image.astype(np.uint8)
