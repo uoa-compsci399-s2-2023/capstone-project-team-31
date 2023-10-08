@@ -334,15 +334,16 @@ def cleanup_labels(true_class:str):
         
     return result
 
-def validate_images(val_images_dir: str, accessory_dir: str, accessory_type: str, num_images: int, mode="dodge", classification=None, target=None, seperate=True, verbose=False) -> float:
+def validate_images(val_images_dir: str, json_dir: str, num_images: int, accessory_dir = '', accessory_type = '', mode="dodge", classification=None, target=None, seperate=True, verbose=False) -> float:
     '''
     Validates set of images with either an accessory or by itself
 
     Args:
     * val_images_dir: image directory. Can either be db or file folder
+    * json_dir: json directory. Applicable if storing images in file folder
+    * num_images: number of images to validate set
     * accessory_dir: accessory directory
     * accessory_type: type of accessory 
-    * num_images: number of images to validate set
     * mode: dodge or impersonation
     * classification: type of classification task
     * target: target label
@@ -354,7 +355,7 @@ def validate_images(val_images_dir: str, accessory_dir: str, accessory_type: str
     '''
     
     # Retrieves the images from directory
-    get_images = prepare_images(val_images_dir, num_images, mode, classification, target, seperate)
+    get_images = prepare_images(val_images_dir, json_dir, num_images, mode, classification, target, seperate)
     
     # If accessory available, prepares the accessory
     if accessory_dir != '':
