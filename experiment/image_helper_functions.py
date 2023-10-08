@@ -49,7 +49,7 @@ def prepare_images(images_dir: str, num_images: int, mode="dodge", classificatio
         images = os.listdir(abs_path)
         #rand_images = random.sample(images, num_images)
         output = []
-        with open("./test_images/male_test.json", 'r') as f:
+        with open("Fairfacedb/json/Indian_train.json", 'r') as f:
             data = json.load(f)
             temp_images = random.sample(list(data.keys()), num_images)
 

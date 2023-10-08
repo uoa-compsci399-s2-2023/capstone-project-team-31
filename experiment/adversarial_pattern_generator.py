@@ -352,7 +352,7 @@ def cleanup_labels(true_class:str):
         
     return result
 
-def validate_images(val_images_dir: str, accessory_dir: str, accessory_type: str, num_images: int, mode="dodge", classification=None, target=None, seperate=True, verbose=False) -> float:
+def validate_images(val_images_dir: str, num_images: int, accessory_dir = '', accessory_type = '', mode="dodge", classification=None, target=None, seperate=True, verbose=False) -> float:
     get_images = prepare_images(val_images_dir, num_images, mode, classification, target, seperate)
     
     if accessory_dir != '':
@@ -366,10 +366,10 @@ def validate_images(val_images_dir: str, accessory_dir: str, accessory_type: str
 
     for ind, im in enumerate(get_images):
         print(ind, '/', num_images, ' images')
-        prep_img = image_to_face(im)
+        prep_img = 1#image_to_face(im)
 
         if prep_img != None:
-            img_copy = np.copy(prep_img[0])
+            img_copy = np.copy(im[0])#prep_img[0])
 
             if accessory_dir != '':
                 image = apply_accessory(img_copy, accessory, accessory_mask)

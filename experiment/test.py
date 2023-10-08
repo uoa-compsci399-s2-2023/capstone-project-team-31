@@ -24,7 +24,7 @@ cv2.waitKey(0)
 cv2.destroyAllWindows() """
 
 
-print(validate_images('test_images/test_2', '', 'new_glasses', 6, 'impersonation', 'gender', 'woman', verbose=True))
+print(validate_images('Fairfacedb', 1000, '', 'new_glasses', 'impersonation', 'ethnicity', 'woman', verbose=False))
 #validate_images('test_images', 'Results/Test_pert.png', 'facemask', 13, 'impersonation', 'ethnicity', 'black', verbose=True)
 
 
