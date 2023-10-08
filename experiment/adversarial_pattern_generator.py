@@ -306,7 +306,6 @@ class AdversarialPatternGenerator:
         plt.figtext(0.5, 0.01, 'Classified: {}, Confidence: {}'.format(lowest_output['classified'], lowest_output['confidence']), ha="center")
         plt.show()
 
-        cv2.imwrite('Results/Test_pert.png', lowest_pert[2])
         return final_attacks, experiment
 
     def run(self):
@@ -320,7 +319,7 @@ class AdversarialPatternGenerator:
             cv2.waitKey(0)
             cv2.destroyAllWindows()
         
-        #cv2.imwrite("./results/accessory_image.png", experiment_result.get_image())
+        cv2.imwrite("./results/accessory_image.png", experiment_result.get_image())
         
 def cleanup_labels(true_class:str):
 ## cleaning up different classification terms
