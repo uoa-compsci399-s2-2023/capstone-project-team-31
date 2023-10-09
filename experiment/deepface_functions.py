@@ -5,7 +5,18 @@ from deepface_models import *
 
 def get_confidence_in_selected_class(image: np.ndarray, classification:str, true_class:str, e:attributeModel, verbose=False):
     '''
-    takes a single image and returns deepface's confidence in predicting its true class
+    Takes a single image and returns deepface's confidence in predicting its true class
+    
+    Args:
+    * image: np array with shape (1, h, w, 3)
+    * classification: Either ethnicity, emotion, or gender classification
+    * true_class: true class of specific image
+    * e: facial recognition model
+    * verbose: add logging display
+
+    Returns:
+    * labeledOutput: prediction details
+    * confidence: confidence score on true class
     '''
     
     image_after = image.astype(np.float32)

@@ -1,5 +1,3 @@
-
-
 class Pertubation:
     
     def __init__(self, movement_info=None, r=None):

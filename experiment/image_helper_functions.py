@@ -6,20 +6,14 @@ import os, json
 from imgaug import augmenters as iaa
 from imgaug import parameters as iap
 
-
-def pre_process_imgs():
-    # if needed
-
-    pass
-
-
-def prepare_images(images_dir: str, num_images: int, mode="dodge", classification=None, target=None, seperate=True) -> list:
+def prepare_images(images_dir: str, json_dir: str, num_images: int, mode="dodge", classification=None, target=None, seperate=True) -> list:
     '''
     Which images will be used for generating an adversarial pattern (could be all in the images directory)
     the silouhette mask for the chosen accessory, in the given colour
     
     Args:
-    * images_dir: the directory containing the images to be used for generating an adversarial pattern, only supports .db
+    * images_dir: the directory containing the images to be used for generating an adversarial pattern, supports folders and db
+    * json_dir: the directory containing information of each image in folder. Must be in json format
     * num_images: the number of images to be used for generating an adversarial pattern
     * accessory_type: the type of accessory to be added to the image
     
@@ -30,7 +24,8 @@ def prepare_images(images_dir: str, num_images: int, mode="dodge", classificatio
     # take a random permutation of image filenames from images_dir of size num_images
     # for each iamge filename, load the image and store it in some type of structure (e.g. list/json whatever)
 
-    
+    #random.seed(0)
+
     abs_path = os.path.abspath(os.path.join(os.path.dirname( __file__ ), os.pardir, images_dir)) #bug fixing
     
     if images_dir.endswith(".db"): # if the images are stored in a database
@@ -46,11 +41,16 @@ def prepare_images(images_dir: str, num_images: int, mode="dodge", classificatio
         return images
     else: # if the images are stored in a directory
         images = os.listdir(abs_path)
-        rand_images = random.sample(images, num_images)
         output = []
-        with open("./Faces.json", 'r') as f:
+
+        if json_dir == '':
+            raise Exception('json directory missing')
+        
+        with open(json_dir, 'r') as f:
             data = json.load(f)
-            for img in rand_images:
+            temp_images = random.sample(list(data.keys()), num_images)
+
+            for img in temp_images:
                 temp =  cv2.imread(os.path.join(abs_path, img))
                 output.append([temp, data[img]['ethnicity'], data[img]['gender'], data[img]['age'], data[img]['emotion']])
         return output
@@ -59,7 +59,7 @@ from deepface.commons import functions
 
 def getImageObjects(img_path,
     enforce_detection=True,
-    detector_backend="retinaface",
+    detector_backend="opencv",
     align=True,
 ):
     img_objs = functions.extract_faces(
@@ -120,18 +120,19 @@ def image_to_face(image: tuple):
     
     return outputImage
 
-def prepare_processed_images(images_dir: str, num_images: int,  mode="dodge", classification=None, target=None, seperate=True):
+def prepare_processed_images(images_dir: str, json_dir: str, num_images: int,  mode="dodge", classification=None, target=None, seperate=True):
     '''
     Detect faces and normalize a given amount of images
     
     Args:
     * images_dir: the directory containing the images to be used for generating an adversarial pattern, only supports .db
+    * json_dir: the directory containing information of each image in folder. Must be in json format
     * num_images: the number of images to get
     
     Returns:
     * list of processed images in the form  (img , ethnicity, gender, age, emotion)
     '''
-    image_list = prepare_images(images_dir, num_images,  mode=mode, classification=classification, target=target, seperate=seperate)
+    image_list = prepare_images(images_dir, json_dir, num_images, mode=mode, classification=classification, target=target, seperate=seperate)
     output_list = []
     for image in image_list:
         prepared_image = image_to_face(image)     
@@ -146,12 +147,12 @@ def prepare_accessory(colour: str, accessory_dir: str, accessory_type: str) -> t
     Returns the silouhette mask for the chosen accessory, in the given colour
     
     Args:
-        colour (str): colour of the accessory, must be one of: red, green, blue, yellow
-        accessory_dir (str): directory of the accessory
-        accessory_type (str): type of accessory, must be one of: glasses
+    * colour (str): colour of the accessory, must be one of: red, green, blue, yellow
+    * accessory_dir (str): directory of the accessory
+    * accessory_type (str): type of accessory, must be one of: glasses
 
     Returns:
-        tuple: (accessory_image, silhouette_mask)
+    * tuple: (accessory_image, silhouette_mask)
     """
     
     fname = accessory_type.lower()
@@ -191,7 +192,6 @@ def move_accessory(accessory_image: np.ndarray, accessory_mask: np.ndarray, move
     * accessory_mask: the new area of the image where the accessory is
     * movement_info: a dict specifying the movements made in the horizontal, vertical and rotational directions
     '''
-    # inspo: https://github.com/mahmoods01/accessorize-to-a-crime/blob/master/aux/attack/rand_movement.m
 
     # generate random values for horizontal, vertical and rotational shifts within the ranges given in 'movement' dict
     shift_x = random.randint(-1*movement['horizontal'], movement['horizontal'])
@@ -266,22 +266,62 @@ def merge_accessories(accessory_dir: str, num_images: int) -> np.ndarray:
 
     return final_mask
 
-def apply_accessory(image: np.ndarray, aug_accessory_image: np.ndarray, org_accessory_image) -> np.ndarray:
+def apply_accessory(image: np.ndarray, aug_accessory_image: np.ndarray, org_accessory_image: np.ndarray) -> np.ndarray:
+    '''
+    Applies accessory to image
+
+    Args:
+    * image: single rgb matrix with shape (h,w,3)
+    * aug_accessory_image: augmented accessory rgb matrix with shape (h,w,3)
+    * org_accessory_image: mask of accessory
+
+    Returns:
+    * image: image with new accessory
+    '''
+
     mask = np.where(org_accessory_image == 0)
     image[mask] = aug_accessory_image[mask]
     return image
+
+def change_con_bright(image: np.ndarray, range: int) -> tuple:
+    '''
+    Changes contrast and brightness of image
+
+    Args:
+    * image: single rgb matrix with shape (h,w,3)
+    * range: range at which brightness and contrast is randomised
+    
+    Returns:
+    * changed_image: image with modified brightness and contrast
+    * ab_params: contrast and brightness parameters
+    '''
+    if range < 0:
+        raise Exception("Brightness and contrast variation should be positive or 0")
+
+    if range != 0:
+        beta = np.random.randint(-range, range)
+        alpha =  1 + beta/100
+
+        img_copy = np.copy(image)
+        changed_image = cv2.convertScaleAbs(img_copy, alpha=alpha, beta=beta)
+        ab_params = (alpha, beta)
+
+        return changed_image, ab_params
+    
+    else:
+        return image, (0,0)
 
 def total_variation(image: np.array, beta = 1) -> tuple:
     '''
     Calculates total variation of perturbation
     
     Args:
-        image: Single rgb matrix with shape (h,w,3) 
-        beta: Magnitude to increase exponential value
+    * image: Single rgb matrix with shape (h,w,3) 
+    * beta: Magnitude to increase exponential value
     
     Returns:
-        tv: Total variation of image
-        dr_tv: Total variation gradient of each pixel (h,w,3)
+    * tv: Total variation of image
+    * dr_tv: Total variation gradient of each pixel (h,w,3)
     '''
 
     # TV calculation
@@ -313,11 +353,11 @@ def softmax_loss(pred: np.array, label: np.array) -> float:
     Softmax loss to use for gradient descent
 
     Args:
-        pred: Prediction array. Currently has shape (1,2)
-        label: Label array. Currently has shape (1,2)
+    * pred: Prediction array. Currently has shape (1,2)
+    * label: Label array. Currently has shape (1,2)
         
     Returns
-        loss: Softmax loss
+    * loss: Softmax loss
     '''
 
     tot = 0
@@ -331,20 +371,18 @@ def non_printability_score(image: np.array, segmentation: np.array, printable_va
     Evaluates the ability of a printer to match the colours in the pertubation
     
     Args:
-        image: Single rgb matrix with shape (h,w,3)
-        segmentation: Area of image that needs to be perturbed
-        printable_values: Printable values retrieved from printed palette (N, 3)
+    * image: Single rgb matrix with shape (h,w,3)
+    * segmentation: Area of image that needs to be perturbed
+    * printable_values: Printable values retrieved from printed palette (N, 3)
  
     Returns:
-        score: Non printability score
-        gradient: Non printability score gradient with shape (h,w,3)
+    * score: Non printability score
+    * gradient: Non printability score gradient with shape (h,w,3)
     '''
-    # copy directly from: https://github.com/mahmoods01/accessorize-to-a-crime/blob/master/aux/attack/non_printability_score.m
 
     def norm(x,y):
         return np.sum((np.subtract(x,y))*(np.subtract(x,y)))
     
-    # TODO: idk if this is really important or not since its literally just adding another dimension to everys single RGB value????
     printable_vals = np.reshape(printable_values, (printable_values.shape[0],1,3))
     max_norm = norm(np.array([0,0,0]), np.array([80,80,80]))
     
@@ -378,18 +416,16 @@ def non_printability_score(image: np.array, segmentation: np.array, printable_va
 
     return score, gradient
 
-def get_printable_vals(num_colors = 32) -> np.array:
+def get_printable_vals(num_colors = 100) -> np.array:
     '''
     Creates an Nx3 matrix of all RGB values that exist in printed image
 
     Args:
-        num_colors: Number (roughly num_colors*3) of unique colors to reduce image to
+    * num_colors: Number (roughly num_colors*3) of unique colors to reduce image to
     
     Returns:
-        printable_vals: Matrix of unique colors (N,3)
+    * printable_vals: Matrix of unique colors (N,3)
     '''
-    # inspo1: https://github.com/mahmoods01/accessorize-to-a-crime/blob/master/aux/attack/get_printable_vals.m
-    # inspo2: https://github.com/mahmoods01/accessorize-to-a-crime/blob/master/aux/attack/make_printable_vals_struct.m
 
     printable_vals = []
     with open('./assets/printable_vals.txt') as file:
@@ -402,6 +438,15 @@ def get_printable_vals(num_colors = 32) -> np.array:
     return np.array(printable_vals)
 
 def convert_b64_to_np(img_b64: str):
+    '''
+    For converting b64 images to rgb matrix (h,w,3)
+
+    Args:
+    * img_b64: image stored in b64 format
+
+    Returns:
+    * img: rgb np array (h,w,3)
+    '''
     decoded_img = base64.b64decode(img_b64)
     img = np.frombuffer(decoded_img, dtype=np.uint8)
     img = cv2.imdecode(img, cv2.IMREAD_COLOR)
