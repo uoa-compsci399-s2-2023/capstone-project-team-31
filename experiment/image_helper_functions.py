@@ -266,6 +266,71 @@ def merge_accessories(accessory_dir: str, num_images: int) -> np.ndarray:
 
     return final_mask
 
+def average_nonzero(arr_int, mask):
+    '''
+    Returns average non-zero value from an array 
+    '''
+    n = 0
+    a = 0
+    arr = arr_int.astype("float")
+    for i in range(len(arr_int)):
+        row = arr_int[i]
+        for j in range(len(row)):
+            pixel = row[j]
+            if((mask[i][j] == [255,255,255]).all()):
+                continue
+            
+            if(n == 0):
+                a = np.zeros_like(pixel)
+            #if(n < 100):
+                #print(mask[i][j])
+            a = a + pixel
+            n += 1
+    #print(a)
+    a = a / n
+    return a
+
+def merge_accessories_delta(accessory_dir: str, colour = "organish", accessory_type = "facemask", directory = "./assets/facemask.png" ) -> np.ndarray:
+    '''
+    Merges accessories into one by removing colour, and combining differences together
+
+    Args:
+    * accessory_dir: directory of accessories
+    * colour: colour of all the accesories
+
+    Returns:
+    * final_mask: combined mask
+    '''
+    abs_path = os.path.abspath(os.path.join(os.path.dirname( __file__ ), os.pardir, accessory_dir))
+    images = os.listdir(accessory_dir)
+    #rand_images = random.sample(images, num_images)
+    accessory_image, accessory_mask = prepare_accessory(colour, directory, accessory_type)
+    accessory_image = accessory_image.astype("float")
+    #accessory_image = cv2.cvtColor(accessory_image, cv2.COLOR_BGR2RGB)
+    mat_sum = np.zeros((224,224,3))
+    for img in images:
+        
+        temp =  cv2.imread(accessory_dir + "/" + img)
+        temp = cv2.resize(temp, dsize = (224,224))
+        temp = temp.astype("float")
+        #temp = cv2.cvtColor(temp, cv2.COLOR_BGR2RGB)
+        mask = np.all(accessory_mask != [255, 255, 255], axis=-1)
+        
+        #print(np.shape(temp))
+        avg = average_nonzero(temp,accessory_mask)
+        #print(avg)
+        temp[mask] -= avg
+        delta = temp 
+        mat_sum = mat_sum + delta
+    
+    mat_sum = mat_sum + accessory_image
+    mat_sum = mat_sum.clip(0,255)
+    final_mask = mat_sum.astype(np.uint8)
+    rgb_mask = cv2.cvtColor(final_mask, cv2.COLOR_BGR2RGB)
+    PILImage = Image.fromarray(rgb_mask)
+    PILImage.save("finalmask.png")
+    return final_mask
+
 def apply_accessory(image: np.ndarray, aug_accessory_image: np.ndarray, org_accessory_image: np.ndarray) -> np.ndarray:
     '''
     Applies accessory to image
@@ -451,3 +516,5 @@ def convert_b64_to_np(img_b64: str):
     img = np.frombuffer(decoded_img, dtype=np.uint8)
     img = cv2.imdecode(img, cv2.IMREAD_COLOR)
     return img
+
+
