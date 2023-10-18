@@ -116,4 +116,7 @@ def parse_args():
 args = parse_args()
 adv_pattern_generator = AdversarialPatternGenerator(args.mode, args.accessory_type, args.classification, args.images_dir, args.json_dir, args.num_images, args.decay_rate, args.step_size, args.lambda_tv, args.printability_coeff, args.momentum_coeff, args.gauss_filtering, args.bright_con_variation, args.max_iterations, args.channels_to_fix, args.stop_probability, args.horizontal_move, args.vertical_move, args.rotational_move, args.target, args.v) # and can specify any other paramenters from args
 
-adv_pattern_generator.run()
+if adv_pattern_generator.num_images > 0:
+    adv_pattern_generator.run()
+else:
+    print("ERROR: no suitable images found. Try increasing num_images parameter")
