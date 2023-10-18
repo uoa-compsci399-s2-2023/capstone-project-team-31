@@ -369,7 +369,7 @@ def validate_images(val_images_dir: str, num_images: int, accessory_dir = '', ac
         prep_img = 1#image_to_face(im)
 
         if prep_img != None:
-            img_copy = np.copy(im[0])#prep_img[0])
+            img_copy = im[0]#prep_img[0]
 
             if accessory_dir != '':
                 image = apply_accessory(img_copy, accessory, accessory_mask)

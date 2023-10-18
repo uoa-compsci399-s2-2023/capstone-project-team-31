@@ -30,7 +30,7 @@ def prepare_images(images_dir: str, num_images: int, mode="dodge", classificatio
     # take a random permutation of image filenames from images_dir of size num_images
     # for each iamge filename, load the image and store it in some type of structure (e.g. list/json whatever)
 
-    random.seed(0)
+    random.seed(1)
 
     abs_path = os.path.abspath(os.path.join(os.path.dirname( __file__ ), os.pardir, images_dir)) #bug fixing
     
@@ -49,7 +49,7 @@ def prepare_images(images_dir: str, num_images: int, mode="dodge", classificatio
         images = os.listdir(abs_path)
         #rand_images = random.sample(images, num_images)
         output = []
-        with open("Fairfacedb/json/Indian_train.json", 'r') as f:
+        with open("Fairfacedb/json/Asian_train.json", 'r') as f:
             data = json.load(f)
             temp_images = random.sample(list(data.keys()), num_images)
 

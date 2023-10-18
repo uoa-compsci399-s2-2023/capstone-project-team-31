@@ -12,8 +12,8 @@ import os
 import numpy as np
 print(tf.config.list_physical_devices('GPU'))
 
-""" e = dm.attributeModel('gender')
-img = cv2.imread('Results/test4.png')
+e = dm.attributeModel('emotion')
+img = cv2.imread('test_images/masks/anne-m2.JPG')
 temp = [img, 'Asian', 'male', '23', 'neutral']
 prep_img = imh.image_to_face(temp)
 
@@ -21,10 +21,54 @@ final_img = prep_img[0]
 print(e.predict_verbose(cleanup_dims(final_img)))
 cv2.imshow('image',final_img)
 cv2.waitKey(0)
-cv2.destroyAllWindows() """
+cv2.destroyAllWindows()
+
+e = dm.attributeModel('emotion')
+img = cv2.imread('test_images/masks/eric-m2.JPG')
+temp = [img, 'Asian', 'male', '23', 'neutral']
+prep_img = imh.image_to_face(temp)
+
+final_img = prep_img[0]
+print(e.predict_verbose(cleanup_dims(final_img)))
+cv2.imshow('image',final_img)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+
+e = dm.attributeModel('emotion')
+img = cv2.imread('test_images/masks/ivan-m2.JPG')
+temp = [img, 'Asian', 'male', '23', 'neutral']
+prep_img = imh.image_to_face(temp)
+
+final_img = prep_img[0]
+print(e.predict_verbose(cleanup_dims(final_img)))
+cv2.imshow('image',final_img)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+
+e = dm.attributeModel('emotion')
+img = cv2.imread('test_images/masks/matt-m2.JPG')
+temp = [img, 'Asian', 'male', '23', 'neutral']
+prep_img = imh.image_to_face(temp)
+
+final_img = prep_img[0]
+print(e.predict_verbose(cleanup_dims(final_img)))
+cv2.imshow('image',final_img)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+
+e = dm.attributeModel('emotion')
+img = cv2.imread('test_images/masks/mikayla-m2.JPG')
+temp = [img, 'Asian', 'male', '23', 'neutral']
+prep_img = imh.image_to_face(temp)
+
+final_img = prep_img[0]
+print(e.predict_verbose(cleanup_dims(final_img)))
+cv2.imshow('image',final_img)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
 
 
-print(validate_images('Fairfacedb', 1000, '', 'new_glasses', 'impersonation', 'ethnicity', 'woman', verbose=False))
+#print(validate_images('Fairfacedb', 40, '', 'new_glasses', 'impersonation', 'ethnicity', verbose=True))
 #validate_images('test_images', 'Results/Test_pert.png', 'facemask', 13, 'impersonation', 'ethnicity', 'black', verbose=True)
 
 
