@@ -56,8 +56,7 @@ Installation guides:
 ## Getting started
 
 Try running the following command to create a simple adversarial facemask which impersonates female:
-
-
+<br/>
 If using database to store images:
 ```
 python experiment\run_experiment.py -a facetest -c gender -d="Faces.db" -n 12 -i 20 -l 0 -p 0 -g 0 -s 50 -r .001 -H 15 -V 15 -R 10 -md impersonation -t female
@@ -67,8 +66,7 @@ If using folder with json file to store images:
 ```
 python experiment\run_experiment.py -a facetest -c gender -d="Images" -j="Faces.json" -n 12 -i 20 -l 0 -p 0 -g 0 -s 50 -r .001 -H 15 -V 15 -R 10 -md impersonation -t female
 ```
-
-
+<br/>
 In your terminal, you should see some feedback as the program parses the image files and trains the perturbation over 20 iterations. The output adversarial pattern and graph of confidence in target class over iterations should pop up at the program end.
 
 ![A man with a facemask on his face. The facemask pattern is unpredictable and doesn't resemble any real object](/readme_assets/Ivan19thperturb.PNG) ![A graph that shows confidence in target class increasing over iterations. The bottom test reads "Classified: Woman, Confidence: 0.999](/readme_assets/confoverepoch.png)
