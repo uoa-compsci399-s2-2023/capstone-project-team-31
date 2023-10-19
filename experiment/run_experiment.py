@@ -117,7 +117,7 @@ def parse_args():
 def check_positive_int(value):
     try:
         value = int(value)
-        if value <= 0:
+        if value < 0:
             raise argparse.ArgumentTypeError("{} is not a positive integer".format(value))
     except ValueError:
         raise argparse.ArgumentTypeError("{} is not an integer".format(value))
@@ -126,7 +126,7 @@ def check_positive_int(value):
 def check_positive_float(value):
     try:
         value = float(value)
-        if value <= 0:
+        if value < 0:
             raise argparse.ArgumentTypeError("{} is not a positive float".format(value))
     except ValueError:
         raise argparse.ArgumentTypeError("{} is not an float".format(value))
