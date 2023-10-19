@@ -182,6 +182,22 @@ Controls whether interim output is displayed to the user. Default is True.
 Value: "True" or "False".
 
 ## Interactive GUI
+An interactive GUI is developed for a quick and easy testing of generated accessories. Two modes of applying the attacks are avaialble, digital and physical. The GUI provides opportunity for others to participate in testing the accessories. This acts as an easy method to collect meaningful results.
+
+### GUI Standby Mode
+On the top of the GUI, labels describe the current settings. Underneath the settings labels is the camera feed display. Face alignment preprocessing is performed by default in digital attack mode, and is off for physical attack mode. The predict button below triggers the system to perform prediction based on the current settings. Two buttons at the bottom of the GUI are used to change settings and switch to digital attack or physical attack. 
+![](https://github.com/uoa-compsci399-s2-2023/capstone-project-team-31/blob/main/readme_assets/gui%20standby%20mode.gif)
+
+### Predict
+
+### Change Settings and Switch to Digital Attack Mode
+After clicking on 'digital attack' button at the bottom left of the GUI, a window will popup for the user to select settings. Two accessory options (facemask, glasses), three impersontation types (gender, race, emotion), and various options for impersontation target depending on the impersontation type selected. 
+![](https://github.com/uoa-compsci399-s2-2023/capstone-project-team-31/blob/main/readme_assets/digital%20attack%20selection.gif)
+
+
+### Change Settings and Switch to Physical Attack Mode
+After clicking on 'physical attack' button at the bottom left of the GUI, a window will popup for the user to select settings.
+![](https://github.com/uoa-compsci399-s2-2023/capstone-project-team-31/blob/main/readme_assets/physical%20attack%20selection.mov)
 
 
 ## References
