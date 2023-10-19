@@ -6,6 +6,7 @@ def parse_args():
 
     parser.add_argument("-md", "--mode",
                         default="dodge",
+                        choices = ["dodge", "impersonation"],
                         type = str,
                         help = "Whether the attack is a dodge or impersonation attack"
     )
@@ -32,7 +33,7 @@ def parse_args():
     )
     parser.add_argument("-n", "--num_images",
                         default = 1,
-                        type = int,
+                        type = check_positive_int,
                         help = "How many images are being processed"
     )
     parser.add_argument("-r", "--decay_rate",
@@ -57,7 +58,7 @@ def parse_args():
     )
     parser.add_argument("-m", "--momentum_coeff",
                         default = 0.9,
-                        type = float,
+                        type = check_positive_float,
                         help = "Apply momentum term in gradient descent"
     )
     parser.add_argument("-g", "--gauss_filtering",
@@ -67,12 +68,12 @@ def parse_args():
     )
     parser.add_argument("-b", "--bright_con_variation",
                         default = 0,
-                        type = float,
+                        type = check_positive_int,
                         help = "Brightness and contrast variation for each image"
     )
     parser.add_argument("-i", "--max_iterations",
                         default = 5,
-                        type = int,
+                        type = check_positive_int,
                         help = "Maximum number of iterations during perturbtion" 
     )
     parser.add_argument("-f", "--channels_to_fix",
@@ -82,21 +83,21 @@ def parse_args():
     )
     parser.add_argument("-P", "--stop_probability",
                         default = 0.01,
-                        type = float,
+                        type = check_positive_float,
                         help = "The probability at which to stop iterating (if hit before max_iter)"
     )
     parser.add_argument("-H", "--horizontal_move",
                         default = 4,
-                        type = int,
+                        type = check_positive_int,
                         help = "Horizontal move distance"
     )
     parser.add_argument("-V", "--vertical_move",
                         default = 4,
-                        type = int,
+                        type = check_positive_int,
                         help = "Vertical movement distance")
     parser.add_argument("-R", "--rotational_move",
                         default = 4,
-                        type = int,
+                        type = check_positive_int,
                         help = "Rotational movement distance")
     parser.add_argument("-t", "--target",
                         default = None,
@@ -112,6 +113,24 @@ def parse_args():
     args = parser.parse_args()
 
     return args
+
+def check_positive_int(value):
+    try:
+        value = int(value)
+        if value <= 0:
+            raise argparse.ArgumentTypeError("{} is not a positive integer".format(value))
+    except ValueError:
+        raise argparse.ArgumentTypeError("{} is not an integer".format(value))
+    return value
+
+def check_positive_float(value):
+    try:
+        value = float(value)
+        if value <= 0:
+            raise argparse.ArgumentTypeError("{} is not a positive float".format(value))
+    except ValueError:
+        raise argparse.ArgumentTypeError("{} is not an float".format(value))
+    return value
 
 args = parse_args()
 adv_pattern_generator = AdversarialPatternGenerator(args.mode, args.accessory_type, args.classification, args.images_dir, args.json_dir, args.num_images, args.decay_rate, args.step_size, args.lambda_tv, args.printability_coeff, args.momentum_coeff, args.gauss_filtering, args.bright_con_variation, args.max_iterations, args.channels_to_fix, args.stop_probability, args.horizontal_move, args.vertical_move, args.rotational_move, args.target, args.v) # and can specify any other paramenters from args
