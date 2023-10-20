@@ -197,7 +197,7 @@ After clicking on 'digital attack' button at the bottom left of the GUI, a windo
 
 ### Change Settings and Switch to Physical Attack Mode
 After clicking on 'physical attack' button at the bottom left of the GUI, a window will popup for the user to select settings.
-![](https://github.com/uoa-compsci399-s2-2023/capstone-project-team-31/blob/main/readme_assets/physical%20attack%20selection.mov)
+![](https://github.com/uoa-compsci399-s2-2023/capstone-project-team-31/blob/main/readme_assets/physical%20attack%20mode.gif)
 
 
 ## References
