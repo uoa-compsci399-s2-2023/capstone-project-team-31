@@ -49,11 +49,12 @@ def prepare_images(images_dir: str, num_images: int, mode="dodge", classificatio
         images = os.listdir(abs_path)
         #rand_images = random.sample(images, num_images)
         output = []
-        with open("Fairfacedb/json/Asian_train.json", 'r') as f:
+        with open("maori.json", 'r') as f:
             data = json.load(f)
             temp_images = random.sample(list(data.keys()), num_images)
 
             for img in temp_images:
+                #if data[img]['gender'] == 'Male':
                 temp =  cv2.imread(os.path.join(abs_path, img))
                 output.append([temp, data[img]['ethnicity'], data[img]['gender'], data[img]['age'], data[img]['emotion']])
         return output

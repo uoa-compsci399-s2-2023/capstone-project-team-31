@@ -366,10 +366,10 @@ def validate_images(val_images_dir: str, num_images: int, accessory_dir = '', ac
 
     for ind, im in enumerate(get_images):
         print(ind, '/', num_images, ' images')
-        prep_img = 1#image_to_face(im)
+        prep_img = image_to_face(im)#1
 
         if prep_img != None:
-            img_copy = im[0]#prep_img[0]
+            img_copy = prep_img[0]#im[0]
 
             if accessory_dir != '':
                 image = apply_accessory(img_copy, accessory, accessory_mask)
