@@ -280,6 +280,8 @@ On the top of the GUI, labels describe the current settings. Underneath the sett
 
 ![](https://github.com/uoa-compsci399-s2-2023/capstone-project-team-31/blob/main/readme_assets/gui%20standby%20mode.gif)
 
+</br>
+
 ### Predict
 Click the button that says 'predict'. A window will popup with the results. 
 
@@ -287,12 +289,16 @@ Click the button that says 'predict'. A window will popup with the results.
 
 ![](https://github.com/uoa-compsci399-s2-2023/capstone-project-team-31/blob/main/readme_assets/predict.gif)
 
+</br>
+
 ### Change Settings and Switch to Digital Attack Mode
 After clicking on 'digital attack' button at the bottom left of the GUI, a window will popup for the user to select settings. Two accessory options (facemask, glasses), three impersontation types (gender, race, emotion), and various options for impersontation target depending on the impersontation type selected. 
 
 </br>
 
 ![](https://github.com/uoa-compsci399-s2-2023/capstone-project-team-31/blob/main/readme_assets/digital%20attack%20selection.gif)
+
+</br>
 
 
 ### Change Settings and Switch to Physical Attack Mode
