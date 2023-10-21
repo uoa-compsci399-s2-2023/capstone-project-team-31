@@ -329,16 +329,33 @@ The following are areas the team have identified for improvement:
 </br>
 
 The base of this project's code was sourced from Sharif et al. and translated to Python:
-
+```
 @inproceedings{Sharif16AdvML,
-  author =       {Mahmood Sharif and Sruti Bhagavatula and Lujo Bauer 
-						and Michael K. Reiter},
-  title =        {Accessorize to a crime: {R}eal and stealthy attacks 
-  						on state-of-the-art face recognition},
-  booktitle =    {Proceedings of the 23rd ACM SIGSAC Conference on 
-						Computer and Communications Security},
-  year =         2016
+  author =	{Mahmood Sharif and Sruti Bhagavatula and Lujo Bauer 
+				and Michael K. Reiter},
+  title =	{Accessorize to a crime: {R}eal and stealthy attacks 
+				on state-of-the-art face recognition},
+  booktitle =	{Proceedings of the 23rd ACM SIGSAC Conference on 
+				Computer and Communications Security},
+  year =	2016
 } 
-
-
+```
 [Github](https://github.com/mahmoods01/accessorize-to-a-crime)
+
+Fairface was used to create and digitally validate some of the accessories
+```
+@inproceedings{karkkainenfairface,
+  author =	{Karkkainen and Kimmo and Joo and Jungseock},
+  title =	{FairFace: Face Attribute Dataset for Balanced Race,
+				Gender, and Age for Bias Measurement and Mitigation},
+  booktitle =	{Proceedings of the IEEE/CVF Winter Conference on
+				Applications of Computer Vision},
+  year =	{2021},
+  pages =	{1548--1558}
+}
+```
+[Github](https://github.com/joojs/fairface)
+
+
+
+
