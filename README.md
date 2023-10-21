@@ -342,6 +342,8 @@ The base of this project's code was sourced from Sharif et al. and translated to
 ```
 [Github](https://github.com/mahmoods01/accessorize-to-a-crime)
 
+</br>
+
 The Deepface model was used for both facial recognition and analysis
 ```
 @inproceedings{serengil2020lightface,
@@ -368,6 +370,8 @@ The Deepface model was used for both facial recognition and analysis
 }
 ```
 [Github](https://github.com/serengil/deepface)
+
+</br>
 
 Fairface was used to create and digitally validate some of the accessories
 ```
