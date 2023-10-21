@@ -356,9 +356,11 @@ Fairface was used to create and digitally validate some of the accessories
 ```
 [Github](https://github.com/joojs/fairface)
 
-<br/>
+</br>
 
 Creative Commons was used to collect Māori and Pasifika faces
+
+</br>
 
 Shield: [![CC BY 4.0][cc-by-shield]][cc-by]
 
