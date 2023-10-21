@@ -303,7 +303,9 @@ class AdversarialPatternGenerator:
         imgs = np.concatenate((lowest_pert[2], lowest_pert[0]), axis=0)
         cv2.imshow('Final Attack', imgs)
         plt.plot(scores_over_time)
-        plt.figtext(0.5, 0.01, 'Classified: {}, Confidence: {}'.format(lowest_output['classified'], lowest_output['confidence']), ha="center")
+        plt.xlabel('Epoch')
+        plt.ylabel('Confidence')
+        plt.title('Mode: {}, Classified: {}, Confidence: {}'.format(self.mode, lowest_output['classified'], lowest_output['confidence']), fontsize = 11)
         plt.show()
 
         return final_attacks, experiment
