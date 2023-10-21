@@ -342,6 +342,33 @@ The base of this project's code was sourced from Sharif et al. and translated to
 ```
 [Github](https://github.com/mahmoods01/accessorize-to-a-crime)
 
+The Deepface model was used for both facial recognition and analysis
+```
+@inproceedings{serengil2020lightface,
+  title =	{LightFace: A Hybrid Deep Face Recognition Framework},
+  author = 	{Serengil, Sefik Ilkin and Ozpinar, Alper},
+  booktitle =	{2020 Innovations in Intelligent Systems and Applications Conference (ASYU)},
+  pages =	{23-27},
+  year =	{2020},
+  doi =		{10.1109/ASYU50717.2020.9259802},
+  url =		{https://doi.org/10.1109/ASYU50717.2020.9259802},
+  organization = {IEEE}
+}
+```
+```
+@inproceedings{serengil2021lightface,
+  title =	{HyperExtended LightFace: A Facial Attribute Analysis Framework},
+  author =	{Serengil, Sefik Ilkin and Ozpinar, Alper},
+  booktitle =	{2021 International Conference on Engineering and Emerging Technologies (ICEET)},
+  pages	=	{1-4},
+  year =	{2021},
+  doi =		{10.1109/ICEET53442.2021.9659697},
+  url =		{https://doi.org/10.1109/ICEET53442.2021.9659697},
+  organization = {IEEE}
+}
+```
+[Github](https://github.com/serengil/deepface)
+
 Fairface was used to create and digitally validate some of the accessories
 ```
 @inproceedings{karkkainenfairface,
@@ -357,6 +384,8 @@ Fairface was used to create and digitally validate some of the accessories
 [Github](https://github.com/joojs/fairface)
 
 </br>
+
+## License
 
 Creative Commons was used to collect Māori and Pasifika faces
 
