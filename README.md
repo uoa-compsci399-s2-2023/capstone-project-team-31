@@ -271,6 +271,11 @@ Value: "True" or "False".
 
 An interactive GUI is developed for a quick and easy testing of generated accessories. Two modes of applying the attacks are avaialble, digital and physical. The GUI provides opportunity for others to participate in testing the accessories. This acts as an easy method to collect meaningful results.
 
+To run GUI:
+```
+python experiment\399_presentation.py
+```
+
 </br>
 
 ### GUI Standby Mode
@@ -377,9 +382,11 @@ Fairface was used to create and digitally validate some of the accessories
 
 </br>
 
-## License
-
 Creative Commons was used to collect Māori and Pasifika faces
+
+</br>
+
+## License
 
 </br>
 
