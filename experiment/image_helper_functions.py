@@ -149,19 +149,19 @@ def prepare_accessory(colour: str, accessory_dir: str, accessory_type: str) -> t
     Args:
     * colour (str): colour of the accessory, must be one of: red, green, blue, yellow
     * accessory_dir (str): directory of the accessory
-    * accessory_type (str): type of accessory, must be one of: glasses
+    * accessory_type (str): type of accessory. Name must correspond to filename
 
     Returns:
     * tuple: (accessory_image, silhouette_mask)
     """
-    
+    accessories = os.listdir('./assets/')
     fname = accessory_type.lower()
 
-    if fname == "glasses" or fname == "facemask" or fname == "bandana" or fname == "earrings":
+    if (fname + '.png') in accessories or (fname + '.jpg') in accessories or (fname + '.jpeg') in accessories:
         # load glasses_silhouette, find what pixels are white (i.e. colour value not rgb (0,0,0)) and make a colour mask of the chosen colour
         accessory = cv2.imread(accessory_dir)
     else:
-        print("Please check your accessory spelling")
+        print("Please check your accessory spelling. Image files supported (.jpg, .jpeg, .png)")
         
     if accessory is None:
         print("Error loading accessory from {}".format(accessory_dir))
