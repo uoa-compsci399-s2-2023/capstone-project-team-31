@@ -34,8 +34,10 @@ class VideoThread(QThread):
                         try: # Try to detect the face in the image
                             face_detected = getImageContents(image)
                             mask_prep = np.multiply(face_detected[0], 255).astype(np.uint8)[0]
-                            print(mask_prep.shape)
-                            mask_applied = apply_accessory(mask_prep, self.parent.accessory, self.parent.mask)
+                            if self.parent.attack_mode == "digital":
+                                mask_applied = apply_accessory(mask_prep, self.parent.accessory, self.parent.mask)
+                            else:
+                                mask_applied = mask_prep
                         except Exception as e:
                             print(e)
                     else:
@@ -247,18 +249,22 @@ class Ui_MainWindow(object):
 
         return coloured_frame, frame
     
-    def set_video_display(self, org_image, aug_img):
-        self.org_image = org_image
+    def set_video_display(self, org_img, aug_img):
+        self.org_image = org_img
         self.aug_image = aug_img
         size = self.video_display.size()
         
         try:
-            if aug_img is not None and self.attack_mode == "digital":
-                image = aug_img
-            elif not self.face_align and self.attack_mode == "physical":
-                image = aug_img
+            if self.aug_image is not None:
+                if self.attack_mode == "digital":
+                    if self.face_align:
+                        image = aug_img
+                    else:
+                        image = org_img
+                else:
+                    image = aug_img
             else:
-                image = org_image
+                image = org_img
             
             h, w, ch = image.shape
             bytesPerLine = ch * w
@@ -430,6 +436,7 @@ class Digital_Popup(QtWidgets.QWidget):
         self.accessory_box.setMinimumSize(QtCore.QSize(200, 50))
         self.accessory_box.setObjectName("accessory_box")
         self.accessory_box.addItems(["facemask", "glasses"])
+        self.accessory_box.currentTextChanged.connect(self.set_type_box)
         self.accessory_box.setFont(font)
         self.gridLayout.addWidget(self.accessory_box, 0, 1, 1, 1)
         
@@ -441,7 +448,7 @@ class Digital_Popup(QtWidgets.QWidget):
         self.type_box = QtWidgets.QComboBox()
         self.type_box.setMinimumSize(QtCore.QSize(200, 50))
         self.type_box.setObjectName("type_box")
-        self.type_box.addItems(["Gender", "Race", "Emotion"])
+        self.set_type_box()
         self.type_box.setFont(font)
         self.type_box.currentTextChanged.connect(lambda: self.set_target(self.type_box.currentText()))
         self.gridLayout.addWidget(self.type_box, 1, 1, 1, 1)
@@ -482,12 +489,19 @@ class Digital_Popup(QtWidgets.QWidget):
         self.setLayout(self.gridLayout_2)
         self.setWindowTitle("Selection Window")
 
+    def set_type_box(self):
+        self.type_box.clear()
+        if self.accessory_box.currentText() == "glasses":
+            self.type_box.addItems(["Gender", "Race"])
+        else:
+            self.type_box.addItems(["Gender", "Race", "Emotion"])
+
     def set_target(self, impersonate_type):
         self.target_box.clear()
         if impersonate_type == "Gender":
             self.target_box.addItems(["Man", "Woman"])
         elif impersonate_type == "Race":
-            self.target_box.addItems(["White", "Black", "Asian"])
+            self.target_box.addItems(["White", "Black", "Asian", "Indian", "Middle Eastern"])
         else:
             self.target_box.addItems(["Happy", "Sad", "Angry", "Surprise", "Neutral"])
     
