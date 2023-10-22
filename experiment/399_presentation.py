@@ -310,9 +310,14 @@ class Ui_MainWindow(object):
             print(e)
 
     def apply_faceframe(self, image): # The current image from webcam is 1280x720
-        partition = image[120:600, 400:880]
+        img_shape = image.shape
+        print(img_shape)
+        start_x = int((img_shape[0] - 480) / 2)
+        start_y = int((img_shape[1] - 480) / 2)
+
+        partition = image[start_x:start_x+480, start_y:start_y+480]
         partition[self.frame_mask] = self.face_frame[self.frame_mask]
-        image[120:600, 400:880] = partition
+        image[start_x:start_x+480, start_y:start_y+480] = partition
         return image
         
     def predict(self):
@@ -326,7 +331,11 @@ class Ui_MainWindow(object):
                     print(e)
                     face_detected = None
 
-            image = self.org_image[120:600, 400:880]
+            img_shape = self.org_image.shape
+            start_x = int((img_shape[0] - 480) / 2)
+            start_y = int((img_shape[1] - 480) / 2)
+            
+            image = self.org_image[start_x:start_x+480, start_y:start_y+480]
             image = cv2.resize(image, (224, 224))
 
             if face_detected is not None:
