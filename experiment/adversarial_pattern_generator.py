@@ -83,7 +83,7 @@ class AdversarialPatternGenerator:
         
         for colour in self.colours:
             
-            accessory_img, accessory_mask = prepare_accessory(colour, "./assets/{}.png".format(self.accessory_type.lower()), self.accessory_type)
+            accessory_img, accessory_mask = prepare_accessory(colour, "./experiment/assets/{}.png".format(self.accessory_type.lower()), self.accessory_type)
             
             confidences = np.empty(self.num_images)
             
@@ -321,7 +321,7 @@ class AdversarialPatternGenerator:
             cv2.waitKey(0)
             cv2.destroyAllWindows()
         
-        cv2.imwrite("./results/accessory_image.png", experiment_result.get_image())
+        cv2.imwrite("./experiment/results/accessory_image.png", experiment_result.get_image())
         
 def cleanup_labels(true_class:str):
 ## cleaning up different classification terms
@@ -360,7 +360,7 @@ def validate_images(val_images_dir: str, json_dir: str, num_images: int, accesso
     
     # If accessory available, prepares the accessory
     if accessory_dir != '':
-        _, accessory_mask = prepare_accessory('red', "./assets/{}.png".format(accessory_type.lower()), accessory_type)
+        _, accessory_mask = prepare_accessory('red', "./experiment/assets/{}.png".format(accessory_type.lower()), accessory_type)
         accessory = cv2.imread(accessory_dir)
 
     e = attributeModel(classification)

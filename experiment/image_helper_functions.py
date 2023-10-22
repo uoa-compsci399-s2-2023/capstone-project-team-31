@@ -154,7 +154,7 @@ def prepare_accessory(colour: str, accessory_dir: str, accessory_type: str) -> t
     Returns:
     * tuple: (accessory_image, silhouette_mask)
     """
-    accessories = os.listdir('./assets')
+    accessories = os.listdir('./experiment/assets')
     fname = accessory_type.lower()
 
     if fname == "glasses" or fname == "facemask" or fname == "bandana" or fname == "earrings" or \
@@ -170,7 +170,7 @@ def prepare_accessory(colour: str, accessory_dir: str, accessory_type: str) -> t
     mask = cv2.threshold(accessory, 0, 1, cv2.THRESH_BINARY)[1]
     
     # make a colour mask of the chosen colour
-    colour_info = json.load(open("./assets/starting_colours.json", 'r'))
+    colour_info = json.load(open("./experiment/assets/starting_colours.json", 'r'))
     colour = colour_info[colour]
         
     coloured_matrix = np.array([[colour for i in range(accessory.shape[1])] for j in range(accessory.shape[0])])
@@ -291,7 +291,7 @@ def average_nonzero(arr_int, mask):
     a = a / n
     return a
 
-def merge_accessories_delta(accessory_dir: str, colour = "organish", accessory_type = "facemask", directory = "./assets/facemask.png" ) -> np.ndarray:
+def merge_accessories_delta(accessory_dir: str, colour = "organish", accessory_type = "facemask", directory = "./experiment/assets/facemask.png" ) -> np.ndarray:
     '''
     Merges accessories into one by removing colour, and combining differences together
 
@@ -494,7 +494,7 @@ def get_printable_vals(num_colors = 100) -> np.array:
     '''
 
     printable_vals = []
-    with open('./assets/printable_vals.txt') as file:
+    with open('./experiment/assets/printable_vals.txt') as file:
         lines = file.readlines()
         for line in lines:
             line = line.split()
