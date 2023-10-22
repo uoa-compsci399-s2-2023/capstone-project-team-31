@@ -154,7 +154,7 @@ def prepare_accessory(colour: str, accessory_dir: str, accessory_type: str) -> t
     Returns:
     * tuple: (accessory_image, silhouette_mask)
     """
-    accessories = os.listdir('./assets/')
+    accessories = os.listdir('./assets')
     fname = accessory_type.lower()
 
     if (fname + '.png') in accessories or (fname + '.jpg') in accessories or (fname + '.jpeg') in accessories:
