@@ -34,6 +34,7 @@ class VideoThread(QThread):
                         try: # Try to detect the face in the image
                             face_detected = getImageContents(image)
                             mask_prep = np.multiply(face_detected[0], 255).astype(np.uint8)[0]
+                            print(mask_prep.shape)
                             mask_applied = apply_accessory(mask_prep, self.parent.accessory, self.parent.mask)
                         except Exception as e:
                             print(e)
@@ -52,7 +53,6 @@ class VideoThread(QThread):
     
     def resume_stream(self):
         self.pause = False
-
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -235,7 +235,7 @@ class Ui_MainWindow(object):
         
     def load_face_frame(self):
         frame = cv2.imread("./experiment/assets/frame.png")
-        frame = cv2.resize(frame, (720, 720)) 
+        frame = cv2.resize(frame, (480, 480)) 
         # make a colour mask of the chosen colour
         colour = (0, 0, 255)
         frame = np.bitwise_not(frame)
@@ -253,7 +253,9 @@ class Ui_MainWindow(object):
         size = self.video_display.size()
         
         try:
-            if aug_img is not None:
+            if aug_img is not None and self.attack_mode == "digital":
+                image = aug_img
+            elif not self.face_align and self.attack_mode == "physical":
                 image = aug_img
             else:
                 image = org_image
@@ -302,9 +304,9 @@ class Ui_MainWindow(object):
             print(e)
 
     def apply_faceframe(self, image): # The current image from webcam is 1280x720
-        partition = image[:, 280:1000]
+        partition = image[120:600, 400:880]
         partition[self.frame_mask] = self.face_frame[self.frame_mask]
-        image[:, 280:1000] = partition
+        image[120:600, 400:880] = partition
         return image
         
     def predict(self):
@@ -318,7 +320,7 @@ class Ui_MainWindow(object):
                     print(e)
                     face_detected = None
 
-            image = self.org_image[:, 280:1000]
+            image = self.org_image[120:600, 400:880]
             image = cv2.resize(image, (224, 224))
 
             if face_detected is not None:
@@ -328,14 +330,12 @@ class Ui_MainWindow(object):
             processed_org = processed_org.astype(np.float32)
             processed_org = np.divide(processed_org, 255)
             org_prediction = self.deepface_model.predict_verbose(processed_org)
-            print(org_prediction)
             if self.attack_mode == "digital":
                 mask_applied = apply_accessory(image.copy(), self.accessory, self.mask)
                 mask_applied_post = np.expand_dims(mask_applied, axis=0)
                 mask_applied_post = mask_applied_post.astype(np.float32)
                 mask_applied_post = np.divide(mask_applied_post, 255)
                 imp_prediction = self.deepface_model.predict_verbose(mask_applied_post)
-                print(imp_prediction)
 
                 self.result_window = Digital_Prediction_Popup(self, image, mask_applied, org_prediction[f"dominant_{self.impersonation_type.lower()}"], imp_prediction[f"dominant_{self.impersonation_type.lower()}"])
                 self.result_window.show()
@@ -349,7 +349,7 @@ class Ui_MainWindow(object):
         
     def load_accesory(self, accessory_type, target):
         # Load the accessory from the accessories folder
-        accessory = cv2.imread("./experiment/trained_accessories/" + accessory_type + "/" + target + ".png")
+        accessory = cv2.imread("./experiment/trained_accessories/" + accessory_type.lower() + "/" + target.lower() + ".png")
         accessory = cv2.cvtColor(accessory, cv2.COLOR_BGR2RGB)
         accessory = cv2.resize(accessory, (224, 224))
         mask = cv2.imread(f"./experiment/assets/{accessory_type}.png")
@@ -429,7 +429,7 @@ class Digital_Popup(QtWidgets.QWidget):
         self.accessory_box = QtWidgets.QComboBox()
         self.accessory_box.setMinimumSize(QtCore.QSize(200, 50))
         self.accessory_box.setObjectName("accessory_box")
-        self.accessory_box.addItems(["facemask", "glasses", "bandana"])
+        self.accessory_box.addItems(["facemask", "glasses"])
         self.accessory_box.setFont(font)
         self.gridLayout.addWidget(self.accessory_box, 0, 1, 1, 1)
         
@@ -519,6 +519,7 @@ class Digital_Prediction_Popup(QtWidgets.QWidget):
         font.setPointSize(20)
         self.original_label.setFont(font)
         self.original_label.setAlignment(QtCore.Qt.AlignCenter)
+        self.original_label.setText("Original:")
         # self.original_label.setObjectName("original_label")
         self.verticalLayout.addWidget(self.original_label)
         self.original_img_display = QtWidgets.QLabel()
@@ -626,6 +627,8 @@ class Physical_Prediction_Popup(QtWidgets.QWidget):
         self.result_disp.setObjectName("result_disp")
         self.horizontalLayout.addWidget(self.result_disp)
         self.verticalLayout_2.addLayout(self.horizontalLayout)
+
+        self.setLayout(self.verticalLayout_2)
 
     def set_image(self, image):
         size = self.image_disp.size()

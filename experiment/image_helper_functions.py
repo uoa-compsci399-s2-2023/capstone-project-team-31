@@ -78,7 +78,7 @@ def getImageObjects(img_path,
     
 def getImageContents(img_path,
     enforce_detection=True,
-    detector_backend="retinaface",
+    detector_backend="opencv",
     align=True,
 ):
     img_objs = getImageObjects(img_path, 
@@ -171,7 +171,7 @@ def prepare_accessory(colour: str, accessory_dir: str, accessory_type: str) -> t
     mask = cv2.threshold(accessory, 0, 1, cv2.THRESH_BINARY)[1]
     
     # make a colour mask of the chosen colour
-    colour_info = json.load(open("D:/Github/capstone-project-team-31/experiment/assets/starting_colours.json", 'r'))
+    colour_info = json.load(open("/Users/cheruichang/Documents/GitHub/capstone-project-team-31/experiment/assets/starting_colours.json", 'r'))
     colour = colour_info[colour]
         
     coloured_matrix = np.array([[colour for i in range(accessory.shape[1])] for j in range(accessory.shape[0])])

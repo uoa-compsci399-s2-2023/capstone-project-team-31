@@ -1,7 +1,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
-class Ui_Form(object):
+class Digital_Prediction_Popup(object):
     def __init__(self, parent, original_image, impersonation_image, original_result, impersonation_result):
         self.parent = parent
         self.gridLayout_2 = QtWidgets.QGridLayout()

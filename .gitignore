@@ -1,1 +1,3 @@
 *.pyc
+.DS_Store
+experiment/.DS_Store
